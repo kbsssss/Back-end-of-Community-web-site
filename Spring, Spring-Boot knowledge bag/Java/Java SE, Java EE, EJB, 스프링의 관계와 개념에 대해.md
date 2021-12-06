@@ -8,6 +8,8 @@
 아래 정리된 내용을 보면서 궁금증을 해결해보자.
 - - -
 
+<br>
+
 #### 1. Java SE란 무엇인가 ?
 자바 SE는 보통 우리가 자바 JDK를 다운로드 받는다거나 자바를 다운로드 받는다 할때 대부분이 이 자바 JDK를 의미한다. 자바 SE = 스탠다드 에디션으로, 핵심 Java 프로그래밍 플랫폼이다. 여기에는 Java 프로그래머가 알아야하는 모든 라이브러리와 API가 포함되어 있다. (java.lang, java.io, java.math, java.net, java.util 등).
 
@@ -41,6 +43,8 @@ Java SE 스펙기반으로 자바를 이용한 서버측 개발을 위한 플랫
 
 🎈 추가로,Java SE와 J2SE 그리고 Java EE와 J2EE는 같은 말이다.
 [J2SE와 J2EE](https://animal-park.tistory.com/97)
+
+
 
 ## 🪁 Reference
 * [Java SE의 개념](https://linked2ev.github.io/java/2019/04/29/JAVA-1.-JAVA-SE-EE-ME/)
