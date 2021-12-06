@@ -1,4 +1,6 @@
-<img src="/img/banner1.png" width="700" height="350"></img>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/144818416-a457a8ac-95cf-4fad-8be5-f6d2f612ef6e.png" width="700px" height="350px">
+</p>
 
 # 🤔 Java SE,EE 그리고 EJB와 스프링은 어떤 관계일까?    
 
