@@ -11,6 +11,10 @@
 ### 1.우선 빠르게 SpringBoot devtools 의존성을 추가해 보도록 하겠다.
 
 <p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/144983726-50030525-fe6d-4a09-a005-cad5e405ca2c.png">
+</p>
+
+<p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/144983711-87ff0dce-accd-4a02-aa03-cc7d661f6437.png">
 </p>
 
@@ -19,15 +23,15 @@
 ### 2.그 다음은 인텔리제이에서 기타 설정들을 해보겠다.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/144983726-50030525-fe6d-4a09-a005-cad5e405ca2c.png">
+<img src="https://user-images.githubusercontent.com/59492312/144983736-2eb88366-c70b-4a5b-8ae0-4ad6102d1ab7.png">
 </p>
 
-인텔리제이에서 Preferences를 들어가서 Compiler란에 들어간다. 그리고 Build project automatically를 클릭 ! (난 미리 체크를 해둔 상태다.) 그리고 close를 클릭하고 나온다.
+인텔리제이에서 Preferences를 들어가서 Compiler란에 들어간다. 그리고 Build project automatically를 클릭 ! (난 미리 체크를 해둔 상태다.) 그리고 OK를 클릭하고 나온다.
 
 > 맥북은 Preferences라 뜨고, 윈도우에서는 Settings로 들어가면 된다.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/144983736-2eb88366-c70b-4a5b-8ae0-4ad6102d1ab7.png">
+<img src="https://user-images.githubusercontent.com/59492312/144986984-f938ca88-0018-4013-bb80-40dc4196324a.png">
 </p>
 
 그 다음은, 맥북은 command + shift + a 를 눌러서 해당 창이 뜨게되면 Registry...를 클릭한다.
@@ -35,19 +39,19 @@
 > 윈도우는 Ctrl + shift + a 를 클릭하면 해당 창이 뜬다.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/144983787-f1aec58c-9f7d-4416-9e78-ce72f73ce836.png">
+<img src="https://user-images.githubusercontent.com/59492312/144983876-497a5d06-51a4-4f2c-a12c-486df86ae8ac.png">
 </p>
 
 그러면, 이런 창이 나오는데, 당황하지 말고 compiler.automake.allow.when.app.running이라는것을 찾아서 체크해준다. 필자는 이미 체크를 해둔상태라 맨위에 뜨게 되는것이다.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/144983876-497a5d06-51a4-4f2c-a12c-486df86ae8ac.png">
+<img src="https://user-images.githubusercontent.com/59492312/144983902-1c5e63c8-7144-44bc-9d44-2d2b00381a7b.png">
 </p>
 
 마지막 설정이다. 맥북과 윈도우 동일하게 Run을 클릭하고 Edit Configurations...를 클릭해보자.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/144983902-1c5e63c8-7144-44bc-9d44-2d2b00381a7b.png">
+<img src="https://user-images.githubusercontent.com/59492312/144987265-64eaae70-8261-42bf-a28e-60c3455af3a6.png">
 </p>
 
 그러면, 새로운 창이 하나 뜨는데, 여기서 
@@ -80,22 +84,37 @@ public class devToolsController {
 ```
 Controller하나를 이와같이 작성해준다.
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/144983923-2f04926a-8a63-4da7-9fda-36e352d8a2a5.png">
-</p>
+~~~html
+<!doctype html>
+<html lang=ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div>스프링부트 devtools test 후</div>
+    <p>{{test1}}</p>
+    <p>{{test2}}</p>
+    <p>{{test3}}</p>
+</body>
+</html>
+~~~
 
 필자는 mustache를 사용하기에 머스테치 템플릿을 사용했다.
 
 ### 4. 결과 보기(브라우저)
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/144983951-47bb45f8-6b72-46e7-8711-6ea351cd72ff.png">
+<img src="https://user-images.githubusercontent.com/59492312/144987735-060f23b8-a301-4916-ad7b-7e34d7e3c4b9.png">
 </p>
 
 코드 수정 전이며
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/144983711-87ff0dce-accd-4a02-aa03-cc7d661f6437.png">
+<img src="https://user-images.githubusercontent.com/59492312/144987747-91f1e181-47ee-4e6b-a753-abc6beebfa29.png">
 </p>
 
 코드를 수정하면 바로 반영되어 브라우저 화면에 이렇게 뜬다.
