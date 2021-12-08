@@ -43,9 +43,9 @@ Java SE 스펙기반으로 자바를 이용한 서버측 개발을 위한 플랫
 
 <br>
 
-🎈 추가로,Java SE와 J2SE 그리고 Java EE와 J2EE는 같은 말이다.
-[J2SE와 J2EE](https://animal-park.tistory.com/97)
-
+🎈 추가로적인 내용으로   
+1. Java SE와 J2SE 그리고 Java EE와 J2EE는 같은 말이다.   
+[[J2SE와 J2EE]](https://animal-park.tistory.com/97)
 
 
 ## 🪁 Reference
