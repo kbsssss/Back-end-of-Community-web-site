@@ -142,7 +142,11 @@ Controller하나를 이와같이 작성해준다.
 
 <br>
 
-🚀 추가로, 이 devtools의 원래기능은 5가지이나 우리가 본것은 Property Defaults, Automatic Restart, live Reload이다. 템플릿의 캐쉬 설정이나 live Reload등을 사용하겠다 하는 모든 설정은 devtools 의존성을 추가함으로써 자동 설정되는 부분이니 건드리지 않아도된다.
+🚀 추가로
+1. 이 devtools의 원래기능은 5가지이나 우리가 본것은 Property Defaults, Automatic Restart, live Reload이다. 템플릿의 캐쉬 설정이나 live Reload등을 사용하겠다 하는 모든 설정은 devtools 의존성을 추가함으로써 자동 설정되는 부분이니 건드리지 않아도된다.
+2. Devtools의 작동원리의 개념에 대한것을 알고싶다면 아래 참조링크를 보도록 하자.   
+[[SpringBoot Devtools 원리]](https://iksflow.tistory.com/57))
+
 
 ## 🪁 Reference
 * [스프링부트 Devtools 설정1](https://velog.io/@bread_dd/Spring-Boot-Devtools)
