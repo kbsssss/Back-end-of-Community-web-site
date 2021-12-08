@@ -6,6 +6,8 @@
 
 문뜩, 스프링에서는 Java SE가 쓰이는걸까 아니면 Java EE가 쓰이는걸까 궁금해졌다. 인텔리제이에서 SDK 설정을 하려면 기본적으로 JDK를 다운받아서 설정하여야 하는데, 그렇다면,Java EE는 Enterprise Edition으로 Java SE 스펙기반으로 자바를 이용한 서버측 개발을 위한 플랫폼이라는데, 이것은 무슨말일까?
 아래 정리된 내용을 보면서 궁금증을 해결해보자.
+
+필자 작성 코드, 깃헙 주소 : [[이곳]](https://github.com/sooolog/dev-spring-springboot) 
 - - -
 
 <br>
