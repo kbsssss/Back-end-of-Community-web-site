@@ -7,7 +7,7 @@
 * springboot devtools 사용을 위한 의존성 설정과 기타설정
 * 기타 오류들 및 OS별, 프로젝트별 에러사항 정리
 
-> 모든 코드는 제 [깃헙](https://github.com/sooolog)에 작성되어 있습니다.
+> 모든 코드는 제 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 * * * 
 
 ### 1.우선 빠르게 SpringBoot devtools 의존성을 추가해 보도록 하겠다.
