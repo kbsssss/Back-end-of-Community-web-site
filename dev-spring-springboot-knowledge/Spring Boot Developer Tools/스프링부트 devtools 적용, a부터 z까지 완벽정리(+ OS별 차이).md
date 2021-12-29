@@ -57,8 +57,8 @@
 </p>
 
 그러면, 새로운 창이 하나 뜨는데, 여기서 
-On 'Update' actions:
-On frame deactivation:
+On 'Update' actions:    
+On frame deactivation:   
 의 값을 모두 **Update classes and resources**로 바꾸어 주어야 한다.
 
 이 마지막 설정이 되야 제대로 실시간 업데이트가 되며, classes는 클래스파일들에 대한 업데이트 resources는 정적파일에 대한 업데이트이다. 즉, Update resources와 같은것도 있는데 이것을 클릭하고 저장하면 class파일이 변경되어도 devtools가 정상적으로 작동하지 않는다. 주의 바란다.
