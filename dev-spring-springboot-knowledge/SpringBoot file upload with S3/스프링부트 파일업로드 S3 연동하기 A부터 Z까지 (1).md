@@ -1,6 +1,6 @@
 <p align="center">
-<img src="">
-</p>
+    <img src="https://user-images.githubusercontent.com/59492312/148671338-fb2f1d35-9ea1-4da9-bccd-3b88c2c8c4c1.png">
+    </p>
 
 # 🗝 스프링부트 파일업로드 S3 연동하기 A부터 Z까지 (1)
 
@@ -9,7 +9,6 @@
 * 
 
 > 필자는 코드 및 개념설명시 핵심내용에 대해서만 설명합니다. 전 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)을 참조해주세요.
-
 * * *
 
 
@@ -159,6 +158,3 @@ for spring boot 2.1.7(필자 버전)을 치면 스프링 공식홈에서 스프�
 
 
 🚀 추가로
-1. 이 devtools의 원래기능은 5가지이나 우리가 본것은 Property Defaults, Automatic Restart, live Reload이다. 템플릿의 캐쉬 설정이나 live Reload등을 사용하겠다 하는 모든 설정은 devtools 의존성을 추가함으로써 자동 설정되는 부분이니 건드리지 않아도된다.
-2. Devtools의 작동원리의 개념에 대한것을 알고싶다면 아래 참조링크를 보도록 하자.   
-[[SpringBoot Devtools 원리]](https://iksflow.tistory.com/57))

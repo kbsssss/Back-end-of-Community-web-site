@@ -1,4 +1,7 @@
-
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/148671332-5da2a1e7-24d5-4f5d-8595-903602749c8e.png
+">
+</p>
 
 # 📖 스프링부트로 파일업로드를 적용하기.(1)
 
