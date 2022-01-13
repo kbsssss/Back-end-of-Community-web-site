@@ -4,15 +4,49 @@
 
 # 📖 스프링부트로 파일업로드 적용하기 A부터 Z까지 (1)
 
-* 
-* 
+* ec2 인스턴스 생성
+* rdb 인스턴스 생성
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 * * *
 
 
 
-### 1.
+### 1.EC2인스턴스를 생성해보겠다.(ec2인스턴스 생성, rdb인스턴스 생성을 한경우 글 (2) 로 넘어가면 된다.)
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/148925274-36458791-639b-4f58-8f58-164633c9db28.png">
+</p>
+
+필자는 커널 4.14 Linux2를 선택해주었다.
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/148925256-89e2da07-4a62-4a40-987a-a2b87e477465.png">
+</p>
+
+GHz뭐 이런것도 다 정리해놨고, 그리고 보안그룹 80, 8080, 443이런것도 싹 정리해야해
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/148925270-4c0beacb-2e09-4892-8413-50833fb20930.png">
+</p>
+
+
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/148925275-71987e2b-3568-4270-a0a5-6329b71fbfee.png">
+</p>
+
+
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/148925280-2a95cf13-88fc-4fd7-b645-48473e5e53bf.png">
+</p>
+
+
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/148925281-5fca576a-5d2b-4ab2-8075-d64dfe63c156.png">
+</p>
 
 #### 🪁 Reference
 * 참조링크 : []()
@@ -25,7 +59,7 @@
 ### 2-1.그다음은 파일과 그 외의 기본내용들을 저장하려 DB을 만들어보겠다.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/148715492-5fc063c0-8d5c-42f7-bfca-a7adb4c09e7b.png">
+<img src="https://user-images.githubusercontent.com/59492312/148872538-9c24fbba-76a0-4e05-889a-2d10ce462fa2.png">
 </p>
 
 데이터베이스 인스턴스를 생성하는 방법은 핵심만 심플하게 알아보고 넘어가도록 하겠다.<br>
@@ -47,7 +81,7 @@
 그룹을 클릭하면 된다. 그 후에 파라미터 그룹 생성을 클릭해주자.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/148714041-b77a2299-6eac-4d47-859b-2b6136891232.png">
+<img src="https://user-images.githubusercontent.com/59492312/148872252-750e1d58-6530-47ed-8e72-df532aaaa0e5.png">
 </p>
 
 파라미터 그룹이름은 rds와 동일하게 해주었다. 또한, 데이터베이스의 버전도 이전 DB인스턴스의
@@ -104,14 +138,14 @@ collation_server
 이렇게 두개를 utf8mb4_general_ci 혹은 utf8mb4_unicode_ci로 바꾸어준다.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/148714175-77b58438-d080-4e76-acf1-40b89704a9cb.png">
+<img src="https://user-images.githubusercontent.com/59492312/148872257-67b7c3e4-196f-4632-a4b8-23b23fe4ff92.png">
 </p>
 
 변경된 파라미터 그룹을 저장하고 다시 DB목록으로 돌아온다음에, 처음 만들었던 db를 선택하고
 수정을 누른다.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/148714182-6b510122-c9f7-44fe-a3a9-c7b85ae8581d.png">
+<img src="https://user-images.githubusercontent.com/59492312/148872255-861c6a49-ad44-49fa-979a-47b097b2caba.png">
 </p>
 
 그 이후에, DB파라미터 그룹으로 이동해서, 옵션 그룹은 그대로 두고 DB 파라미터 그룹만
@@ -142,9 +176,9 @@ DB 인스턴스 수정을 클릭하면, DB가 수정중이라 나오는데, 끝�
 
 2.unicode 안하는이유
 3.my.cnf이거 확인k
-4.보안그룹이 있었네
+
 5.새로운 test로 셋팅하기 aws
-6.
+6.collation이랑 이런거 체크해서 보여줘서 추가 utf8mb4설
 
 #### 🪁 Reference
 * 참조링크 : [AWS 콘솔](https://console.aws.amazon.com/)
@@ -157,4 +191,12 @@ DB 인스턴스 수정을 클릭하면, DB가 수정중이라 나오는데, 끝�
 
 
 
-🚀 추가로
+### 🚀 추가로
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/148872254-e4b0946b-6017-4bcc-b12a-ca7a5bbc7243.png">
+</p>
+
+보이는바와 같이, 해당 default보안 그룹은 aws계정을 만들고나서 바로 생겨져있는
+보안그룹이다. 즉, ec2나 rds 인스턴스를 생성했다고 생기는 보안그룹이 아니다. 또한, 삭제도
+불가능하다. 인지하고 있으면 좋을 것 같다.
