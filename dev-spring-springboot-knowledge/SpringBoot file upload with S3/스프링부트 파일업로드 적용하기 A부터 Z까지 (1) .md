@@ -1,3 +1,5 @@
+태그 : #파일업로드 #보안그룹 #디폴트 보안그룹 #
+
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/148671233-623b59f6-6ec4-49f7-90a8-8ee1606a42c6.png">
 </p>
@@ -24,19 +26,24 @@
 <img src="https://user-images.githubusercontent.com/59492312/148925256-89e2da07-4a62-4a40-987a-a2b87e477465.png">
 </p>
 
-GHz뭐 이런것도 다 정리해놨고, 그리고 보안그룹 80, 8080, 443이런것도 싹 정리해야해
+t2.micro가 프리티어에서 무료로 사용할 수 있는 인스턴스이니 선택해주었다.
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/148925270-4c0beacb-2e09-4892-8413-50833fb20930.png">
 </p>
 
+그 후의, 단계3의 인스턴스 세부 정보 구성은 '다음:스토리지추가'를 눌러주면 위의
+화면과 같은것이 뜬다.
 
+여기서, 우리는 Gib(기가비트)를 프리티어에서는 30GiB까지 사용할 수 있다.
+조금 더 얘기하자면, 통상 이 스토리지의 크기에 따라서 IOPS(초당 입출력 처리량)도
+증가 하게 되는데, 그러면, 조금 더 빠른 성능 개선을 도와주게 된다.
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/148925275-71987e2b-3568-4270-a0a5-6329b71fbfee.png">
 </p>
 
-
+다음으로 가서 태그 추가를 눌러주고, 키에 Name이라 적어주며 값에는 
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/148925280-2a95cf13-88fc-4fd7-b645-48473e5e53bf.png">
