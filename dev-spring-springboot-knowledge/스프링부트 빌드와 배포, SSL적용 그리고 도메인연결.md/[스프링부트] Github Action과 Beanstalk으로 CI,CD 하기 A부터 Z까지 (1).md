@@ -25,10 +25,7 @@
 CD(지속적배포)는 Continuouse Delivery(지속적인 서비스 제공) + Continuous Deployment(지속적인 배포)가 합쳐진
 용어이다.
 
-우리는 CI의 Build,Test,Merge와 CD(Continuous Delivery),CD(Continuous Deployment)에 대해 알아보고
-그 외의 추가 용어에 대해서도 알아보고 넘어가도록 하겠다.
-
-#### 🪁 Reference
+#### 🪁 References
 * 참조링크 : [CI/CD 개념 그리고 흐름 (1)](https://abbo.tistory.com/225)
 * 참조링크 : [CI/CD 개념 그리고 흐름 (2)](https://artist-developer.tistory.com/24)
 
@@ -58,8 +55,8 @@ META-INF와 MANIFEST.MF 들을 하나로 압축하는 과정을 의미한다. �
 
 #### (2).Test,Merge
 그 다음은 Test와 Merge인데, test는 말 그대로 단위테스트나 종합테스트 그 외에 해당 코드가 잘되는지
-테스트하는것을 말한다. 또한 Merge는 코드합병으로 깃헙에서 서로 다른 branch에서 commit 한것을 pull request를
-받아들임으로써 코드를 합병하는것이다.(merge에 대해 헷갈린다면, 깃과 깃헙을 공부하고 오자.)
+테스트하는것을 말한다. 또한 Merge는 코드병합으로 깃과 깃헙을 이용하 서로 다른 branch에서 commit 한것을 pull request를
+받아들임으로써 코드를 병합하는것이다.(merge에 대해 헷갈린다면, 깃과 깃헙을 공부하고 오자.)
 
 <br>
 
@@ -70,7 +67,7 @@ META-INF와 MANIFEST.MF 들을 하나로 압축하는 과정을 의미한다. �
 
 > 여기서 우리가 사용하는 Git은 형상관리(=구성관리)툴로, 버전이나 변경사항을 체계적으로 추적하고 통제하는것을 가능하게 해준다.
 
-#### 🪁 Reference
+#### 🪁 References
 * 참조링크 : [빌드의 개념](https://choseongho93.tistory.com/296)
 * 참조링크 : [CI의 전반적인 개념](https://artist-developer.tistory.com/24)
 * 참조링크 : [형상관리,구성관리 개념](https://ko.wikipedia.org/wiki/%EA%B5%AC%EC%84%B1_%EA%B4%80%EB%A6%AC)
@@ -92,9 +89,9 @@ Continuous Delivery는 지속적 제공으로, CI를 통해서 새로운 소스�
 Continuous Deployment는 지속적 배포로, 이렇게 지속적 제공으로 인해 성공적으로 병합된 내역을 저장소뿐만이 아니라 클라이언트가 사용할 수 있는 환경까지 배포하는것을 의미한다.
 예를들면, EC2같은곳을 말한다.       
   
-#### 🪁 Reference
-* 참조링크 : [CD의 두 개념 (1)](https://abbo.tistory.com/225)
-* 참조링크 : [CD의 두 개념 (2)](https://ggn0.tistory.com/118)
+#### 🪁 References
+* 참조링크 : [CD의 두 개념 (1)](https://abbo.tistory.com/225)   
+* 참조링크 : [CD의 두 개념 (2)](https://ggn0.tistory.com/118)   
 
 <br>
 
@@ -103,7 +100,7 @@ Continuous Deployment는 지속적 배포로, 이렇게 지속적 제공으로 �
 ### 정리 및 추가내용
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/151295676-fdd8f8d4-c5fb-40ad-9717-021124b156cd.png">
+<img src="https://user-images.githubusercontent.com/59492312/151293092-275d1aa6-cf5f-4289-99f9-c3216fe0f200.png">
 </p>
 
 #### 1.CI와 CD의 순서에 대해서 정리
@@ -141,11 +138,7 @@ CI/CD 파이프라인은 개발 플로우마다 조금씩 다르거나 추가될
 > [두번째 CI/CD순서](https://ggn0.tistory.com/118)    
 > 세번째 CI/CD순서 - aws 혼자구현하기 책 298pg    
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/151293092-275d1aa6-cf5f-4289-99f9-c3216fe0f200.png">
-</p>
-
-#### 2.위와 같은 CI/CD 프로세스들의 묶음을 Pipeline(파이프라인)이라고 한다.
+#### 2.Pipeline(파이프라인)의 개념
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/151294755-efebeccc-27c4-407a-a846-8ad1d89c7515.png">
@@ -155,10 +148,10 @@ CI/CD 파이프라인은 개발 플로우마다 조금씩 다르거나 추가될
 이야기 한다. CI만 있는 프로세스들의 묶음을 CI파이프라인이라고도 하며, CD들만 있는 프로세스들의 묶음을 CD파이프라인이라고도 한다.
 통상, CI/CD의 전 단계를 CI/CD파이프라인이라 부른다. AWS에는 CodePipeline이라고 파이프라인을 자동화하여 완전관리형 지속전달 서비스도 있다고 한다.
 
-> [Pipeline의 개념](https://linux.systemv.pe.kr/%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81%EC%97%90%EC%84%9C-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8pipeline%EC%9D%80-%EB%AC%B4%EC%97%87/)
-> [CI와 CD파이프라인](https://ichi.pro/ko/circleci-dae-gitlab-olbaleun-ci-cd-dogu-seontaeg-273919299873289)
-> [CI와 CD파이프라인](https://www.redhat.com/ko/topics/devops/what-cicd-pipeline)
-> [AWS CodePipeline](https://aws.amazon.com/ko/codepipeline/)
+> [Pipeline의 개념](https://linux.systemv.pe.kr/%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81%EC%97%90%EC%84%9C-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8pipeline%EC%9D%80-%EB%AC%B4%EC%97%87/)   
+> [CI와 CD파이프라인](https://ichi.pro/ko/circleci-dae-gitlab-olbaleun-ci-cd-dogu-seontaeg-273919299873289)   
+> [CI와 CD파이프라인](https://www.redhat.com/ko/topics/devops/what-cicd-pipeline)   
+> [AWS CodePipeline](https://aws.amazon.com/ko/codepipeline/)    
 
 <br>
 
