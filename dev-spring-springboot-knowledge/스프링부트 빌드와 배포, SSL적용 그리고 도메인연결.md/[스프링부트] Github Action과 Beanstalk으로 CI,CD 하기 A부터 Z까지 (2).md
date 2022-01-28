@@ -43,10 +43,11 @@ Github Action과 Beanstalk를 사용했을 경우의 기본 구조는 이러하�
 
 ### 2.Github Action으로 빌드하기 위한, deploy.yml 작성
 
-https://gist.github.com/sooolog/83947148ff7a760d1f95776dede5fe84
+https://gist.github.com/sooolog/adfa10c8a2bf29e82e4a8bb1522cd2f6
 
-<script src="https://gist.github.com/sooolog/83947148ff7a760d1f95776dede5fe84.js"></script>
+<script src="https://gist.github.com/sooolog/adfa10c8a2bf29e82e4a8bb1522cd2f6.js"></script>
 
+https://gist.github.com/sooolog/adfa10c8a2bf29e82e4a8bb1522cd2f6.js
 
 <p align="center">
 <img src="">
