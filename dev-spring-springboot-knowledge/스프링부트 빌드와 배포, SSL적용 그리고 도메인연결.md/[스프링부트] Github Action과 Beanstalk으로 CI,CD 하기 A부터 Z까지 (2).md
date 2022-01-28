@@ -43,11 +43,48 @@ Github Action과 Beanstalk를 사용했을 경우의 기본 구조는 이러하�
 
 ### 2.Github Action으로 빌드하기 위한, deploy.yml 작성
 
-https://gist.github.com/sooolog/adfa10c8a2bf29e82e4a8bb1522cd2f6
+```yml
+name: dev-spring-springboot
 
-<script src="https://gist.github.com/sooolog/adfa10c8a2bf29e82e4a8bb1522cd2f6.js"></script>
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
 
-https://gist.github.com/sooolog/adfa10c8a2bf29e82e4a8bb1522cd2f6.js
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: 1.8
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+        shell: bash
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss # (1)
+          utcOffset: "+09:00"
+
+      - name: Show Current Time
+        run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}" # (2)
+        shell: bash
+```
+
+a
 
 <p align="center">
 <img src="">
@@ -84,4 +121,5 @@ https://gist.github.com/sooolog/adfa10c8a2bf29e82e4a8bb1522cd2f6.js
 7.그 모냐 왜 t2.micro에서 잘되다가 잘 안되다가 하는지 알기 그리고 용량증가하면 더 잘되는거같다.
 8.아 빌드하는거에 이미 테스트를 진행하고 빌드하는구나, 깃헙액션 보니 그렇다. + 
 9.혹시나 /에 대한 맵핑이 되어야 (여태, /맵핑을 restcontroller만 함 되는건지 일반 컨트롤러로 /맵핑해봤다. 결과는 ? 와
-    RestController가 있어서 된게 아니라, /맵핑자체를 통신을 못받아서 안된거였네. 404에러가 계속 뜨니 /에
+    RestController가 있어서 된게 아니라, /맵핑자체를 통신을 못받아서 안된거였네. 404에러가 계속 뜨니 /에 실제, /ho는
+    레스트 해놓고 /와 /hohoho를 일반 컨트롤러 했는데 그 계속 오류 됬던거로 뜸
