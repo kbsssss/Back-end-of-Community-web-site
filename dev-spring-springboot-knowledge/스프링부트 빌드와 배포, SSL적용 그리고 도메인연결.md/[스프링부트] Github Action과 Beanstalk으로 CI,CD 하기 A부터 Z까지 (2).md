@@ -114,10 +114,12 @@ name은 위의 사진처럼 프로젝트의 해당 코드를 push하면 해당�
 
 > 즉, 이 name은 Repo Action 탭에 나타나는 이름으로 실제 workflow 진행창에는 나오지 않는다. 그렇기에
 > build나 배포에 영향을 주는것은 아니고 통상 필자처럼 프로젝트명으로 입력하거나 원하는 nmae을 입력하면 된다.  
+> [name에 대한 내용](https://stalker5217.netlify.app/devops/github-action-aws-ci-cd-1/)
 
 이제 나머지 #(1) 부터 #(9) 까지의 개념들에 대해 설명하도록 하겠다.
 
 ##### (1).브랜치 이름
+
 ```yml
 on:
   push:
@@ -145,14 +147,31 @@ on:
 
 
 ##### (3).OS 환경
+
 ```yml
 jobs:
   build:
     runs-on: ubuntu-latest # (3).OS환경
 ```
-a
+
+해당 Github Action 스크립트(여기서는 jobs의 steps들을 의미한다. 조금 더 쉽게 말하자면, (3)~(9)까지의
+단계들을 말하며 해당 workflow를 말한다. job,step,workflow에 대해 잘 모른다면 만 아래의 '추가로'를 참고하자.)
+가 작동될 OS 환경 지정하는것이다.
+
+> Github Action의 workflow는 Runner라고 하는 Github Action Runner 어플리케이션이 설치된 인스턴스 서버에서
+> 실행이 된다. 그 서버의 OS 환경을 지정하는것이다. 
+
+일반적으로, 웹 서비스의 OS는 우분투보다는 센토를 많이 쓰는데, Github Action에서는 공식지원하는 OS목록에는
+Centos가 없기에 우분투를 대신 사용하도록 한다.
+
+> 우분투를 선택한다고 해도, 우리가 하려는 CI/CD에는 영향을 주지않으니 걱정하지 않아도 된다.
+
+[OS목록](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on)을 본다면
+우분투의 버전들이 나와있다. 현재 Ubuntu-latest는 Ubuntu 20.04와 같다고 나와있다.(필자가 글을 작성할 당시의 버전이니 조금 달라져 있을수도 있다.)
+ubuntu-latest로 지정하거나 ubuntu-20.04로 적어주면 된다.
 
 ##### (4).코드 check out
+
 ```yml
 jobs:
   build:
@@ -160,9 +179,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2 # (4).코드 check out
 ```
-a
+
+말 그대로, 코드 check out인데, 이 check out이라는 말은 개발용어에서 자주 등장하며 여러 의미로 쓰이니
+간단하게 짚고 넘어가도록 하겠다.   
+
+1. 형상관리 툴인 깃같은곳에서 소스코드를 내려받을 때 쓰는 check out : 이 경우에는 말 그대로 해당 소스코드를
+내려받는것을 의미한다. 여기서는 스프링부트 프로젝트 소스코드를 내려받는것이다.
+
+2. git checkout <branch name>처럼 terminal과 같은 Cli 사용하는 경우 : 특정 브랜치 여기서는 branch name에
+해당하는 브랜치를 사용하겠다는것을 명시적으로 보여주는 것이다.
+
+> [check out의 두가지 의미](https://backlog.com/git-tutorial/kr/stepup/stepup2_3.html)
 
 ##### (5).자바 설치
+
 ```yml
 jobs:
   build:
@@ -172,7 +202,10 @@ jobs:
         with:
           java-version: 1.8 # (5).자바 설치
 ```
-a
+
+Github Action이 실행될 OS 즉, Runner에 Java를 설치하는 것이다. with: java-version: 1.8은 내가 다운받을
+자바의 버전을 의미하는데, 자바11을 원한다면 자바11에 맞는 코드를 적어주면 된다. 필자는 자바8로 설치를 할것이다. 실제로도 가장
+많이 쓰이고, 상용화가 잘 되있는 자바8을 많이 사용한다.
 
 ##### (6).권한 부여
 ```yml
@@ -183,7 +216,21 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash # (6).권한 부여
 ```
-a
+
+다음 step인 gradle wrapper를 실행하여 build할 수 있도록 실행 권한 (+x)을 부여해주는 것이다.
+실제로 터미널에서 ./gradlew build 명령어로 빌드를 실행하는데, Permission Denied가 되기 때문에 그 전에
+chmod +x gradlew  를 터미널에 입력 하여 권한을 미리 부여해주는 것이다.
+
+> run은 Runner에서 명령어를 실행하라는 의미이다.
+
+bash가 나왔으니 bash에 대해 한번 간단하게 훑고 지나가도록 하겠다. 그 다음 build에 대한 내용을 바로보고싶다면 다음 문단으로
+넘어가면 된다.
+
+Bash, Vim, CLI, Git Bash에 대해 알아보겠다.
+Bash는 CLI(Command Line Interface)이다. 리눅스와 맥에서는 기본적으로 Bash가 쓰인다.
+
+태그도 써야한다.
+> [](https://2srin.tistory.com/117) 
 
 ##### (7).build 시작
 ```yml
@@ -221,9 +268,21 @@ jobs:
 ```
 a
 
+##### 👨‍💻 추가적인 얘기
+
+위에서 name은 단순히 github action의 workflow에서 단계별 명칭을 보여주는 역활만 하기 때문에
+본인이 알아보기에 맞게 새롭게 작성해도 된다.
+
+아래는 그 예시이다.    
+필자는 위의 name에서 추가로 의미없는 숫자를 덧붙여 보았다.
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/151544083-af4a11b6-7388-4b97-b135-6dbba56250f4.png">
+</p>
+
+> 깃헙 레포지토리에서 직접 Github Action을 실행시켜보고 확인해보면 더 정확하게 이해가 될 것이다.
+
 #### 🪁 References
-* 참조링크 : [](https://jojoldu.tistory.com/543)
-* 참조링크 : []()
+* 참조링크 : [deploy.yml에 관한 전반적인 내용](https://jojoldu.tistory.com/543)
 
 <br>
 
@@ -233,7 +292,7 @@ a
 
 깃헙액션의 코어 개념에 대해 간단하게 정리하도록 하겠다.    
 
-**Workflow** : 자동화된 전체 프로세스로(즉, 깃헙액션에서 진행되는 하나의 플로우를 workflow로 보는거다.). 하나 이상의 Job으로 구성되고, Event에 의해 예약되거나 트리거될 수 있는 자동화된 절차를 말한다. Workflow 파일은 YAML으로 작성되고, Github Repository의 .github/workflows 폴더 아래에 저장된다. Github에게 YAML 파일로 정의한 자동화 동작을 전달하면, Github Actions는 해당 파일을 기반으로 그대로 실행시킨다.    
+**Workflow** : 자동화된 전체 프로세스로(즉, 위에서는 jobs에 있는것들로, (3)부터 (9)까지가 하나의 workflow인것이다.). 하나 이상의 Job으로 구성되고, Event에 의해 예약되거나 트리거될 수 있는 자동화된 절차를 말한다. Workflow 파일은 YAML으로 작성되고, Github Repository의 .github/workflows 폴더 아래에 저장된다. Github에게 YAML 파일로 정의한 자동화 동작을 전달하면, Github Actions는 해당 파일을 기반으로 그대로 실행시킨다.    
 
 **Event** : Workflow를 트리거(실행)하는 특정 활동이나 규칙. 예를 들어, 누군가가 커밋을 리포지토리에 푸시하거나 풀 요청이 생성 될 때 GitHub에서 활동이 시작될 수 있다.   
 
@@ -241,14 +300,14 @@ a
 
 **Step** : Job 안에서 순차적으로 실행되는 프로세스 단위.   
 
-**Runner** : Gitbub Action Runner 어플리케이션이 설치된 것 으로, Workflow가 실행될 인스턴스이다.      
+**Runner** : Gitbub Action Runner 어플리케이션이 설치된 일종의 서로, Workflow가 실행될 인스턴스이다.      
 
 #### 🪁 References
 * 참조링크 : [깃헙액션의 코어개념](https://velog.io/@ggong/Github-Action%EC%97%90-%EB%8C%80%ED%95%9C-%EC%86%8C%EA%B0%9C%EC%99%80-%EC%82%AC%EC%9A%A9%EB%B2%95)
 
 <br>
 
-태그 : #Github Action, #Benastalk, #깃헙액션 코어개념, #extra-icons 플러그인, #deploy.yml, 
+태그 : #Github Action, #Benastalk, #깃헙액션 코어개념, #extra-icons 플러그인, #deploy.yml, #깃헙액션 코어개념, #workflow, #runner, #job, #event, #step, #check out, #check out의 두가지 의미
 
 
 
