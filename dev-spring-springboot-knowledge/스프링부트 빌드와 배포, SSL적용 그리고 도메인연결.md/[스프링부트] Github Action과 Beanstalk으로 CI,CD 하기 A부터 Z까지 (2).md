@@ -221,16 +221,41 @@ jobs:
 실제로 터미널에서 ./gradlew build 명령어로 빌드를 실행하는데, Permission Denied가 되기 때문에 그 전에
 chmod +x gradlew  를 터미널에 입력 하여 권한을 미리 부여해주는 것이다.
 
-> run은 Runner에서 명령어를 실행하라는 의미이다.
+> run은 Runner에서 명령어를 실행하라는 의미이다.    
+> [./gradlew build를 위한 권한 부여](https://javalism.tistory.com/101)    
 
-bash가 나왔으니 bash에 대해 한번 간단하게 훑고 지나가도록 하겠다. 그 다음 build에 대한 내용을 바로보고싶다면 다음 문단으로
+bash가 나왔으니 bash에 대해 한번 간단하게 훑고 지나가도록 하겠다. 그 다음 build에 대한 내용을 바로 보고싶다면 다음 문단으로
 넘어가면 된다.
 
-Bash, Vim, CLI, Git Bash에 대해 알아보겠다.
+CLI, 터미널, 커맨드 프롬프트, 쉘, Bash, Git Bash, shell script, vim에 대해 알아보겠다.
+
+(1). CLI는 Command Line Interface로 말 그대로 명령 줄 인터페이스로 터미널이나 커맨드 프롬프트처럼 한 줄의 명령어로
+사용자와 컴퓨터가 상호 작용하는 '방식'을 의미한다.
+
+(2). 터미널과 커맨드 프롬프트는 CLI를 가능하게 하는것으로 맥에서는 티미널이 쓰이고, 윈도우에서는 커맨드 프롬프트가 쓰이는것이다.
+
+(3). 쉘은 터미널을 사용하기 위한 소프트웨어 환경을 뜻한다. 즉, 운영체제 상에서 사용자가 입력하는 명령을 읽고 해석하여
+실행해주는 것으로, 사용자와 컴퓨터 사이에 소통하기위한 언어로 볼 수 있다.
+
+(4). bash는 쉘의 한 종류이다. 쉘은 언어라 했는데, 언어에도 종류가 있듯이 bash가 linux에서 사용하는 쉘의 한 종류이며,
+이 bash는 linux에서 가장 많이 사용되며 기본 쉘이다. 조금 더 이해하기 쉽게 예를 들자면, cd, ls, rm 등과같은것이 모두 bash인것이다.
+
+(5). Git bash란, 윈도우에서는 커맨드 프롬프트라는 CLI를 사용하는데, bash를 사용하려면 git bash가 있어야 하는것이다.
+윈도우에서 git bash를 다운받으면 깃과 bash 둘다 쓸 수 있다.
 Bash는 CLI(Command Line Interface)이다. 리눅스와 맥에서는 기본적으로 Bash가 쓰인다.
 
-태그도 써야한다.
-> [](https://2srin.tistory.com/117) 
+(6). 쉘 스크립트는 쉘에서 사용할 수 있는 명령어들의 조합을 모아놓은 파일이다. 한줄씩 순차적으로 읽으면서 명령어들을 실행시켜주는 인터프리터 방식의 프로그램
+이다.
+
+(7). 마지막으로 vim은 텍스트 편집기이다. cd, ls와 같은 bash 명령어 외에, vim hi.text처럼 텍스트를 만들거나 수정 등 텍스트
+편집기용 명령어이다.
+
+> [git bash의 개념](https://2srin.tistory.com/117)    
+> [CLI의 개념](https://ko.wikipedia.org/wiki/%EB%AA%85%EB%A0%B9_%EC%A4%84_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4)    
+> [쉘과 bash의 개념 (1)](https://dinfree.com/lecture/core/101_basic_3.html)   
+> [쉘과 bash의 개념 (2)](https://minkwon4.tistory.com/159)      
+> [shell script의 개념](https://minkwon4.tistory.com/159)    
+> [vim의 개념](https://ko.wikipedia.org/wiki/Vim)    
 
 ##### (7).build 시작
 ```yml
@@ -307,7 +332,7 @@ a
 
 <br>
 
-태그 : #Github Action, #Benastalk, #깃헙액션 코어개념, #extra-icons 플러그인, #deploy.yml, #깃헙액션 코어개념, #workflow, #runner, #job, #event, #step, #check out, #check out의 두가지 의미
+태그 : #Github Action, #Benastalk, #깃헙액션 코어개념, #extra-icons 플러그인, #deploy.yml, #깃헙액션 코어개념, #workflow, #runner, #job, #event, #step, #check out, #check out의 두가지 의미, #bash, #shell, #shell script, #cli, #커맨드 프롬프트, #git bash, #vim
 
 
 
