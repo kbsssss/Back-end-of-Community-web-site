@@ -4,9 +4,9 @@
 
 # 📖 [스프링부트] Github Action과 Beanstalk으로 CI/CD 하기 A부터 Z까지 (2)
 
-* Github Action과 Beanstalk으로 CI/CD 진행
-* 
-* 
+* Github Action을 위한 deploy.yml작성과 이해
+* bash, shell, git bash, vim, cli, 터미널의 기본개념 훑고가기
+* 깃헙에 workflow사용을 위한 push에 Personal Access tokens로 권한 부여하기
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 * * *
