@@ -54,8 +54,12 @@ Github repository의 action에서 템플릿을 만들어서 해당 코드들을 
 원한다면, [extra-icons 플러그인](https://plugins.jetbrains.com/plugin/11058-extra-icons)을 적용해주면 된다.
 이 외에도 인텔리제이 아이콘 플러그인 검색해서 원하는것을 설치하고 적용해 주면 된다. 
 
+<br>
+
 > 필자는 CI/CD 관련 코드들을 프로젝트 내에서 작성하여 한번에 관리하는것을 선호한다. Github에서 작성하여 적용하는
 > 방법도 있으니, 궁금하신분들은 찾아보셔서 한번쯤 공부해보는것도 좋다.
+
+<br>
 
 ```yml
 name: dev-spring-springboot
@@ -91,11 +95,11 @@ jobs:
         uses: 1466587594/get-current-time@v2
         id: current-time
         with:
-          format: YYYY-MM-DDTHH-mm-ss # (1)
+          format: YYYY-MM-DDTHH-mm-ss 
           utcOffset: "+09:00"작 # (8).build 시점의 시간확보
 
       - name: Show Current Time
-        run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}" # (2)
+        run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}" 
         shell: bash # (9).확보한 시간 보여주기
 ```
 
@@ -112,9 +116,13 @@ name은 위의 사진처럼 프로젝트의 해당 코드를 push하면 해당�
 조금 더 쉽게 말하자면, Commit했을때 설명 + deploy.yml의 name + 내가 여태 Push한 workflow갯수 로 표시되는거다.
 필자는 commit할때 github action build라고 commit message를 적었기에 이와같이 나온거다.
 
+<br>
+
 > 즉, 이 name은 Repo Action 탭에 나타나는 이름으로 실제 workflow 진행창에는 나오지 않는다. 그렇기에
 > build나 배포에 영향을 주는것은 아니고 통상 필자처럼 프로젝트명으로 입력하거나 원하는 nmae을 입력하면 된다.  
 > [name에 대한 내용](https://stalker5217.netlify.app/devops/github-action-aws-ci-cd-1/)
+
+<br>
 
 이제 나머지 #(1) 부터 #(9) 까지의 개념들에 대해 설명하도록 하겠다.
 
@@ -131,11 +139,15 @@ on:
 Github Action이 시작된다는 의미이다. 즉, Github Action 트리거 브랜치인것이다. master로 적어놓았지만,
 다른 브랜치에서 Github Action을 실행시키고 싶다면 해당하는 branch 명을 바꾸어도 된다.
 
+<br>
+
 > 당연히, 지정한 브랜치외에 다른 명을 갖은 브랜치에서 push를 하게되고, 레포지토리에 pull request되어
 > merge가 진행이 되었다고 해도, Github Action은 실행되지 않는다. 추가로 push외에 pull request나
 > 다른 이벤트에 대해서도 트리거를 작동시키게 할 수 있다.      
 > [push외에 다른 이벤트에 대한 Github Action 작동](https://hwasurr.io/git-github/github-actions/)
 > [pull request에 대한 트리거 설정 코드](https://stalker5217.netlify.app/devops/github-action-aws-ci-cd-1/)
+
+><br>
 
 ##### (2).수동 실행
 ```yml
@@ -158,13 +170,21 @@ jobs:
 단계들을 말하며 해당 workflow를 말한다. job,step,workflow에 대해 잘 모른다면 만 아래의 '추가로'를 참고하자.)
 가 작동될 OS 환경 지정하는것이다.
 
+<br>
+
 > Github Action의 workflow는 Runner라고 하는 Github Action Runner 어플리케이션이 설치된 인스턴스 서버에서
 > 실행이 된다. 그 서버의 OS 환경을 지정하는것이다. 
+
+<br>
 
 일반적으로, 웹 서비스의 OS는 우분투보다는 센토를 많이 쓰는데, Github Action에서는 공식지원하는 OS목록에는
 Centos가 없기에 우분투를 대신 사용하도록 한다.
 
+<br>
+
 > 우분투를 선택한다고 해도, 우리가 하려는 CI/CD에는 영향을 주지않으니 걱정하지 않아도 된다.
+
+<br>
 
 [OS목록](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on)을 본다면
 우분투의 버전들이 나와있다. 현재 Ubuntu-latest는 Ubuntu 20.04와 같다고 나와있다.(필자가 글을 작성할 당시의 버전이니 조금 달라져 있을수도 있다.)
@@ -221,8 +241,12 @@ jobs:
 실제로 터미널에서 ./gradlew build 명령어로 빌드를 실행하는데, Permission Denied가 되기 때문에 그 전에
 chmod +x gradlew  를 터미널에 입력 하여 권한을 미리 부여해주는 것이다.
 
+<br>
+
 > run은 Runner에서 명령어를 실행하라는 의미이다.    
 > [./gradlew build를 위한 권한 부여](https://javalism.tistory.com/101)    
+
+<br>
 
 **bash가 나왔으니 bash와 그 외에 반드시 알아야 할 기본용어에 대해 간단하게 한번 훑고 지나가도록 하겠다.** 그 다음 build에 대한 내용을 바로 보고싶다면 다음 문단으로
 넘어가면 된다.
@@ -250,12 +274,16 @@ Bash는 CLI(Command Line Interface)이다. 리눅스와 맥에서는 기본적�
 (7). 마지막으로 vim은 텍스트 편집기이다. cd, ls와 같은 bash 명령어 외에, vim hi.text처럼 텍스트를 만들거나 수정 등 텍스트
 편집기용 명령어이다.
 
+<br>
+
 > [git bash의 개념](https://2srin.tistory.com/117)    
 > [CLI의 개념](https://ko.wikipedia.org/wiki/%EB%AA%85%EB%A0%B9_%EC%A4%84_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4)    
 > [쉘과 bash의 개념 (1)](https://dinfree.com/lecture/core/101_basic_3.html)   
 > [쉘과 bash의 개념 (2)](https://minkwon4.tistory.com/159)      
 > [shell script의 개념](https://minkwon4.tistory.com/159)    
 > [vim의 개념](https://ko.wikipedia.org/wiki/Vim)    
+
+<br>
 
 ##### (7).build 시작
 ```yml
@@ -320,9 +348,13 @@ github action으로 build가 완료가 됬을때 확보한 시간을 github acti
 이곳에 Show Current time에 CurrentTime=2022-01-28T14-47-53가 잘 출력된것을 볼 수 있다.
 (직접 해보면 더 빠르게 이해가 될 것이다. 곧 직접해보도록 하겠다.)
 
+<br>
+
 > 그렇다면, 앞서 말한 Version Label에 사용되어서 배포한 어플리케이션의 버전 식별용으로 사용된다는 것은 언제쓰는건가요 ?
 > 라고 물어볼 수 있다. 첫 (8)에서 확보한 시간을 바탕으로 다음 장에 배포를 진행할때, 그대로 Version Label에 적용하여 식별용으로
 > 어떻게 사용되는지 보여줄 것이다. 다음 글 (3) 배포하기로 넘어가서 설명하도록 하겠다.
+
+<br>
 
 ##### 👨‍💻 추가적인 얘기
 
@@ -335,7 +367,11 @@ github action으로 build가 완료가 됬을때 확보한 시간을 github acti
 <img src="https://user-images.githubusercontent.com/59492312/151544083-af4a11b6-7388-4b97-b135-6dbba56250f4.png">
 </p>
 
+<br>
+
 > 깃헙 레포지토리에서 직접 Github Action을 실행시켜보고 확인해보면 더 정확하게 이해가 될 것이다.
+
+<br>
 
 #### 🪁 References
 * 참조링크 : [deploy.yml에 관한 전반적인 내용](https://jojoldu.tistory.com/543)
@@ -353,7 +389,11 @@ github action으로 build가 완료가 됬을때 확보한 시간을 github acti
 로컬 저장소에서(IntelliJ 등 그 외) 원격 저장소인 깃헙 레포지토리로 PUSH를 하게되면, github action이 실행된다.
 위와같이 빌드가 잘되면 모두 초록색으로 체크가 된다.
 
+<br>
+
 > 해당 화면을 보려면 내가 push한 레포지토리로 들어가서 위와같이 Actions탭을 누르면 된다.
+
+<br>
 
 #### 🪁 References
 * 참조링크 : [deploy.yml에 관한 전반적인 내용](https://jojoldu.tistory.com/543)
