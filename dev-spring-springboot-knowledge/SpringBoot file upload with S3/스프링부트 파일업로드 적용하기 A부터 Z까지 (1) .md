@@ -135,7 +135,11 @@ RSA를 선택해주면 된다. ED25519 제약 사항이 있기때문이다.
 기준시간과 Seoul이 다르기 때문에, 나중에 시간을 다루는 쿼리문을 할때 오차가 생길 수 있기 때문이다.
 자세한것을 아래 참조링크를 참고하도록 하자.
 
+<br>
+
 > 참조링크 : [time_zone 설정 이유](https://programforlife.tistory.com/52)
+
+<br>
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/148714115-8a7d0065-19f7-4c8c-b63e-995c9d99ac55.png">

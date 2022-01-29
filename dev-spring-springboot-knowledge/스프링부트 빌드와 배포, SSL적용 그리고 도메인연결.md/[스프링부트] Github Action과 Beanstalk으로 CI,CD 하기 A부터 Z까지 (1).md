@@ -47,7 +47,11 @@ META-INF와 MANIFEST.MF 들을 하나로 압축하는 과정을 의미한다. �
 또한, 빌드 과정을 도와주는 도구를 Build Tool이라고 한다. 즉, 컴파일 된 코드를 실제 실행할 수 있는 상태로 만드는 
 일을 Build 라는 개념으로 생각하면 된다.
 
+<br>
+
 > 스프링부트 프로젝트에서 쓰는 Gradle도 Build Tool의 일종이다.
+
+<br>
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/151288671-4483d871-64ac-4f4f-be8d-cb9d06189b8d.png">
@@ -65,7 +69,11 @@ META-INF와 MANIFEST.MF 들을 하나로 압축하는 과정을 의미한다. �
 테스트 되어 공유 레포지토리에 병합되는것을 얘기 한다. 즉, 이를 수동이 아닌 자동으로 지속적으로 쉽게 해주는 환경(CI)을 말한다.
 (CI의 단계와 순서에 대해서는 글 후반부에 추가적으로 얘기하겠다.)
 
+<br>
+
 > 여기서 우리가 사용하는 Git은 형상관리(=구성관리)툴로, 버전이나 변경사항을 체계적으로 추적하고 통제하는것을 가능하게 해준다.
+
+<br>
 
 #### 🪁 References
 * 참조링크 : [빌드의 개념](https://choseongho93.tistory.com/296)
@@ -134,9 +142,13 @@ CI/CD 파이프라인은 개발 플로우마다 조금씩 다르거나 추가될
 하게하고(master 브랜치가 push 했을때만 build되게 설) 이를 merge하여, master 브랜치에서 최종 test를 하고 다시 정
 원격 레포지토리에 push하여 test를 하며 build를 진행할 수도 있다. 즉, 이 CI/CD의 과정은 개발 플로우에 따라 얼마든지 달라질 수 있다는것을 알고가자.
 
+<br>
+
 > [첫번째 CI/CD순서](https://abbo.tistory.com/225)   
 > [두번째 CI/CD순서](https://ggn0.tistory.com/118)    
 > 세번째 CI/CD순서 - aws 혼자구현하기 책 298pg    
+
+<br>
 
 #### 2.Pipeline(파이프라인)의 개념
 
@@ -147,6 +159,8 @@ CI/CD 파이프라인은 개발 플로우마다 조금씩 다르거나 추가될
 여기서 파이프라인의 개념은 코드를 컴파일(Compile), 빌드(Build) 그리고 배포(Deploy) 하게 해주는 자동화된 프로세스들의 묶음(set)을
 이야기 한다. CI만 있는 프로세스들의 묶음을 CI파이프라인이라고도 하며, CD들만 있는 프로세스들의 묶음을 CD파이프라인이라고도 한다.
 통상, CI/CD의 전 단계를 CI/CD파이프라인이라 부른다. AWS에는 CodePipeline이라고 파이프라인을 자동화하여 완전관리형 지속전달 서비스도 있다고 한다.
+
+<br>
 
 > [Pipeline의 개념](https://linux.systemv.pe.kr/%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81%EC%97%90%EC%84%9C-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8pipeline%EC%9D%80-%EB%AC%B4%EC%97%87/)   
 > [CI와 CD파이프라인](https://ichi.pro/ko/circleci-dae-gitlab-olbaleun-ci-cd-dogu-seontaeg-273919299873289)   
