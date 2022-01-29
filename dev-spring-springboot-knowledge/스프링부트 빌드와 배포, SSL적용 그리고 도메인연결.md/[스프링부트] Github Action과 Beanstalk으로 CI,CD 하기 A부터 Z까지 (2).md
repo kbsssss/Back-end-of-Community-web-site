@@ -224,7 +224,7 @@ chmod +x gradlew  를 터미널에 입력 하여 권한을 미리 부여해주�
 > run은 Runner에서 명령어를 실행하라는 의미이다.    
 > [./gradlew build를 위한 권한 부여](https://javalism.tistory.com/101)    
 
-bash가 나왔으니 bash에 대해 한번 간단하게 훑고 지나가도록 하겠다. 그 다음 build에 대한 내용을 바로 보고싶다면 다음 문단으로
+**bash가 나왔으니 bash와 그 외에 반드시 알아야 할 기본용어에 대해 간단하게 한번 훑고 지나가도록 하겠다.** 그 다음 build에 대한 내용을 바로 보고싶다면 다음 문단으로
 넘어가면 된다.
 
 CLI, 터미널, 커맨드 프롬프트, 쉘, Bash, Git Bash, shell script, vim에 대해 알아보겠다.
@@ -266,9 +266,18 @@ jobs:
         run: ./gradlew clean build
         shell: bash # (7).build 시작    
 ```
-a
+
+마지막 build의 시작이다. ./gradlew clean build 명령어를 실행하여 빌드를 시작한다. 보이는 바와 같이 shell: bash는 bash를 사용하여서
+build를 시작하라는 의미이다. github action으로 빌드하기는 여기까지이다.
 
 ##### (8).build 시점의 시간 확보
+
+(7)까지만 해도 build는 되는데, 왜 (8),(9) 코드들이 있는걸까?
+용도는 두가지이다.    
+첫번째 : 빌드되는 시점의 시간을 보기위함    
+두번째 : 후에 배포시킬때 version label이란것에 빌드된 시간을 넣어서 어플리케이션 버전으로 사용하기 위함이다.
+무슨말인지 모르겠다면, 아래 차근차근 설명하니 따라보면 충분히 이해가 될 것이다.
+
 ```yml
 jobs:
   build:
@@ -280,7 +289,12 @@ jobs:
           format: YYYY-MM-DDTHH-mm-ss # (1)
           utcOffset: "+09:00"작 # (8).build 시점의 시간확보
 ```
-a
+
+1466587594/get-current-time이라는 것을 사용하여(runner에 있는) 빌드시점의 시간을 확보해 놓는것이다.
+format은 YYYY-MM-DDTHH-mm-ss로 해놓아서 확보해놓을 시간의 형태를 정해놓고, utcOffset까지 설정해놓아서
+한국 시간으로 맞춰서 확보해놓는것이다.(UTC 기준이기 때문에 한국시간에 맞추려면 +09:00을 해주어야 한다.)
+
+그렇다면, 이렇게 확보해놓은 빌드시점의 시간은 어떻게 쓰일까 ?
 
 ##### (9).확보한 시간 보여주기
 ```yml
@@ -291,7 +305,24 @@ jobs:
         run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}" # (2)
         shell: bash # (9).확보한 시간 보여주기
 ```
-a
+
+다음 (9)를 보자. echo ~ }}"라고 쓰여진 코드 부분은 일종의 화면에 출력하는것이다. 즉, 내가 프로젝트를 push를 해서
+github action으로 build가 완료가 됬을때 확보한 시간을 github action 빌드 상태창에 시간이 어떻게 되는지 보여주겠다는
+의미이다.
+
+조금 이해가 안갈 수 있다. 아래 사진을 보도록 하자.
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/151648743-ae6c4a39-f124-4be6-9df6-0f649e9c15c8.png">
+</p>
+
+잠시 후에 Push를 하고 깃헙 레포지토리에 Action탭을 클릭하면 실시간으로 push한 프로젝트가 build가 잘 되고 있는지 확인할 수 있는 창이다.
+이곳에 Show Current time에 CurrentTime=2022-01-28T14-47-53가 잘 출력된것을 볼 수 있다.
+(직접 해보면 더 빠르게 이해가 될 것이다. 곧 직접해보도록 하겠다.)
+
+> 그렇다면, 앞서 말한 Version Label에 사용되어서 배포한 어플리케이션의 버전 식별용으로 사용된다는 것은 언제쓰는건가요 ?
+> 라고 물어볼 수 있다. 첫 (8)에서 확보한 시간을 바탕으로 다음 장에 배포를 진행할때, 그대로 Version Label에 적용하여 식별용으로
+> 어떻게 사용되는지 보여줄 것이다. 다음 글 (3) 배포하기로 넘어가서 설명하도록 하겠다.
 
 ##### 👨‍💻 추가적인 얘기
 
@@ -308,6 +339,45 @@ a
 
 #### 🪁 References
 * 참조링크 : [deploy.yml에 관한 전반적인 내용](https://jojoldu.tistory.com/543)
+
+<br>
+
+
+
+### 3.직접 PUsh를 해서 build를 진행해보도록 하겠다.
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/151648904-65022ea0-b707-4377-a6ca-e98c08a872d8.png">
+</p>
+
+로컬 저장소에서(IntelliJ 등 그 외) 원격 저장소인 깃헙 레포지토리로 PUSH를 하게되면, github action이 실행된다.
+위와같이 빌드가 잘되면 모두 초록색으로 체크가 된다.
+
+> 해당 화면을 보려면 내가 push한 레포지토리로 들어가서 위와같이 Actions탭을 누르면 된다.
+
+#### 🪁 References
+* 참조링크 : [deploy.yml에 관한 전반적인 내용](https://jojoldu.tistory.com/543)
+
+<br>
+
+
+
+
+### 4.(push가 실패하는 분들만 보면 된다.)
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/151649056-26134ea1-734c-4aff-ad41-c28eeac75d54.png">
+</p>
+
+기본적으로 로컬에서 원격 깃헙으로 push를 하거나 아니면 workflows를 작동시키려면 깃헙 계정의 settings로 들어가서(레포지토리의 setting이 아니다.)
+Personal access tokens에서 토큰을 발급받아서 권한을 부여해주어야 가능하다.
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/151649059-44daf835-0c0b-4a9e-b194-eaffa5729b5b.png">
+</p>
+
+위 화면처럼, 보통 우리가 commit하고 push할때와는 다르게 workflow를 선택해주고 토큰을 발급받아서 사용해야 권한이 부여되고 정상적으로 push가 되는것이다.
+만약, access token에 대해 아직 잘 모르겠다면, 깃헙 access token으로 원격 저장소 push하기 글들을 찾아본다면 확실하게 지금의 내용이 이해가 될것이다.
 
 <br>
 
@@ -333,23 +403,3 @@ a
 <br>
 
 태그 : #Github Action, #Benastalk, #깃헙액션 코어개념, #extra-icons 플러그인, #deploy.yml, #깃헙액션 코어개념, #workflow, #runner, #job, #event, #step, #check out, #check out의 두가지 의미, #bash, #shell, #shell script, #cli, #커맨드 프롬프트, #git bash, #vim
-
-
-
-
-
-1.빈스톡 connect fail해서 한 경우도 인스턴스가 바뀌지않음
-2.이상하게 그 디그레이드 되서 기다리게 된거 있잖아 배포는 됬는데, 그거는 EC2가 바뀌었는데 ? 직접해봄
-3.혹시 여태 안됬던게, rest가 아닌 다른 정적 머스테치 연동은 안되니까, 받을게 없어서 에러가 난건가 ? 그래서 rest를 하니 된거
-    아.. 우선은 rest가 없어서 그랬던건지 아니면 그냥 mustache가 /를 못받아서 그랬던건지 알아야 한다.(이거 이유도 알자 404 등등)
-4.그리고 실제 port나(어플리케이션에서 server.prot하는거나, 아니면 빈스톡구성에서 PORT 5000하는거나) 이거도 영향을
-    주는지 해보고, 보안그룹에서 80포트를 없애도 되는지 확인해보자.
-
-6.거기다가, 그냥 아무것도 커밋없이도 푸쉬되는지도 보자.    - 안됨
-7.그 모냐 왜 t2.micro에서 잘되다가 잘 안되다가 하는지 알기 그리고 용량증가하면 더 잘되는거같다.
-8.아 빌드하는거에 이미 테스트를 진행하고 빌드하는구나, 깃헙액션 보니 그렇다. + 
-9.혹시나 /에 대한 맵핑이 되어야 (여태, /맵핑을 restcontroller만 함 되는건지 일반 컨트롤러로 /맵핑해봤다. 결과는 ? 와
-    RestController가 있어서 된게 아니라, /맵핑자체를 통신을 못받아서 안된거였네. 404에러가 계속 뜨니 /에 실제, /ho는
-    레스트 해놓고 /와 /hohoho를 일반 컨트롤러 했는데 그 계속 오류 됬던거로 뜸
-10.보면, 정상적으로 배포완료되도 degraded됬다고 나와 1 out of 2 instances에서 버전이 맞지 않다고 근데, 이건
-    조졸두 블로그에도 똑같이 나오는데 이거 해결하고 가자.
