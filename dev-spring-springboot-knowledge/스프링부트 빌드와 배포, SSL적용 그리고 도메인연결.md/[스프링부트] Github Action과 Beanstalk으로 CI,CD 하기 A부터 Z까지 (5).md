@@ -2,7 +2,7 @@
 <img src="">
 </p>
 
-# 📖 [스프링부트] Github Action과 Beanstalk으로 CI/CD 하기 A부터 Z까지 (4)
+# 📖 [스프링부트] Github Action과 Beanstalk으로 CI/CD 하기 A부터 Z까지 (5)
 
 * 
 * 
@@ -18,7 +18,7 @@
 <img src="https://user-images.githubusercontent.com/59492312/152080729-0e3fcf8b-e5b1-4cc3-a771-2deda9e99a99.png">
 </p>
 
-위에 있는거 로그 스토리지 s3까지 버켓생성하고 다시봐야 한다.
+
 
 #### 🪁 Reference
 * 참조링크 : []()
