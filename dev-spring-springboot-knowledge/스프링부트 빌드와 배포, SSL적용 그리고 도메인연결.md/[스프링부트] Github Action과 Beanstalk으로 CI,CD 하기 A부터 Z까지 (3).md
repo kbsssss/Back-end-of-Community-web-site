@@ -22,6 +22,8 @@
 
 빈스톡 사용을 위한 환경생성을 진행해 본다. aws 검색창에 beanstalk를 치면 Elastic Beanstalk가 나온다.
 
+<br>
+
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/151652649-d30182dd-8d28-411e-bb01-146cd2bd741e.png">
 </p>
@@ -48,6 +50,8 @@
 real-test라 했지만, 이 글을 읽는 독자분들은 프로젝트 이름으로 써주거나 원하는 이름으로 어플리케이션 이름을
 적어주면 된다.
 
+<br>
+
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/151652640-306072d1-c9e1-476a-96a9-82cd6d8a57f8.png">
 </p>
@@ -57,6 +61,8 @@ real-test라 했지만, 이 글을 읽는 독자분들은 프로젝트 이름으
 사용하여 ec2에 배포하는 경우, 배포 내용을 볼 수 있는 임시 도메인으로 봐도 된다.
 
 도메인은 아무것도 채워넣지않아도 자동으로 채워지니 비워두고 그 다음 진행하도록 하겠다.
+
+<br>
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/151652638-da74cfa1-514b-47a1-adb7-fec6d9bcf6bf.png">
@@ -170,6 +176,8 @@ Corretto 8을 이용하도록 하겠다.
 이해가 잘 되기에 nginx와 로드벨런서, ec2 그리고 보안그룹의 간단한 구조에 대해 알아보고 왜 포트80을 열어주어야 하는지에 대해서도 알고 넘어가도록 하겠다. 
 아래 사진들을 보자.
 
+<br>
+
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/152101959-50f08e62-e2dd-4e77-987f-a70c0b25092f.png">
 </p>
@@ -211,6 +219,8 @@ Internet Gateway에서 로드벨런서가 먼저 요청을 받고 이를 Nginx�
 ssh에 대해서는 보안상 내ip만 접속하도록 해놓았고, 443과 8080포트에 대해서는 전부 열어놓았다. 그렇다면, 의문이 든다. 80번 포트에 대해서도 보안그룹 인바운드 규칙을 추가해주어야 웹 브라우저에서
 접근할 수 있을텐데 이게 어떻게 가능할까 ? 아래 그림을 보도록 하겠다.
 
+<br>
+
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/152101949-d3d9fcdb-9372-4ec3-a89a-25f9e6b17715.png">
 </p>
@@ -231,6 +241,8 @@ ssh에 대해서는 보안상 내ip만 접속하도록 해놓았고, 443과 8080
 
 첫번째 디폴트 보안그룹은 이렇게 80포트로 IPv4에 대해서 전부 열려있다.
 
+<br>
+
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/152101957-c453f35c-f580-4306-add8-2c41ff197338.png">
 </p>
@@ -239,6 +251,8 @@ ssh에 대해서는 보안상 내ip만 접속하도록 해놓았고, 443과 8080
 필자의 [파일업로드 적용하기 A부터 Z까지 (1)](https://github.com/sooolog/dev-spring-springboot-knowledge/blob/master/dev-spring-springboot-knowledge/SpringBoot%20file%20upload%20with%20S3/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8%20%ED%8C%8C%EC%9D%BC%EC%97%85%EB%A1%9C%EB%93%9C%20%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0%20A%EB%B6%80%ED%84%B0%20Z%EA%B9%8C%EC%A7%80%20(1)%20.md)
 의 글을 참고해보면, 보안그룹을 추가할때 다른 보안그룹ID로 추가하는 경우, 추가한 보안그룹ID에 해당하는 보안그룹이 적용된 서버로 들어온 요청이 다시 보안그룹ID를 인바운드에 추가한 서버로의 요청에 대해
 허용 한다는 말이다. 아래 사진을 보면서 다시 정리하겠다.
+
+<br>
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/152114275-145df6f5-f986-45a9-909d-c07901253b70.png">
@@ -304,8 +318,12 @@ ssh접근에 대해서는 aws에서 pem키를 발급하여 pem키가 있어야�
 이것의 의미는, 아무리 트래픽이 많이 생기고 CPU 가동률이 올라가도 최대 1개의 인스턴스 외에는
 Auto Scaling을 적용하지 않겠다는 의미이다.
 
+<br>
+
 > 당연히, 실제 배포되는 서비스나 규모가 어느정도 생긴다면 인스턴스의 최소 최대를 유연하게 설정해주어야 하는게
 > 맞으나 우리는 프리티어로 무료로 사용해야하니 최대 1개로 진행하는 것이다.
+
+<br>
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/151652648-f148a032-45c6-4d2c-a967-cbebdc2074c2.png">
