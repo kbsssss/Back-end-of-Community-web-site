@@ -117,9 +117,9 @@ Corretto 8을 이용하도록 하겠다.
 
 <br>
 
-> [스팟 인스턴스의 개념과 4가지 종류](https://blog.leedoing.com/178)
-> [스팟 인스턴스의 개념](https://wooono.tistory.com/86)
-> [Batch란 무엇인가 ?](https://gold-jae.tistory.com/46)
+> [스팟 인스턴스의 개념과 4가지 종류](https://blog.leedoing.com/178)    
+> [스팟 인스턴스의 개념](https://wooono.tistory.com/86)    
+> [Batch란 무엇인가 ?](https://gold-jae.tistory.com/46)    
 
 <br>
 
@@ -133,7 +133,7 @@ Corretto 8을 이용하도록 하겠다.
 
 <br>
 
-> [온디맨드 인스턴스란 (1)](https://ssue95.tistory.com/4)
+> [온디맨드 인스턴스란 (1)](https://ssue95.tistory.com/4)    
 > [온디맨드 인스턴스란 (2)](https://codingmoondoll.tistory.com/entry/EC2-%EB%B9%84%EC%9A%A9-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0)
 
 <br>
@@ -150,8 +150,8 @@ Corretto 8을 이용하도록 하겠다.
 
 <br>
 
-> [예약 인스턴스의 개념 (1)](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=rnjsrldnd123&logNo=221492606516)
-> [예약 인스턴스의 개념 (2)](https://ssue95.tistory.com/4)
+> [예약 인스턴스의 개념 (1)](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=rnjsrldnd123&logNo=221492606516)    
+> [예약 인스턴스의 개념 (2)](https://ssue95.tistory.com/4)    
 
 <br>
 
@@ -369,8 +369,8 @@ t2.small은 지워주고 t2.micro로만 진행하도록 하겠다.
 
 <br>
 
-> [배포 정책 종류에 관해 (1)](https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/using-features.deploy-existing-version.html)    
-> [배포 정책 종류에 관해 (2)](https://velog.io/@hwal92/Elastic-Beanstalk-%EC%97%90-%EB%8C%80%ED%95%9C-%EC%A0%95%EB%A6%AC)    
+> [배포 정책 종류에 관해 (1)](https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/using-features.deploy-existing-version.html)     
+> [배포 정책 종류에 관해 (2)](https://velog.io/@hwal92/Elastic-Beanstalk-%EC%97%90-%EB%8C%80%ED%95%9C-%EC%A0%95%EB%A6%AC)     
 
 <br>
 
@@ -539,9 +539,5 @@ IAM을 이용하여 AWS 콘솔에 접근가능한 계정을 여러개 만든 IAM
 <br>
 
 
-
-### 🚀 추가로
-
-<br>
 
 태그 : #온디맨드 인스턴스, #예약 인스턴스, #스팟 인스턴스, #Nginx 80포트, #ssh 보안그룹, #80포트 IPv6, #IAM, #깃헙 IAM설정, #배포옵션, #immutable
