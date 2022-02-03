@@ -387,22 +387,95 @@ pem키는 기존에 EC2인스턴스를 생성해본적이 없다면 독자들의
 
 여기까지 하면, 이제 환경 생성을 눌러주어 추가 옵션 구성을 적용한 환경을 생성해 보도록 하겠다.
 
-
 #### 🪁 Reference
 * 참조링크 : [빈스톡 환경 구성하기 (1)](https://jojoldu.tistory.com/549)
-* 참조링크 : []()
 
 <br>
 
 
 
-### 2.
+### 2.빈스톡 환경을 생성해주었다면, 이제는 IAM 설정을 해주도록 하자.
 
 <p align="center">
-<img src="">
+<img src="https://user-images.githubusercontent.com/59492312/152279576-84633a5d-22b8-4dc6-9ca6-adf37c1550a8.png">
 </p>
 
-ㅁㅁㅁ 이거 그거도 해야해, 이거 배포하기 Version label 앞에서 시간확보한거 사용하는거
+IAM이 무엇이기에 받아야 하는걸까 ? IAM은 aws 밖에서 aws 클라우드에 접근가능한 권한종류를 지정해주고
+이를 인증키 (accessKey, secretKey)를 발급해주어 인증키를 아는 사용자만 사용할 수 있게 해주는것이다. 
+우리는 Github Action으로 빌드하고 이를 빈스톡으로 배포해주어야 하기에, 우리가 배포하려는 깃헙 레포지토리에
+IAM에서 발급해준 인증키를 등록을 하여 정상적으로 배포가 가능하게 해주려 한다.
+
+<br>
+
+> 그 외에도, IAM사용자라 해서 AWS 콘솔에 접근하되 권한을 제한해놓는 등 IAM의 기능이 많지만, 
+> 우선 배포환경에 대한 위주로 보고 필요시 나중에 더 자세히 알도록 하겠다.
+
+<br> 
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152279340-7791d194-f020-446e-b29f-ae2b5004a28f.png">
+</p>
+
+AWS 콘솔창에서 IAM을 검색해주고 들어가서 사용자 추가버튼을 눌러준다.
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152279486-04d3f6f6-3c65-4735-bef4-dbda864600ef.png">
+</p>
+
+사용자 이름을 지정해주어야 하는데, 필자는 프로젝트이름-Githubaction-beanstalk으로 지었지만,
+이 IAM이 깃헙액션과 빈스톡을 이용한 CI/CD환경에 사용되는 IAM이라는것만 잘 식별되게 지으면 어떻게 지으든
+크게 상관은 없다.
+
+추가로, 아래에 보면 엑세스 유형선택이 보인다.    
+1.액세스 키 - 프로그래밍 방식 엑세스
+2.암호 - AWS 관리 콘솔 엑세스     
+
+여기서 1번은 설명에 적혀있듯이, API, CLI, SDK등 기타 개발도구에 대해 인증키를 발급해주어
+할당된 권한을 이용할 수 있게 해주는것이다. 두번째인 암호 유형은 IAM사용자를 위한것으로 위에서 잠깐 말했듯이
+IAM을 이용하여 AWS 콘솔에 접근가능한 계정을 여러개 만든 IAM 사용자를 위한것으로 지금 당장 우리가 필요한것은
+아니니, 엑세스 키만 체크하고 넘어가도록 하자.
+
+<br>
+
+> 우리는 깃헙의 레포지토리에 엑세스키를 등록하여 빈스톡에 접근하기 위함이니 프로그래밍 방식 엑세스를 선택해주어야 한다.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152279355-5648f305-250f-4b2c-a292-8217123d0e47.png">
+</p>
+
+그룹에 사용자 추가는 방금말한 IAM사용자를 위한 것으로 우리는 기존 정책 직접연결을 선택해 주자.
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152279354-685de683-e735-4505-a6a5-39838e6c145d.png">
+</p>
+
+그 후, beanstalk을 입력해주면 AdministratorAccess-AWSElasticBeanstalk를 선택해주면 된다.
+그러면 빈스톡에 대한 관리자 권한을 설정하는것이다. 원래는 이 권한도 세부적으로 나누어 놓아야 하지만, 우리는 관리자
+권한 하나만으로 설정하도록 하겠다.
+
+<br>
+
+> 작성한 시간 기준의 모습이며, 시간이 지나면 정책 이름의 명칭이 바뀔 수 있다. 하지만 우리는 Beanstalk의 전 권한을 이용하려고 하니 정책이름이 바뀌더라도
+> 전 권한에 해당하는 Beanstalk 정책명을 선택해주면 된다.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152279350-ba6f1fea-e7c0-4dc8-bae0-6c9b81359c10.png">
+</p>
+
+다음은, 태그 추가이다. 아무것도 적지않고 넘어가도 된다. 사용자 정보와 직책을 적어준것이다.
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152280786-31a7c755-383b-4793-a8b8-5e9038ba77c5.png"">
+</p>
+
+이 후 다음으로 넘어가면 사용자 만들기가 있다. 사용자 만들기까지 클릭해주면, 위와같은 화면이 나온다.
+엑세스 키 ID와 비밀 엑세스 키는 이 화면을 지나면 다시 볼 수 없으니 꼭 복사해서 따로 적어두거나 아니면,
+.csv파일을 다운받아 보관해 놓도록 하자.
+
 
 #### 🪁 Reference
 * 참조링크 : []()
