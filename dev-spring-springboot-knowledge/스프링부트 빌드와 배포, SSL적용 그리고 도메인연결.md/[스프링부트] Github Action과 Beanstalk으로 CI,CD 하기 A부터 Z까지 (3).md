@@ -193,16 +193,13 @@ Internet Gateway에서 로드벨런서가 먼저 요청을 받고 이를 Nginx�
 <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/152101955-9efdfb27-fb66-4d3c-a4f6-4dfe8c9d0bd5.png">
-</p>
-<p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/152101954-625e2162-0f72-4e82-8f57-cd1a8c1c4f3d.png">
 </p>
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/152101953-d1a59d88-e1da-4604-b0cd-28acdc3da974.png">
 </p>
 
-세 개의 그림 모두, 처음 말했던 구조를 갖고 있다. 이 그림을 보여준 이유는 Nginx는 EC2 내부에 있고, EC2 내부에 있다면,
+두 개의 그림 모두, 처음 말했던 구조를 갖고 있다. 이 그림을 보여준 이유는 Nginx는 EC2 내부에 있고, EC2 내부에 있다면,
 로드벨런서로부터 80포트로 요청을 받을때 ec2 보안그룹을 통과하여야 한다. 즉, EC2의 보안그룹에도(빈스톡의 EC2 보안그룹) 80포트에 대해 
 허용을 해주어야지 Nginx가 요청을 받을 수 있는것이다.
 
