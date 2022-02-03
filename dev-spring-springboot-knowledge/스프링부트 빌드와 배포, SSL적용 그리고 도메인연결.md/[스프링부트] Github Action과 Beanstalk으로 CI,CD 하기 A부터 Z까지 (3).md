@@ -329,7 +329,16 @@ Auto Scaling을 적용하지 않겠다는 의미이다.
 <img src="https://user-images.githubusercontent.com/59492312/151652648-f148a032-45c6-4d2c-a967-cbebdc2074c2.png">
 </p>
 
-ㅁ 
+그 아래로 스크롤을 내리면, 인스턴스 유형이 보이는데 기본적으로 t2.micro와 t2.small 두가지가
+설정이 되어있다. 상황에 따라 가용성을 높이기 위한 설정이지만, 우리는 현재 프리티어로 무료로 사용하려하니 위의 사진처럼
+t2.small은 지워주고 t2.micro로만 진행하도록 하겠다.
+
+<br>
+
+> 플릿을 비롯한 빈스톡 환경구성에서 그냥 지나쳤던 부분들에 대해서는 다음 글에서 자세하게 설명할 예정이다.
+> 여기서는 기본적인 CI/CD환경 구축에만 집중하도록 한다.
+
+<br>
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/151653123-e9ef2992-9a68-4438-bcf9-37be3d1ee574.png">
@@ -338,7 +347,31 @@ Auto Scaling을 적용하지 않겠다는 의미이다.
 <img src="https://user-images.githubusercontent.com/59492312/151652644-1038fd6b-2571-4091-b63c-d58ae2bba0e3.png">
 </p>
 
-ㅁ 
+다음은 롤링 업데이트와 배포를 보겠다. 똑같이 편집을 눌러주자. 그러면 맨위에 배포 방식이 나와있다.
+여기서 배포 방식을 눌러보면, 한 번에 모두부터 트래픽 분할까지 여러 종류의 배포 방식이 나와있다. 각각의
+기본 개념들을 훑고 어떠한 선택을 해야하는지를 설명하도록 하겠다.
+
+**한 번에 모두(All at once)** - 모든 인스턴스에 동시에 새 버전을 배포한다. 배포시간은 가장 짧지만 모든 인스턴스가 업데이트 되기 때문에 다운타임이 발생한다.
+
+**롤링(Rolling)** - 기존 인스턴스 중 일부를 배치 단위로 선정하여 새 버전을 배포한다. 업데이트 중인 배치 인스턴스에 대해서는 서비스가 작동하지 않을 수 있다. 즉 서비스 다운타임을 방지하기 위해 일부 인스턴스만 먼저 업데이트하고 그 후 나머지 인스턴스를 업데이트 하는 방식이다.
+
+**추가 배치를 사용한 롤링(Rolling with additional batch)** - Rolling Update 방식을 그대로 따르나, Rolling Update 방식처럼 기존의 인스턴스외에 추가 인스턴스를 구성하여 배포하는 방식이다. 추가 인스턴스를 구성하기 때문에 Rolling Update에 비해 배포시간이 더 많이 걸리지만 성공적으로 배포만 된다면, 서비스 중단없이 배포할 수 있다.
+
+**변경 불가능(Immutable)** - 기존 인스턴스를 업데이트하는 대신 새 애플리케이션 버전이 항상 새 인스턴스에 배포되도록 하는 더 느린 배포 방법이다. 또한 배포가 실패할 경우 빠르고 안전하게 롤백할 수 있다는 추가 이점이 있다. 이 방법을 사용하면 Elastic Beanstalk에서 변경 불가능한 업데이트를 수행하여 애플리케이션을 배포한다. 변경이 불가능한 업데이트에서 두 번째 Auto Scaling 그룹이 사용자 환경에서 시작되고 새 인스턴스가 상태 확인을 통과할 때까지 새 버전과 기존 버전이 함께 트래픽을 처리한다.
+
+**트래픽 분할(Traffic splitting)** - canary 테스트 배포 방법이다. 이전 애플리케이션 버전을 통해 나머지 트래픽을 계속 처리하면서 수신 트래픽의 일부를 사용하여 새 애플리케이션 버전의 상태를 테스트하려는 경우에 적합하다.
+
+즉, 정리하자면 한 번에 모두에서 변경 불가능까지의 옵션은 사용자의 가용성을 중요시하는 순서로도 볼 수 있다.
+그렇기에 보통 개발할 때는 한 번에 모두를 선택하고 실제 서비스 배포 환경에서는 변경 불가능을 선택한다. 하지만, 우리는
+현재 빈스톡을 사용한 CI/CD 환경구축을 하려고 하니 '추가 배치를 사용한 롤링'을 선택해주어서 무중단 배포 환경을 만들것이다.
+만약 변경 불가능에 대한 배포방식에 대해 자세히 알고싶다면, 필자가 다음 글에 정리해놓았으니 이를 참고하도록 하자.
+
+<br>
+
+> [배포 정책 종류에 관해 (1)](https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/using-features.deploy-existing-version.html)    
+> [배포 정책 종류에 관해 (2)](https://velog.io/@hwal92/Elastic-Beanstalk-%EC%97%90-%EB%8C%80%ED%95%9C-%EC%A0%95%EB%A6%AC)    
+
+<br>
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/151653127-cad86afc-717e-48e7-9f6d-62658823591c.png">
@@ -347,7 +380,13 @@ Auto Scaling을 적용하지 않겠다는 의미이다.
 <img src="https://user-images.githubusercontent.com/59492312/151652857-16a1dbe5-99a7-4077-8646-5476c536d4f0.png">
 </p>
 
-ㅁ 
+그 다음, 보안을 편집해보도록 하겠다. 여기서는 키 페어 즉, pem키를 설정하는 곳이다.
+pem키는 기존에 EC2인스턴스를 생성해본적이 없다면 독자들의 aws에는 아직 pem키가 발급이 안되있을 수 있다.
+참조링크 [스프링부트 파일업로드](https://github.com/sooolog/dev-spring-springboot-knowledge/blob/master/dev-spring-springboot-knowledge/SpringBoot%20file%20upload%20with%20S3/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8%20%ED%8C%8C%EC%9D%BC%EC%97%85%EB%A1%9C%EB%93%9C%20%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0%20A%EB%B6%80%ED%84%B0%20Z%EA%B9%8C%EC%A7%80%20(1)%20.md)
+를 들어가면 pem키 발급에 대해 정리해 놓았다.
+
+여기까지 하면, 이제 환경 생성을 눌러주어 추가 옵션 구성을 적용한 환경을 생성해 보도록 하겠다.
+
 
 #### 🪁 Reference
 * 참조링크 : [빈스톡 환경 구성하기 (1)](https://jojoldu.tistory.com/549)
@@ -377,7 +416,7 @@ Auto Scaling을 적용하지 않겠다는 의미이다.
 
 <br>
 
-태그 : #온디맨드 인스턴스, #예약 인스턴스, #스팟 인스턴스, #Nginx 80포트, #ssh 보안그룹, #
+태그 : #온디맨드 인스턴스, #예약 인스턴스, #스팟 인스턴스, #Nginx 80포트, #ssh 보안그룹, #80포트 IPv6, #
 
 
 
