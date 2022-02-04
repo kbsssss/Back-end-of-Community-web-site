@@ -385,6 +385,17 @@ pem키는 기존에 EC2인스턴스를 생성해본적이 없다면 독자들의
 
 여기까지 하면, 이제 환경 생성을 눌러주어 추가 옵션 구성을 적용한 환경을 생성해 보도록 하겠다.
 
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152470883-ec2f15c3-a2b7-4cb7-bf48-4c53c61effd8.png">
+</p>
+
+환경 생성이 완료가 되면 위와같은 화면을 볼 수 있다. 정상적으로 환경이 생성된 것이다.
+
+> 보면, 필자가 처음 입력한 어플리케이션 이름과 환경이름이 다른걸 알 수 있다. 필자는 처음 real-test라고 만들었던 환경을 삭제하고
+> 어플리케이션 이름을 dev-real-test그리고 환경이름을 Devrealtest-env로 다시 만들어 주었기 때문에 그렇다.
+
 #### 🪁 Reference
 * 참조링크 : [빈스톡 환경 구성하기 (1)](https://jojoldu.tistory.com/549)
 

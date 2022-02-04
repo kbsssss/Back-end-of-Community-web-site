@@ -4,8 +4,9 @@
 
 # 📖 [스프링부트] Github Action과 Beanstalk으로 CI/CD 하기 A부터 Z까 (4) [완]
 
-* deploy.yml, 00-makeFiles.config, nginx.conf, Procfile의 작성
-* 
+* deploy.yml 작성 
+* 00-makeFiles.config, Procfile 작성
+* nginx.conf 작성
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 * * *
@@ -41,6 +42,8 @@
 빈스톡으로 배포할 수 있는 방법은 많지만, 우리는 Github Action으로 빌드하고 배포까지 간편하게 하나의 스크립트에서
 진행하기 위해서, 기존에 작성해 두었던 deploy.yml 뒤에 추가로 작성해준 코드이다. 이해를 돕기위해 deploy.yml의 전체코드를
 첨부하도록 하겠다.
+
+<br>
 
 ```yml
 name: dev-spring-springboot
@@ -104,6 +107,8 @@ jobs:
 ```
 
 그렇다면, 이제 이번에 새로배울 코드들의 각 줄의 의미에 대해 알아 보도록 하겠다.
+
+<br>
 
 ```yml
       - name: Generate deployment package 
@@ -195,6 +200,8 @@ deploy/.platform에 그대로 복사하라는 의미이다.
 AWS CLI로 배포를 진행할 수도 있지만, 이렇게 스크립트안에 알집 압축과 배포까지 한번에 진행시키기 위해 사용한다. 링크를
 클릭하고, Use latest Version을 클릭해보면      
 
+<br>
+
 ```yml
 - name: Beanstalk Deploy
   uses: einaregilsson/beanstalk-deploy@v20
@@ -210,9 +217,11 @@ AWS CLI로 배포를 진행할 수도 있지만, 이렇게 스크립트안에 �
 
 그 뒤로 나와있는 코드를 보겠다.
 
+<br>
+
 ```yml
-     aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-     aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
 
 우리가 기존에 받아놓았던, IAM 발급키이다. 여기서는 위의 코드처럼 적어주면 된다.
@@ -227,40 +236,63 @@ secrets.AWS_SECRET_ACCESS_KEY 키를 불러와 각각 적용하게 된다.
 <br>
 
 ```yml
-    application_name: dev-real-test
-    environment_name: Devrealtest-env
+application_name: dev-real-test
+environment_name: Devrealtest-env
 ```
 
 그 다음 코드는 갖고있는 IAM키로 접근할 빈스톡 환경을 지정해주는것이다. 보면, application name과
-environment name을 @@@@
+environment name을 적어주어서 어느 빈스톡 환경으로 연동할지를 설정하는것이다. 
 
 <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/152080729-0e3fcf8b-e5b1-4cc3-a771-2deda9e99a99.png">
+<img src="https://user-images.githubusercontent.com/59492312/152470883-ec2f15c3-a2b7-4cb7-bf48-4c53c61effd8.png">
 </p>
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/152080729-0e3fcf8b-e5b1-4cc3-a771-2deda9e99a99.png">
-</p>
+우리가 이전 글에서 만들어놓은 환경을 들어가 보면, 어플리케이션 이름이 dev-real-test이고, 환경이름이 Devrealtest-env라는걸 알 수 있다.
+이 명칭들을 적어서 넣어주면 된다.
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/152080729-0e3fcf8b-e5b1-4cc3-a771-2deda9e99a99.png">
-</p>
+<br>
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/152080729-0e3fcf8b-e5b1-4cc3-a771-2deda9e99a99.png">
-</p>
+```yml
+version_label: github-action-${{steps.current-time.outputs.formattedTime}}
+```
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/152080729-0e3fcf8b-e5b1-4cc3-a771-2deda9e99a99.png">
-</p>
+그 다음 볼 코드는 version_label이다. version label은 말 그대로 어떠한 버전인지 라벨을 붙였다고 생각하면 된다. 우리가
+이전 Github Action에서 빌드하는 글을 보면, Get Current Time에 대해 설명한적이 있다. 위의 Deploy.yml 풀코드를 보아도 알 수 있는데
+빌드를 완료하고 난 후 시점을 확보하고 그 시점을 배포하려는 어플리케이션의 버전 라벨로 사용한다는 것이다. 즉, github-action-${{steps.current-time.outputs.formattedTime}}
+코드는 github-action-빌드한시간 으로 버전 라벨로 사용한다는 의미이다.
 
+<br>
 
+> deploy.yml에서 Show Current Time에서도 이 ${{steps.current-time.outputs.formattedTime}} 코드를 사용하여 빌드된 시점을 보여줬었다.
+
+<br>
+
+```yml
+region: ap-northeast-2
+deployment_package: deploy/deploy.zip # (2)
+```
+
+나머지 코드들을 한번에 정리하도록 하겠다.     
+region: ap-northeast-2부터 보면, ap-northeast-2는 서울 리전을 의미한다. 그렇다면 왜 리전을 적어주어야 하는걸까?
+바로 빈스톡 환경이름 즉, 환경name은 각 리전별로 고유한 이름이여야 한다. 기본적으로 어플리케이션 내에 여러환경이 있을 수 있기에 어플리케이션은 중복해서
+빈스톡 환경을 생성할 수는 있지만, 빈스톡 환경의 이름은 각 환경마다 고유한 이름을 갖어야 된다는것이다. 고유한 이름의 범위는 바로 region내로 한정짓기 때문에
+접근하려고 하는 빈스톡이 어느 리전에 있는지 구체화해서 적어주어야 하는것이다.
+
+<br>
+
+> region이 다르면 중복된 빈스톡 환경이름으로 생성할 수 있다.
+
+<br>
+
+deployment_package는 우리가 이전에 빈스톡으로 서버에 배포하기위해 Jar파일을 압축하여 zip파일로 만들었다고 했다.
+이 zip파일을 배포하겠다는 의미이다.
+
+이로써, deploy.yml작성을 마무리하고 다른 설정파일들을 보도록 하겠다.
 
 #### 🪁 Reference
-* 참조링크 : []()
-* 참조링크 : []()
+* 참조링크 : [deploy.yml 작성하기](https://jojoldu.tistory.com/549)
 
 <br>
 
