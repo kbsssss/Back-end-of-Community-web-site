@@ -298,17 +298,116 @@ deployment_package는 우리가 이전에 빈스톡으로 서버에 배포하기
 
 
 
-### 2.
+### 2. 00-makeFiles.config, Procfile을 작성해보고 개념에 대해 알아보겠다.
 
 <p align="center">
-<img src="">
+<img src="https://user-images.githubusercontent.com/59492312/152473761-9c06c854-0f78-4014-9092-97e47dc72dc3.png">
 </p>
 
-ㅁ
+00-makeFiles.config, Procfile를 작성하기전에 파일이 위치한 구조부터 보고가겠다.
+보이는 바와같이, 00-makeFiles.config는 루트디렉토리에서 .ebextensions디렉토리를 만들어서 작성을 해주면 되고,
+Procfile은 루트디렉토리에 바로 만들어 주면 된다.
+
+<br>
+
+```config
+files:
+    "/sbin/appstart" :
+        mode: "000755"
+        owner: webapp
+        group: webapp
+        content: |
+            #!/usr/bin/env bash
+            JAR_PATH=/var/app/current/application.jar
+
+            # run app
+            killall java
+            java -Dfile.encoding=UTF-8 -jar $JAR_PATH
+```
+
+00-makeFiles.config파일부터 보도록 하겠다. 처음 드는 궁금증은 왜 .ebextensions라는 디렉토리안에 이 파일을 생성하느냐는 것이다.
+그 이유는 바로 빈스톡은 EC2를 대신해서 생성해주기 때문에, 우리가 직접 EC2를 직접 생성할때처럼은 사용할 수가 없다. 
+그래서 직접생성해서 사용했을때처럼 커스터마이즈를 하고싶을 때 이 .ebextensions라는 디렉토리아래에 설정파일을 두어서 적용시키는 것이다.
+
+00-makeFile.config라는 .config 확장명을 갖은 파일안에  YAML이나 JSON형식으로 코드를 작성하면, 빈스톡에 배포시
+해당 코드들이 사용이 되는것이다. 그럼, 이 .config라는 파일 확장자는 사실 크게 의미는 없지만 설정파일이라는 의미를 주기위해 .config로
+적어주는것이고 그 안의 코드들은 YAML이나 JSON으로 적어주어 적용하게 되는것이다. 이 00-makeFiles.config 파일에서 00-xxx.config형태로
+쓰는이유는, 파일의 나열이 alphabetical order 순서이기에, 적용 순서가 중요한대로 00,01로 붙여서 사용을 하는것이다.
+
+<br>
+
+>[.ebextension과 00-xxx.config파일명의 이해](https://techblog.woowahan.com/2539/)
+
+<br>
+
+이제 00-makeFiles.config안의 코드들에 대해 보도록 하겠다. 우선,
+files로 시작을 하는데, 이는 파일을 만들거나 다운로드를 받게하는 코드이다. 여기서는
+만드는 기능으로 적용이 된다. 
+
+<br>
+
+> [00-makeFiles.config 문법](https://techblog.woowahan.com/2539/)
+
+<br>
+
+우리가 배포한 zip파일이 압축이 풀리고, 어느 파일을 실행할지를 설정하는 어플리케이션 실행
+스크립트를 생성하는것이다.
+
+<br>
+
+```config
+    "/sbin/appstart" :
+        mode: "000755"
+        owner: webapp
+        group: webapp
+        content: |
+            #!/usr/bin/env bash
+            JAR_PATH=/var/app/current/application.jar
+
+            # run app
+            killall java
+            java -Dfile.encoding=UTF-8 -jar $JAR_PATH
+```
+
+/sbin 아래에 스크립트 파일을 두면, 이는 전역에서 사용이 가능하기에 /sbin/appstart 라고 작성하여 appsatrt 스크립트 파일을 생성한다.
+권한은 755를 갖으며, owner는 webapp이고, content를 갖은 스크립트 파일이 생성된다.
+
+content안에 있는 JAR_PATH는 압축이 해제된 zip파일내에 있던 jar파일의 경로를 의미한다.
+
+<br>
+
+> 우리가 이전 글에서 build한 후 jar파일들과 여러 설정파일들을 압축해주는 과정에서 
+> cp build/libs/*.jar deploy/application.jar 로 생성된 jar파일명을 application.jar로
+> 통일해준것을 알 것이다. 이렇게 통일해 준 이유는 위의 JAR_PATH에서 jar파일명을 그대로 명시해주어야 하기 때문이다. 만약,
+> build할 때 jar파일명을 application.jar로 통일해주지 않으면 JAR_PATH의 jar파일명도
+> 매번 그에 맞게 수정해주어야 하기때문에 번거로워 진다. 그래서 앞선 글에서 JAR파일을 통일시켜준것이다.
+
+<br>
+
+그 아래, killall java는 기존에 실행중이던 어플리케이션을 종료하라는 의미이다. 하지만, 우리는
+추가 배치를 이용한 롤링으로 새로운 인스턴스를 생성하여 배포해주고 기존의 인스턴스를 대체하는것이기 때문에
+필요한 코드는 아니지만, 적어주어도 상관은 없다.
+
+java -Dfile.encoding=UTF-8 -jar $JAR_PATH는 해당되는 Jar파일을 실행시킨다는
+의미이며, -Dfile.encoding=UTF-8을 함으로써 파일 인코딩을 UTF-8로 실행하라는 의미이다. 
+
+설정파일 00-makeFile.config로 인해 생성된 실행 스크립트의 content를 모두 보았다면,
+이제 이렇게 생성한 appstart 스크립트 파일을 실행시키는 일만 남았다.
+스크립트 파일의 실행은 Procfile에서 담당한다.
+
+<br>
+
+```text
+web: appstart
+```
+
+Procfile에 작성한 내용이다.     
+위에서 만든 어플리케이션 실행 스크립트를 실행시키는 일은 Procfile에서 하고
+또, Procfile을 실행시켜야 Procfile이 작동하는 것이니 결국에는 배포된 어플리케이션의 실행은
+Procfile을 실행시킨다는 의미와 같다.
 
 #### 🪁 Reference
-* 참조링크 : []()
-* 참조링크 : []()
+* 참조링크 : [00-mkaeFile.config, Procfile 작성](https://jojoldu.tistory.com/549)
 
 <br>
 
