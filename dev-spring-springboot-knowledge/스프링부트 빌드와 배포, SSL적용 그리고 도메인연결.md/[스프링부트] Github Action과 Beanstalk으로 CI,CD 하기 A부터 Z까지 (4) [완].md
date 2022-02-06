@@ -413,11 +413,228 @@ Procfile을 실행시킨다는 의미와 같다.
 
 
 
-### 🚀 추가로
+### 3.마지막 nginx.conf 파일을 보도록 하겠다.
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152483197-fe279aef-46bc-4a51-8b4e-f5d4bd19c091.png">
+</p>
+
+Nginx는 무중단 배포로도 사용이 되지만, 여기서는 Nginx가 받은요청을 스프링부트 임베디드 톰캣으로
+보내는 역활만 하는 리버스 프록시로 보도록 하겠다.
 
 <br>
 
-태그 : #
+> 무중단 배포를 Nginx로 설정할 때도, 리버스 프록시 기능을 사용한다.
+
+<br>
+
+Nginx.conf내에 쓰는 코드들을 설명하기에 앞서, 빈스톡 환경에서 리버스 프록시로써의 역활에 대해
+필수적으로 알아야 할 기본개념들을 보고 가도록 하겠다. 꼭 참고하기를 바란다.
+
+<br>
+
+> 빈스톡에서는 로드벨런서(Application Load Balancer)가 무중단 배포를 대신해서 수행한다.
+
+<br>
+
+> 리버스 프록시란, 내부망의 서버 앞단에서 요청을 처리해주는 서버를 의미한다. 조금 더
+> 쉽게 설명하자면, EC2 인스턴스 내부에는 리버스 프록시 역활을 하는 Nginx가 있고, 우리가 배포한
+> 스프링부트 프로젝트인 WAS(웹 어플리케이션 서버)가 존재한다. EC2 인스턴스로 오는 요청을 WAS가 직접받지않고
+> 리버스프록시인 Nginx가 대신받은 후에 다시 이를 WAS로 보내는것이다.
+
+> [nginx와 리버스 프록시란](https://juneyr.dev/nginx-basics)
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152486577-aa3176b8-8786-4923-b70f-3dd1e98f9b91.png">
+</p>
+
+보는바와 같이 EC2내부에 Nginx가 먼저 요청을 받게된다. 그렇다면, 궁금증이 생긴다. 왜 바로 WAS에서 받지않고
+번거롭게 리버스 프록시를 거쳐서 요청을 받을까 ?    
+
+그 이유는 바로 보안때문이다. WAS는 대부분 DB서버와 연결 되어있기에, WAS가 최전방에 있으면 보안이 취약해진다. 그 때문에
+리버스 프록시인 nginx를 앞 단에 두고 사용하는 것이다.
+
+<br>
+
+> [Nginx를 리버스 프록시로 사용하는 이유](https://juneyr.dev/nginx-basics)    
+> [Nginx 그림 참조](https://stackoverflow.com/questions/54612962/502-bad-gateway-elastic-beanstalk-spring-boot)
+
+<br>
+
+그런데, 위 사진을 보면 뭔가 이질적인게 느껴진다. 로드벨런서로 부터 클라이언트의 요청을 Nginx가
+받는것 까지는 이해가 되는데, 그 요청을 그대로 WAS에 보내는게 아니라 5000포트로 허공에 보내는걸 알 수 있다.
+왜 이러는 걸까 ? 
+
+Nginx는 빈스톡에서 사용될 때 별다른 설정을 해주지 않으면 받은 요청을 다시 5000포트로 보내게 설정되어있다.
+즉, 정상적으로 작동하게 하려면 우리는 이를 8080포트(WAS로)로 보내주거나, 아니면 스프링부트 어플리케이션을 5000포트로
+실행하여야 한다.
+
+<br>
+
+> 5000포트로 진행하는 방법에 대해서도 글 맨 마지막 추가부분에 잠깐 설명하겠지만, 필자는 8080포트로 진행하도록 하겠다.
+
+<br>
+
+스프링부트 어플리케이션은 8080포트에서 실행시키고, Nginx는 받아온 요청을 다시 8080포트인 WAS로 보내는
+설정을 바로 .platform/nginx/nginx.conf 에 있는 nginx.conf에서 설정하여 사용한다.
+
+<br>
+
+```conf
+user                    nginx;
+error_log               /var/log/nginx/error.log warn;
+pid                     /var/run/nginx.pid;
+worker_processes        auto;
+worker_rlimit_nofile    33282;
+
+events {
+    use epoll;
+    worker_connections  1024;
+}
+
+http {
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;
+
+  log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for"';
+
+  include       conf.d/*.conf;
+
+  map $http_upgrade $connection_upgrade {
+      default     "upgrade";
+  }
+
+  upstream springboot {
+    server 127.0.0.1:8080;
+    keepalive 1024;
+  }
+
+  server {
+      listen        80 default_server;
+
+      location / {
+          proxy_pass          http://springboot;
+          proxy_http_version  1.1;
+          proxy_set_header    Connection          $connection_upgrade;
+          proxy_set_header    Upgrade             $http_upgrade;
+
+          proxy_set_header    Host                $host;
+          proxy_set_header    X-Real-IP           $remote_addr;
+          proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+      }
+
+      access_log    /var/log/nginx/access.log main;
+
+      client_header_timeout 60;
+      client_body_timeout   60;
+      keepalive_timeout     60;
+      gzip                  off;
+      gzip_comp_level       4;
+
+      # Include the Elastic Beanstalk generated locations
+      include conf.d/elasticbeanstalk/healthd.conf;
+  }
+}
+```
+
+nginx.conf에 작성된 코드이다. 이제부터 각 문단이나 중요키워드를 중심으로
+설명해 나가도록 하겠다. 부수적으로 알아야 할 개념들에 대해서도 설명하니, 천천히 따라오면
+된다.
+
+(1). **error_log /var/log/nginx/error.log warn;** - 이 부분은 nginx에서 일어나는 로그파일이
+존재하는 곳이다. warn은 로그 레벨을 의미하며, 해당 로그레벨 이상만 기록한다. error로 변경할 수도 있다.
+
+<br>
+
+> 우리가 배포한 ec2인스턴스에 ssh접속하여 vim /var/log/nginx/error.log를 하면 nginx의 에러로그를 볼 수 있다.
+> 그러나, 조금 더 편한 방법으로는 빈스톤 콘솔에서 로그를 클릭하고, 전체 로그를 요청해서 다운받은다음에, nginx폴더의 error텍스트를
+> 열어보면 더 편하게 볼 수 있다.(같은 로그다.)
+
+<br>
+
+> [nginx 에러 로그](https://prohannah.tistory.com/136)
+
+<br>
+
+(2). events 블록 : 네트워크 동작에 관련된 설정을 하는곳이며, 이벤트 모듈을 사용한다.    
+
+(3). http 블록 : 웹서버에 대한 동작을 설정하는 영역으로 server블록과 location블록 그리고 upstream블록의 루트 블록이다. 여기서 선언된
+값은 하위블록에 상속되어, 서버의 기본값이 된다.
+
+(4). server블록과 location블록 : server블록은 하나의 웹사이트를 선언하는데 사용되며, 가상 호스팅의 개념이다. location블록은 server블록 내에서
+특정 URL을 처리하는 방법을 정의한다. 
+
+(5). upstream블록 : origin서버라고도 하며, 여기서는 WAS를 의미한다. nginx는 downstream에 해당한다.
+
+
+<br>
+
+> 위의 nginx.conf설정 그대로 빈스톡 환경 구성의 소프트웨어 환경 속성에서 PORT로 8080 혹은 
+> 5000으로 설정하고 해도 정상적으로 작동한다.(특히, PORT 5000은 빈스톡 환경을 생성하자마자 자동으로 소프트웨어
+> 환경 속성에 적혀져있는데, 위의 nginx.conf설정이 담긴 프로젝트를 배포하면 해당 환경 속성 PORT 5000이 없어진다.)      
+> [PORT 8080 적용](https://stackoverflow.com/questions/54612962/502-bad-gateway-elastic-beanstalk-spring-boot)
+
+<br>
+
+#### 🪁 Reference
+* 참조링크 : []()
+* 참조링크 : []()
+
+<br>
+
+
+
+### 🚀 추가로
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152488115-f6e4b0d7-2953-4d84-ac7e-e122c588f229.png">
+</p>
+
+위에 보이는것처럼 Nginx가 80번포트로 받은 외부의 요청들을 5000포트로 그대로 요청을 보내며, 스프링부트 어플리케이션을 5000포트로 실행시키는 방법에 대해서도 보고 가도록
+하겠다.
+
+첫번째는, 스프링부트 설정파일인 application.properties 또는 application.yml에     
+server.port:5000 (properties설정파일) 또는     
+server:   
+  port: 5000 (yml설정파일)    
+와 같이 적어주면, 스프링부트 프로젝트가 실행될때 해당 5000포트에서 실행이 된다.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152491989-a3c18aa9-7581-4be7-8cfc-2b1fe0b3f23e.png">
+</p>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152515745-47e37589-6117-41b5-9e72-b54ad47e83ec.png">
+</p>
+
+두번째 방법은, 바로 빈스톡 환경 생성을 할 때 추가 옵션 구성에서 소프트웨어 편집을 누르고
+그 안의 환경 속성에서 SERVER_PORT와 5000을 적어주고 적용하면, 이 또한 스프링부트 어플리케이션이 5000포트에서
+실행되게된다.
+
+<br>
+
+> 그런데, properties나 yml설정파일을 사용하는것이나, 빈스톡 환경 구성에서 직접 SERVER_PORT를 5000으로 잡아주는 방식은
+> 어디까지나, 위에 작성한 nginx.conf파일처럼 포트를 직접 설정해주지 않았을 때 이야기다. nginx.conf 파일도 그대로 사용하면서 바로 위의
+> 설정들도 함께 사용하지 말길 바란다.
+
+<br>
+
+#### 🪁 Reference
+
+* 참조링크 : [Nginx 포트 5000 그대로 사용하는 방법 (1)](https://browndwarf.tistory.com/66)    
+* 참조링크 : [Nginx 포트 5000 그대로 사용하는 방법 (2)](https://stackoverflow.com/questions/54612962/502-bad-gateway-elastic-beanstalk-spring-boot)    
+* 참조링크 : [Nginx 포트 5000 그대로 사용하는 방법 (3)](https://wky.kr/6)
+
+<br>
+
+
+
+태그 : #deploy.yml, #.ebextensions, #nginx.conf, #00-makeFiles.config, #Procfile, 
 
 
 위에 있는거 로그 스토리지 s3까지 버켓생성하고 다시봐야 한다.
@@ -432,3 +649,6 @@ Procfile을 실행시킨다는 의미와 같다.
 배포 바익은 추가 롤링이 아닌, 변경 불가능에 대해서도 정리하자.
 
 ㅁㅁㅁ 이거 그거도 해야해, 이거 배포하기 Version label 앞에서 시간확보한거 사용하는거
+이거는 파일 작성할 때 말고 실제 빈스톡 환경에서 콘솔창 다룰때 상세하게 다루자.
+
+그 443 ssl적용할때, nginx.conf파일은 물론이고 그 리스터 부분도 다시 정리해야해
