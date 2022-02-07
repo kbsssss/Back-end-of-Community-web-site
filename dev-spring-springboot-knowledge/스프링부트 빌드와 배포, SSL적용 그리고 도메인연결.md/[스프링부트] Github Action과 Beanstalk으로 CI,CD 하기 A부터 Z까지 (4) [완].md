@@ -492,6 +492,7 @@ worker_rlimit_nofile    33282;
 events {
     use epoll;
     worker_connections  1024;
+    multi_accept on;
 }
 
 http {
@@ -545,22 +546,145 @@ nginx.conf에 작성된 코드이다. 이제부터 각 문단이나 중요키워
 설명해 나가도록 하겠다. 부수적으로 알아야 할 개념들에 대해서도 설명하니, 천천히 따라오면
 된다.
 
-(1). **error_log /var/log/nginx/error.log warn;** - 이 부분은 nginx에서 일어나는 로그파일이
-존재하는 곳이다. warn은 로그 레벨을 의미하며, 해당 로그레벨 이상만 기록한다. error로 변경할 수도 있다.
+<br>
+
+```conf
+user                    nginx;
+error_log               /var/log/nginx/error.log warn;
+pid                     /var/run/nginx.pid;
+worker_processes        auto;
+worker_rlimit_nofile    33282;
+```
+
+(1).**user** : 프로세스가 실행되는 권한을 설정하는거다. root혹은 nginx와 같은 값을 지정할 수 있다.
+
+(2). **error_log** : nginx에서 일어나는 에러 로그파일이 존재하는 곳이다. warn은 로그 레벨을 의미하며, 해당 로그레벨 이상만 기록한다. error로 변경할 수도 있다.
 
 <br>
 
-> 우리가 배포한 ec2인스턴스에 ssh접속하여 vim /var/log/nginx/error.log를 하면 nginx의 에러로그를 볼 수 있다.
+> 우리가 빈스톡으로 배포한 ec2인스턴스에 ssh접속하여 vim /var/log/nginx/error.log를 하면 nginx의 에러로그를 볼 수 있다.
 > 그러나, 조금 더 편한 방법으로는 빈스톤 콘솔에서 로그를 클릭하고, 전체 로그를 요청해서 다운받은다음에, nginx폴더의 error텍스트를
 > 열어보면 더 편하게 볼 수 있다.(같은 로그다.)
 
 <br>
 
-> [nginx 에러 로그](https://prohannah.tistory.com/136)
+(3).**worker_processes** : nginx에서 몇 개의 워커 프로세스를 생성할 것인지를 지정하는 지시어이다. 1이면 모든 요청을 하나의
+프로세스로 실행하겠다는 의미이다. CPU 멀티코어 시스템에서 1이면 하나의 코어만으로 요청을 처리하겠다는 의미이다. 보통 명시적으로 서버에
+장착되어 있는 코어 수 만큼 할당하는 것이 보통이며, 그렇기에 auto로 주로 설정한다.
 
 <br>
 
-(2). events 블록 : 네트워크 동작에 관련된 설정을 하는곳이며, 이벤트 모듈을 사용한다.    
+> EC2인스턴스는 인스턴스 종류마다 코어의 개수가 다르다. 그렇기에 auto로 설정하는 편이 좋다.
+> auto는 사용가능한 CPU 코어를 자동탐지하여 적용해준다.
+
+<br>
+
+(4).**worker_rlimit_nofile** : 위의 워커 프로세스가 최대 열 수 있는 파일 수를 제한하는것이다.
+
+<br>
+
+추가로,    
+1. nginx 프로세스는 마스터(master)와 워커(worker) 프로세스로 나뉜다. 우리가 설정한 프로세스는
+워커 프로세스이며, user에서 지시한 값은 해당 워커 프로세스의 권한 지정이다. 만약 user에서 권한을 루트사용자(최고사용자)로
+지정해놓았는데, 악의적인 사용자가 제어권을 갖게되면 최고 사용자의 권한으로 원격제어당하는것이기 때문에 루트사용자로 지정하지않고
+nginx로 사용하는것이다.
+
+2. nginx성능 튜닝에 관해서이다. 
+통상 worker_processes는 auto로 설정하지만, 운영체제를 위해서 CPU core수의 10~20%는 남겨두는경우가 있다.
+예를 들면, 24core를 갖은 CPU라면 Nginx에서 사용할 코어수를 1~2-정도 할당하고 2~4개는 OS용으로 남겨두는것이다.
+지금 당장은 적용할 필요는 없지만, 참고하도록하자.
+
+<br>
+
+> [user nginx의 의미 (1)](https://whatisthenext.tistory.com/123)    
+> [user nginx의 의미 (2)](https://narup.tistory.com/209)    
+> [nginx 에러 로그](https://prohannah.tistory.com/136)    
+> [worker_processes의 개념 (1)](https://whatisthenext.tistory.com/123)    
+> [worker_processes의 개념 (2)](https://narup.tistory.com/209)    
+> [nginx에서 worker processes의 auto 의미](https://nginx.org/en/docs/ngx_core_module.html#worker_processes)    
+> [nginx 성능튜닝에 관한 이야기](https://couplewith.tistory.com/entry/%EA%BF%80%ED%8C%81-%EA%B3%A0%EC%84%B1%EB%8A%A5-Nginx%EB%A5%BC%EC%9C%84%ED%95%9C-%ED%8A%9C%EB%8B%9D-2-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EC%B2%98%EB%A6%AC%EB%9F%89-%EB%8A%98%EB%A6%AC%EA%B8%B0)
+
+<br>
+
+이후, pid는 필요시 nginx.org 공식홈에서 설명해주고 있으니,
+궁금하다면 읽어보도록 하자.
+
+<br>
+
+```conf
+events {
+    use epoll;
+    worker_connections  1024;
+    multi_accept on;
+}
+```
+
+(1).**user epoll** : Linux커널 2.6이상인경우에 쓰이는 효율적인 이벤트 처리 방식이다.
+
+<br>
+
+> FreeBSD 4.1+, OpenBSD 2.9+, NetBSD 2.0 및 MacOS에서 순차적인 처리를 위한 방식으로 kqueue가 사용되고 있으나
+> Linux 2.6+ 이상에서 사용하는 효율적인 이벤트 처리 방식으로 epoll가 사용되고 있다. 여기서 말하는 순차적인 처리와 효율적인 이벤트
+> 처리 방식을 multi_accept에서 다시 설명하도록 하겠다.
+
+<br>
+
+(2).**worker_connections** : 하나의 프로세스가 처리할 수 있는 동시 접속 최대 수를 의미한다. 
+그렇기에, 한번에 받을 수 있는 요청은 worker_processess(프로세스 수) X worker_connections수로
+정해진다. 통상 512, 1024를 기준으로 적어진다.
+
+<br>
+
+> 여기서 고려해야 할 사항은, 이 커넥션의 의미는 클라이언트와의 커넥션 뿐만이 아니라, 프록시 서버들간의 연결이나 아니면 다른 연결들에대해서도
+> 포함한 총 커넥션의 수라는것이다. 또한, 실제 동시 연결 커넥션 수는 오픈 되는 파일의 최대값을 넘을 수 없다는 거다. 이 값은
+> 위에서 설명한 worker_rlimit_nofile을 의미한다. 지금 당장은 고려하지 않아도 되지만, 서비스의 규모가 커지면 고려해야 할 부분이다.    
+> [worker_connections의 추가내용](https://nginx.org/en/docs/ngx_core_module.html#worker_connections)
+
+<br>
+
+(3).**multi_accept** : 순차적으로 요청(커넥션)을 받지 않고 동시에 요청을 접수하는 방식이다. 디폴트값은 off이다.
+
+<br>
+
+> 위에 user가 epoll로 설정되어야만 사용할 수 있다. 만약 kqueue로 설정되어 있으면 해당 디렉티브(multi_accept on)는 무시되는데
+> 그 이유는 kqueue방식은 애초에 커넥션들을 순차적으로 받아들여기 위해 사용되는 방식이기 때문이다.
+
+<br>
+
+> [use epoll, kqueue (1)](https://couplewith.tistory.com/entry/%EA%BF%80%ED%8C%81-%EA%B3%A0%EC%84%B1%EB%8A%A5-Nginx%EB%A5%BC%EC%9C%84%ED%95%9C-%ED%8A%9C%EB%8B%9D-2-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EC%B2%98%EB%A6%AC%EB%9F%89-%EB%8A%98%EB%A6%AC%EA%B8%B0)       
+> [use epoll, kqueue (2)](https://nomaddream.tistory.com/19)   
+> [worker_connections에 관하여 (1)](https://couplewith.tistory.com/entry/%EA%BF%80%ED%8C%81-%EA%B3%A0%EC%84%B1%EB%8A%A5-Nginx%EB%A5%BC%EC%9C%84%ED%95%9C-%ED%8A%9C%EB%8B%9D-2-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EC%B2%98%EB%A6%AC%EB%9F%89-%EB%8A%98%EB%A6%AC%EA%B8%B0)   
+> [worker_connections에 관하여 (2)](https://nomaddream.tistory.com/19)   
+> [worker_connections에 관하여 (3)](https://whatisthenext.tistory.com/123)   
+> [multi_accept 개념 (1)](https://nginx.org/en/docs/ngx_core_module.html#worker_connections)
+> [multi_accept 개념 (2)](https://couplewith.tistory.com/entry/%EA%BF%80%ED%8C%81-%EA%B3%A0%EC%84%B1%EB%8A%A5-Nginx%EB%A5%BC%EC%9C%84%ED%95%9C-%ED%8A%9C%EB%8B%9D-2-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EC%B2%98%EB%A6%AC%EB%9F%89-%EB%8A%98%EB%A6%AC%EA%B8%B0)
+
+<br>
+
+```conf
+http {
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;
+
+  log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for"';
+
+  include       conf.d/*.conf;
+
+  map $http_upgrade $connection_upgrade {
+      default     "upgrade";
+  }
+}
+```
+
+s
+
+<br>
+
+<br>
+
+아니 근데, 이거하고 디렉티브니 이런 기본 개념도 정리해야해, 블럭이니
 
 (3). http 블록 : 웹서버에 대한 동작을 설정하는 영역으로 server블록과 location블록 그리고 upstream블록의 루트 블록이다. 여기서 선언된
 값은 하위블록에 상속되어, 서버의 기본값이 된다.
