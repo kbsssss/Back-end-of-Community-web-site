@@ -548,9 +548,27 @@ nginx.conf에 작성된 코드이다. 이제부터 각 문단이나 중요키워
 
 1. 먼저 nginx 설정파일의 문법에 대해서 보도록 하겠다.
 
-* **Directives(지시어)** : 
+* **Directives(지시어)** : nginx.conf처럼 설정파일에서는 디렉티브라는것으로 옵션설정을 한다. 즉,
+위의 코드중에 user, error_log, pid, http, server모두 디렉티브이다. 또한, 디렉티브는 블록(혹은 컨텍스트)디렉티브와
+심플 디렉티브로 나뉜다.
+ 
+* **심플디렉티브** : 세미콜론(;)으로 끝나는 디렉티브이다. 위의 디렉티브중 USEr,error_log,pid가 심플디렉티브이다.
+ 
+* **블록 디렉티브** : 세미콜론 대신에 중괄호({})로 끝난다. 또한, 블록 디렉티브는 중괄호 안에 다른 디렉티브를 가질 수 있다.
+위의 디렉티브중 http, server가 블록 디렉티브이다..
 
-* a
+<br>
+
+> 블록은 컨텍스트라고도 불린다. 그렇기에 컨텍스트안에는 다른 디렉티브들이 있을 수 있는데, user, error_log, pid처럼
+> 다른 컨텍스트에 속해있지않은 디렉티브들을 메인 컨텍스트안에 있는것으로 보며, server디렉티브는 http 컨텍스트안에
+> 있는것으로 보면 된다.
+
+<br>
+
+> [심플 디렉티브와 블록(컨텍스트) 디렉티브 (1)](https://kscory.com/dev/nginx/install)      
+> [심플 디렉티브와 블록(컨텍스트) 디렉티브 (2)](https://architectophile.tistory.com/12)
+
+<br>
 
 2. 다음으로, nginx.conf의 파일이 어디있는지 그리고 디렉터리 구조는 어떠한지 보도록 하겠다.
 (모두 필요한 내용이니 가볍게 읽어보면 도움이 된다.)
@@ -559,6 +577,7 @@ nginx.conf파일은 기본적으로 /etc/nginx/ 폴더안에 위치하게 된다
 
 즉, 조금 더 풀어서 말하자면, 우리가 EC2인스턴스에 ssh로 접속하게 되면 제일 먼저 홈디렉토리에서 시작하게 된다.
 그곳에서 명령어 cd /etc/enginx로 들어가보면 각종 nginx 설정파일들과 폴더들이 있고 거기에 nginx.conf파일도 있는것이다.
+그 중에 nginx.conf파일이 가장 주요한 설정파일이다.
 
 <br>
 
@@ -568,6 +587,11 @@ nginx.conf파일은 기본적으로 /etc/nginx/ 폴더안에 위치하게 된다
 > 빈스톡을 이용한 인스턴스이건 ec2-user로 디렉토리명이 지정되어있다. 실제로 해당 홈 디렉토리를 들어가보면 디렉토리가
 > '~'로 표시된것을 알 수 있다.    
 > [루트 디렉토리 '/'와 홈 디렉토리'~'](https://dana-study-log.tistory.com/entry/Linux-%EB%A6%AC%EB%88%85%EC%8A%A4-%ED%8C%8C%EC%9D%BC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B5%AC%EC%A1%B0-%EB%A3%A8%ED%8A%B8-%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC-%ED%99%88-%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC)
+
+<br>
+
+> [nginx.conf 파일의 위치 (1)](https://kscory.com/dev/nginx/install)      
+> [nginx.conf 파일의 위치 (2)](https://architectophile.tistory.com/12)
 
 <br>
 
@@ -701,7 +725,7 @@ http {
 }
 ```
 
-s
+a
 
 <br>
 
