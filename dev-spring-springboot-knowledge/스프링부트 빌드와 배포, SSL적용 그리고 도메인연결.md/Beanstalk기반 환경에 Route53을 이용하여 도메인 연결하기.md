@@ -2,7 +2,7 @@
 <img src="">
 </p>
 
-# 📖 
+# 📖 Beanstalk기반 환경에 Route53을 이용하여 도메인 연결하기
 
 * 
 * 

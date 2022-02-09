@@ -725,9 +725,151 @@ http {
 }
 ```
 
-a
+http 블록은 웹 서버에 대한 동작을 설정하는 영역으로, server, location 블록을 포함한다.
+또한, 여기서 선언된 값은 하위블록에 상속된다.
 
 <br>
+
+> http 블록을 여러개 생성하여 관리할 수 있지만, 권장사항은 아니다. http블록을 하나만 생성하여 이용하는것이
+> 권장사항이다.     
+> [http블록 갯수 권장사항](https://taewooblog.tistory.com/74)
+
+<br>
+
+> [http 블록에 관하여 (1)](https://prohannah.tistory.com/136)
+> [http 블록에 관하여 (2)](https://taewooblog.tistory.com/74)
+> [선언된 값에 대한 하위 블록의 상속](https://juneyr.dev/nginx-basics)
+
+<br>
+
+그 다음, include 디렉티브는 추가적인 설정파일(conf)을 포함시켜주거나 MIME 타입 목록을
+지정하는데 사용된다.
+
+  include       /etc/nginx/mime.types;    
+  include       conf.d/*.conf;
+
+이곳에서도, mime.types 파일을 읽어들이거나 *.conf로 설정파일을 불러오고있다.
+
+<br>
+
+> [include 지시어에 관하여 (1)](https://narup.tistory.com/209)
+> [include 지시어에 관하여 (2)](https://aimaster.tistory.com/11)
+> [mime.types에 관하여](https://kscory.com/dev/nginx/install)
+
+<br>
+
+default_type의 default_type  application/octet-stream;는 옥텟 스트림 기반의 http를 사용한다는 의미이며,
+MIME 타입 설정이다.
+
+<br>
+
+> [default_type에 관하여 (1)](https://narup.tistory.com/209)
+> [default_type에 관하여 (2)](https://kscory.com/dev/nginx/install)
+
+<br>
+
+log_format은 nginx의 access 로그의 형식을 지정해준다.
+
+<br>
+
+> 뒤에 나오는 access_log의 로그 형식을 지정한다. 또한, 앞서 언급한 error로그의 형식에는
+> 영향을 주지 않는다. 
+
+<br>
+
+> [default_type에 관하여 (2)](https://kscory.com/dev/nginx/install)
+
+<br>
+
+```conf
+  upstream springboot {
+    server 127.0.0.1:8080;
+    keepalive 1024;
+  }
+```
+
+이제는 upstream 블록 디렉티브를 보겠다.    
+upstream은 origin은 WAS 즉, 웹 어플리케이션 서버를 의미한다. nginx와 연결한 웹 어플리케이션 서버를 지정하는데
+사용된다. 하위에 있는 server 지시어는 연결할 웹 어플리케이션 서버의 'IP주소(호스트주소):포트'로 지정해준다.
+
+upstream은 여러개를 만들 수 있으며,a
+
+<br
+
+> nginx서버를 가리키는것은 downstream에 해당한다.
+
+<br>
+
+> upstream 지시어 안에, server 지시어를 여러개 적어서 로드벨런싱으로써 작용하게 할 수도 있다.    
+> upstream test{    
+>         server 호스트주소:포트    
+>         server 호스트주소:포트    
+> }    
+> 와 같이 써주며, 순서대로 요청을 돌아가며 처리해주는 라운드로빈 방식과 서버마다 가중치를 주고 가중ㅊ치가 높은곳 부터 부하를 보내는 가중치
+> 라운드 로빈 방식이 있는데, 다른 설정이 없다면 라운드 로빈 방식으로 작동한다.       
+> [엔진엑스로 로드벨런싱 이용하기](https://cantcoding.tistory.com/77)
+
+<br>
+
+> [upstream 지시어 (1)](https://narup.tistory.com/209)
+> 
+
+<br>
+
+```conf
+  server {
+      listen        80 default_server;
+
+      access_log    /var/log/nginx/access.log main;
+
+      client_header_timeout 60;
+      client_body_timeout   60;
+      keepalive_timeout     60;
+      gzip                  off;
+      gzip_comp_level       4;
+
+      # Include the Elastic Beanstalk generated locations
+      include conf.d/elasticbeanstalk/healthd.conf;
+  }
+```
+
+다음은, server 블록 지시어다. server 블록 또한 여러개 만들 수 있는데, 그렇게되면 한대의 머신(=호스트)에
+여러 웹사이트를 서빙할 수 있게 되어 실제로 호스트는 한대지만, 가상으로 마치 호스트가 여러개 존재하는 것처럼 동작하게 할 수 있기에 가상 호스트라고 한다.
+
+조금 더 쉽게 말하자면, http 컨텐스트 내에 아래와 같이    
+
+```conf
+server {
+    server_name test123.com
+}
+
+server {
+    server_name test456.com
+}
+```
+
+<br>
+
+> 위에는 적혀져 있지 않지만, server_name이라는 지시어를 server 컨텐스트내에 사용할 수 있다.
+> 
+
+<br>
+
+```conf
+      location / {
+          proxy_pass          http://springboot;
+          proxy_http_version  1.1;
+          proxy_set_header    Connection          $connection_upgrade;
+          proxy_set_header    Upgrade             $http_upgrade;
+
+          proxy_set_header    Host                $host;
+          proxy_set_header    X-Real-IP           $remote_addr;
+          proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+      }
+```
+
+마지막으로, location 블록 지시어를 보겠다.
+a
 
 <br>
 
@@ -806,7 +948,7 @@ server:
 
 
 태그 : #deploy.yml, #.ebextensions, #nginx.conf, #00-makeFiles.config, #Procfile, 
-
+#하위블록으로 상속, #
 
 위에 있는거 로그 스토리지 s3까지 버켓생성하고 다시봐야 한다.
 
