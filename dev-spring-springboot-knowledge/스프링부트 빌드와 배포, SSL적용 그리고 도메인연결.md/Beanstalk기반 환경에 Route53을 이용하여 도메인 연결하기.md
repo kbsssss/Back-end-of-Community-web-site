@@ -1,10 +1,10 @@
 <p align="center">
-<img src="">
+<img src="https://user-images.githubusercontent.com/59492312/153342965-a7f7fcc2-96ba-467f-aae8-e22fdb515e43.png">
 </p>
 
 # 📖 Beanstalk기반 환경에 Route53을 이용하여 도메인 연결하기
 
-* 
+* route53, 호스팅 영역 생성
 * 
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
@@ -24,7 +24,7 @@ aws 검색란에 route53을 검색하면 위와같은 화면이 나타난다. �
 
 <br>
 
-> 여기서 알고가야 할 용어가 있는데, 우리는 지금 DNS 서버로 route53을 사용하는거다. DNS는 Domain Name System으 요청받은 도메인 이름을
+> 여기서 알고가야 할 용어가 있는데, 우리는 지금 DNS 시스템으로 route53을 사용하는거다. DNS는 Domain Name System으 요청받은 도메인 이름을
 > 네트워크 주소로 바꾸어주거나, 그 반대의 변환을 시행해주는 시스템이다. 또한, 호스팅영역은 레코드들의 컨테이너이며 레코드에는 특정 도메인과 그 하위 도메인의 트래픽을
 > 라우팅하는 방식에 대한 정보가 담겨있다. 뒤에 자세히 설명해놓았으니, 순서대로 읽으면 더 잘 이해가 될것이다.
 
