@@ -127,6 +127,118 @@ SOA레코드와 NS레코드는 호스팅영역을 생성해주면 AWS에서 자�
 
 <br>
 
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/153537042-fa1c85bd-156d-4456-97fb-55fe8e8d62c6.png">
+</p>
+
+다음은, 레코드 생성 버튼을 눌러주면 레코드를 등록할 수 있는 화면이 나온다.
+레코드이름은 어느 하위도메인이나, 도메인에 대해 라우팅을 해줄것인지 적는거다. 우리는 우선 도메인에 대한
+A레코드 타입으로 진행하도록 하니 레코드 이름에는 아무것도 적어주지 않는다.
+
+<br>
+
+> 도메인은 real-test.com을 의미하며, 하위도메인은 www.real-test.com, m.real-test.com을 의미한다.
+
+<br>
+
+> A레코드 타입이란, 지정된 레코드이름으로 즉, 지정된 도메인명으로 요청이 들어온다면, 지정한 IP 주소로 
+> 연결되게 하는 방식을 의미한다. 우리는 빈스톡 환경에서 만든 로드벨런서로 라우팅 값을 지정할것이다.
+
+<br>
+
+트래픽 라우팅 대상에는 내가 라우팅해줄 ip나 그 외에 값들을 입력해주어야 하는데 우리는 A레코드 타입이며,
+빈스톡 배포에 사용한 로드벨런서로 값을 지정해줄것이다.
+
+<br>
+
+> Elastic Beanstalk환경에 대한 별칭을 선택하지 않고, application/Classic Load balancer을 선택해준 이유는
+> 뒤에 ACM SSL 인증서(https)를 로드벨런서에 연결할것인데, 여기서 A레코드값을 로드벨런서로 지정해야 정상적으로 작동하기 때문이다. 
+> 다음 빈스톡과 ssl설정 작성글에서 더 자세하게 다룰것이다.    
+> [ACM SSL인증서를 로드벨런서에 연결](https://aws.amazon.com/ko/premiumsupport/knowledge-center/associate-acm-certificate-alb-nlb/)
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/153540770-fd3e359e-7aa9-4768-ac81-86d494dd0408.png">
+</p>
+
+보니까, 이거 설명하고 그리고 ROUTE53은 리전별 서비스가 아니다. 왜 그럴까 ?
+
+지연시간은 같은리전 빈스톡환경 여러개 고려하고 지리적위치는 리전기반으로 다시정리
+
+<br>
+
+1.첫번째, 선 로드벨런서는 어차피 캐시를 하면 안되기에 TTL이 없는건가.
+2.혹시 첫번째 DNS 쿼리에 대해서 성능이 좋다는게, 어차피 로드벨런서나 빈스톡은 매번 TTl없이 진행해야하는데, 서브도메인 호스팅영역으로
+ 그냥 NS만하면 그 값은 안바뀌잖아 그러니까 그거는 캐시 즉,ttl을 적용해서 네임서버 부하를 덜어주는거지.
+ 
+ 엔진엑스는 반영이안되나, 그 배포는 됬는데 건강체크해서 실패한 경우, SSh 접속해서 보면 좋을텐
+ 이거도 전부 반영이됬다.
+ 
+ 그거도 해야해, 내가 배포실패해도 파일은 올라갔는지, NGinx.conf파일 볼려고 SSh 접속하려하는데 안됨
+ 근데, 이거 빈스톡 버전 최신꺼로하니 됬다.; 시
+ 
+ 그리고 이상하게 내 CELEBMINE.COM해서 들어가도 다시 클릭해보면 Www안보인다.
+ 그러나, WWW.Celebmine.com으로 들어가면 보인다. 흠..다른데는 무조건 WWw가 보이는데
+ Https의 영향인건가.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/153552296-134c0c66-59a6-4a26-a9d7-0623c6ed82f6.png">
+</p>
+
+위에서는 별칭값을 선택했기 때문에 안나왔지만, TTL이라는 속성이 하나 더 있다.
+TTL이란, DNS resolver가 이 레코드에 관한 정보를 캐싱할 시간(초)이다.
+조금 더 쉽게 이해가 되기 위해 아래 그림을 보겠다.
+
+<br>
+
+> [TTL이란](https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/resource-record-sets-values-basic.html#rrsets-values-basic-ttl)
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/153543841-c6377ecb-88be-4037-9fb8-b38a80b8a8fa.png">
+</p>
+
+즉, TTL을 설정해 놓으면 위의 그림과같이 DNS resolver에서 해당 레코드에 대한 정보를
+캐싱하기 때문에, 캐싱된 레코드는 요청이들어오면 지연 시간을 줄일 수 있고 Route 53 서비스 비용 또한 줄이는 효과가 있다.
+(TTL을 이용한 캐싱을 할경우 DNS resolver에서 같은 도메인에 대한 IP주소를 기억해서 캐싱된 도메인에 대한
+DNS 쿼리 요청을 받으면 바로 IP주소를 반환하게 되는것이다.)
+
+<br>
+
+> 하지만, 만약 특정 레코드에 대한 라우팅 값이 바뀌면 TTL시간을 줄여주어서 새로운 라우팅값이
+> 반영되도록 해야하는것도 알아두자.
+
+> 추가로, 별칭을 지정해주면, TTL을 입력하는 부분이 사라진다.
+> 그 이유는, 별칭 레코드가 AWS 리소스(라우팅 값)를 가리키는 경우 
+> 유지 시간(TTL)을 설정할 수 없고. 라우팅 값으로 입력한
+> aws 리소스내에서 유지 시간(TTL)을 사용하여 설정한다. 그래서 로드벨런서로 라우팅값을
+> 지정해줄때 TTL 속성란이 보이지 않았던거다.    
+> [레코드 설정시 별칭은 TTL 속성이 없는이유](https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html)
+
+<br>
+
+> [Route53과 DNS resolver 그리고 도메인 관계](https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/welcome-dns-service.html#welcome-dns-service-how-route-53-routes-traffic)
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/153557545-e4ef8dc2-2a25-4f75-a575-f192a15b4a29.png">
+</p>
+
+마지막으로, DNS 쿼리의 개념에 대해서도 보고가도록 하자.
+바로 전 위의 그림 에서 보다시피, DNS 쿼리는 특정 도메인의 IP를 조회하기 위한 
+DNS resolver로 보내는 요청이다. 
+
+<br>
+
+> [DNS쿼리 개념과 요금, 호스팅영역 요금](https://jw910911.tistory.com/92)
+
+<br>
+
 #### 🪁 Reference
 * 참조링크 : []()
 * 참조링크 : []()
