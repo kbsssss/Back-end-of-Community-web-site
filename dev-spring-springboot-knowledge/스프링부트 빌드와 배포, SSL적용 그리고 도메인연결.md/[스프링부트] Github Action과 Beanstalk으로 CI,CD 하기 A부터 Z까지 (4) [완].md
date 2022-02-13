@@ -777,10 +777,6 @@ log_format은 nginx의 access 로그의 형식을 지정해준다.
 
 <br>
 
-> [default_type에 관하여 (2)](https://kscory.com/dev/nginx/install)
-
-<br>
-
 ```conf
   upstream springboot {
     server 127.0.0.1:8080;
@@ -794,7 +790,7 @@ upstream은 origin은 WAS 즉, 웹 어플리케이션 서버를 의미한다. ng
 
 upstream은 여러개를 만들 수 있으며,a
 
-<br
+<br>
 
 > nginx서버를 가리키는것은 downstream에 해당한다.
 
@@ -947,8 +943,9 @@ server:
 
 
 
-태그 : #deploy.yml, #.ebextensions, #nginx.conf, #00-makeFiles.config, #Procfile, 
-#하위블록으로 상속, #
+태그 : #deploy.yml, #.ebextensions, #nginx.conf, #00-makeFiles.config, #Procfile, #하위블록으로 상속, # 
+
+
 
 위에 있는거 로그 스토리지 s3까지 버켓생성하고 다시봐야 한다.
 
