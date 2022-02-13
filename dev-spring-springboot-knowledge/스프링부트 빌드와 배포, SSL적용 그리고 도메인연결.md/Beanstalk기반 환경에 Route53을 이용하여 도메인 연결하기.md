@@ -208,8 +208,8 @@ A레코드 타입으로 진행하도록 하니 레코드 이름에는 아무것�
 
 <br>
 
-> [Route53 라우팅 정책 (1)](https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/routing-policy.html)
-> [Route53 라우팅 정책 (2)](https://velog.io/@pgh8019/AWS-Route-53-Routing-Policy%EB%A5%BC-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90)
+> [Route53 라우팅 정책 (1)](https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/routing-policy.html)    
+> [Route53 라우팅 정책 (2)](https://velog.io/@pgh8019/AWS-Route-53-Routing-Policy%EB%A5%BC-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90)    
 > [Route53 라우팅 정책 (3)](https://gooners0304.tistory.com/entry/Route-53-DNS-%EB%A0%88%EC%BD%94%EB%93%9C-%EB%93%B1%EB%A1%9D%ED%95%98%EA%B8%B0)
 
 <br>
