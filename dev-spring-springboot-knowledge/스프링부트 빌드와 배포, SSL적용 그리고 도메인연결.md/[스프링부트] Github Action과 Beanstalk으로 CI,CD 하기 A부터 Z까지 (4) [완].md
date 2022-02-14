@@ -703,7 +703,7 @@ events {
 > [worker_connections에 관하여 (1)](https://couplewith.tistory.com/entry/%EA%BF%80%ED%8C%81-%EA%B3%A0%EC%84%B1%EB%8A%A5-Nginx%EB%A5%BC%EC%9C%84%ED%95%9C-%ED%8A%9C%EB%8B%9D-2-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EC%B2%98%EB%A6%AC%EB%9F%89-%EB%8A%98%EB%A6%AC%EA%B8%B0)   
 > [worker_connections에 관하여 (2)](https://nomaddream.tistory.com/19)   
 > [worker_connections에 관하여 (3)](https://whatisthenext.tistory.com/123)   
-> [multi_accept 개념 (1)](https://nginx.org/en/docs/ngx_core_module.html#worker_connections)
+> [multi_accept 개념 (1)](https://nginx.org/en/docs/ngx_core_module.html#worker_connections)    
 > [multi_accept 개념 (2)](https://couplewith.tistory.com/entry/%EA%BF%80%ED%8C%81-%EA%B3%A0%EC%84%B1%EB%8A%A5-Nginx%EB%A5%BC%EC%9C%84%ED%95%9C-%ED%8A%9C%EB%8B%9D-2-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%EC%B2%98%EB%A6%AC%EB%9F%89-%EB%8A%98%EB%A6%AC%EA%B8%B0)
 
 <br>
@@ -752,8 +752,8 @@ http 블록은 웹 서버에 대한 동작을 설정하는 영역으로, server,
 
 <br>
 
-> [include 지시어에 관하여 (1)](https://narup.tistory.com/209)
-> [include 지시어에 관하여 (2)](https://aimaster.tistory.com/11)
+> [include 지시어에 관하여 (1)](https://narup.tistory.com/209)    
+> [include 지시어에 관하여 (2)](https://aimaster.tistory.com/11)    
 > [mime.types에 관하여](https://kscory.com/dev/nginx/install)
 
 <br>
@@ -763,7 +763,7 @@ MIME 타입 설정이다.
 
 <br>
 
-> [default_type에 관하여 (1)](https://narup.tistory.com/209)
+> [default_type에 관하여 (1)](https://narup.tistory.com/209)    
 > [default_type에 관하여 (2)](https://kscory.com/dev/nginx/install)
 
 <br>
@@ -829,10 +829,116 @@ upstream은 여러개를 만들 수 있으며,a
   }
 ```
 
-다음은, server 블록 지시어다. server 블록 또한 여러개 만들 수 있는데, 그렇게되면 한대의 머신(=호스트)에
+다음은, server 블록 지시어다.    
+server 블록의 역활을 간단히 말하면, 하나의 웹사이트를 선언하는 데 사용되며, 가상 호스팅(Virtual Host)의 개념이다.
+아래 listen 지시어와 server_name지시어의 역활을 알아가면서 더 쉽게 이해해보도록 하겠다.
+
+<br>
+
+```conf
+server {aaaasfawefwefwef
+    listen 80 default_server;
+    listen [::]:80 default_server; #추가된 코드
+```
+
+* **listen지시어** : listen지시어 다음에는 포트번호가 온다. 예를 들어, "listen 80처럼 되어있으면
+EC2에 들어온 요청중에 포트가 80번에 해당하는것을 받겠다." 라는 의미이다.(Nginx는 EC2 인스턴스 내부에 있다.)
+
+바로 다음에는 default_server 인자가 나오는걸 볼 수 있다.
+이 default_server는 프로토콜(http, https, ftp등) 별로 단 하나의 
+server 블록에만 존재해야한다. 즉, listen의 값이 80인 server블록이 여러개 있다면
+단 하나의 server블록내의 listen 80 지시어에 대해서만 default_server로 지시할 수 있다는것이다.
+
+이 default_server의 기능은, 들어온 특정 포트(여기선 80으로 보자)에 대한 모든 요청이
+real-test.com:80, real-test.net:80, www.real-test.com:80와 같은 형태로 요청이 들어온다 할때,
+server_name이 매칭되는 도메인이 없는경우 해당 요청의 포트 즉, 여기서는 80번 포트에 대해 모든요청이
+listen지시어 값이 80 default_server로 지정된 server블록에서 처리 하게 되는 것이다.    
+(바로 아래 server_name 지시어에 대한 설명이 나와있다.)
+
+<br>
+
+> listen HostName 혹은 IP주소 / 포트(port)로 적게 되어있는데, 'HostName 혹은 IP주소'에 대해서는
+> 언급하지 않고 가도록 하겠다.
+
+<br>
+
+> listen [::]:80 와 같이 사용되면, 이는 IPv6형식의 요청을
+> 처리한다는 의미이다.    
+> [listen \[::\]:80에 관하여](https://architectophile.tistory.com/12)
+
+<br>
+
+```conf
+  server {
+      listen        80 default_server;
+  }
+```
+
+실제로도 해본 결과, 위 처럼 단 하나의 server 블록내에 80포트에 대해 default_server가 설정되어있는경우,
+www.real-test.com, m.real-test.com, real-test.net, real-test.co.kr에 대해 모두
+listen 80 default_server가 있는 서버블록에서 요청을 받아가게 된다.
+
+<br>
+
+> 위의 도메인들이 Route53으로 DNS 도메인설정을 했을때 얘기이다. 빈스톡 환경에서 
+> Route53을 이용한 도메인 연결은 다음 글에서 설명할것이다.
+
+<br>
+
+> [listen의 개념 (1)](https://architectophile.tistory.com/12)
+> [listen의 개념 (2)]()
+> [default_server의 개념 (1)](https://swiftcoding.org/nginx-routing)
+> [default_server의 개념 (2)](https://architectophile.tistory.com/12)
+> [default_server의 개념 (3)]()
+
+<br>
+
+* **server_name지시어** : server_name지시어는 클라이언트가 특정 포트로 요청을 하되, 어느 도메인으로
+요청을 했는지에 따라 매칭해주는 지시어이다. 예를 들면, listen 80; 이지만, server_name지시어의 값을 
+real-test.com으로 했으면 클라이언트가 브라우저 주소창에 real-test.com으로 입력해야지 해당 server 블록
+지시어로 요청이 매칭이 된다는 의미이다. 만약 www.real-test.com이나 혹은 real-test.net처럼 요청이 들어오면
+server_name 지시어값과 달라서 해당 server 블록에는 매칭되지 않는다.
+
+이를 조금 더 기능적으로 기술하자면,    
+클라이언트의 요청(request)의 header에 명시된 도메인값이 server_name값과 일치하는 경우 server블록에 분기해준다는 의미이다.
+
+<br>
+
+> 여기서 server_name에 들어갈 수 있는 값은 하위도메인(서브도메인, ex)www.도메인.com, m.도메인.com)이나 최상위 도메인이
+> 다른 도메인 ( ex)real-test.net, real-test.co.kr)이 들어갈 수 있다.
+
+<br>
+
+> [server_name의 개념 (1)](https://swiftcoding.org/nginx-routing)    
+> [server_name의 개념 (2)](https://narup.tistory.com/209)      
+
+<br>
+
+정리하자면,      
+그렇기에, server블록은 하나의 웺사이트를 선언하는데 사용되며, server 블록이 여러개이면, 한대의 머신(호스트)에 여러 웹사이트를 서빙할 수
+있게되는것이다.(server_name으로 여러 도메인을 지정할 수 있기때문) 여기서 호스트란 EC2로 보아도 되고, Nginx 웹서버로 볼 수도 있다.
+
+이렇게, 실제로 호스트는 한대지만, 여러 웹사이트를 서빙하기에 마치 가상으로 호스트가 여러개 존재하는 것처럼
+동작하게 되기에 이런 개념을 가상 호스트라고 한다. server 블록 자체가 가상 호스팅을 가능하게 하는것이다. 
+
+<br>
+
+> [server 블록이란 (1)](https://prohannah.tistory.com/136)    
+> [server 블록이란 (2)](https://juneyr.dev/nginx-basics)
+
+<br>aaaaaaaaaaa
+
+다음, access log가 어디 저장될지 보이는건데, 이는 이 서버에 해당하는 거에 대해서만
+로그를 남긴다. 이것도 상속의 개념aaa
+
+<br>
+
+server 블록 또한 여러개 만들 수 있는데, 그렇게되면 한대의 머신(=호스트)에
 여러 웹사이트를 서빙할 수 있게 되어 실제로 호스트는 한대지만, 가상으로 마치 호스트가 여러개 존재하는 것처럼 동작하게 할 수 있기에 가상 호스트라고 한다.
 
 조금 더 쉽게 말하자면, http 컨텐스트 내에 아래와 같이    
+
+그리고 http 블록도 server, location이런거 끝내고 개념 한번 더 정리
 
 ```conf
 server {
@@ -886,6 +992,85 @@ a
 > 5000으로 설정하고 해도 정상적으로 작동한다.(특히, PORT 5000은 빈스톡 환경을 생성하자마자 자동으로 소프트웨어
 > 환경 속성에 적혀져있는데, 위의 nginx.conf설정이 담긴 프로젝트를 배포하면 해당 환경 속성 PORT 5000이 없어진다.)      
 > [PORT 8080 적용](https://stackoverflow.com/questions/54612962/502-bad-gateway-elastic-beanstalk-spring-boot)
+
+<br>
+
+```conf
+user                    nginx;
+error_log               /var/log/nginx/error.log warn;
+pid                     /var/run/nginx.pid;
+worker_processes        auto;
+worker_rlimit_nofile    33282;
+
+events {
+    use epoll;
+    worker_connections  1024;
+    multi_accept on;
+}
+
+http {
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;
+
+  log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for"';
+
+  include       conf.d/*.conf;
+
+  map $http_upgrade $connection_upgrade {
+      default     "upgrade";
+  }
+
+  upstream springboot {
+    server 127.0.0.1:8080;
+    keepalive 1024;
+  }
+  server {
+      listen 80;
+      server_name celebmine.net www.celebmine.net;
+      return 301 http://celebmine.com$request_uri;
+  }
+
+  server {
+      listen 80;
+      server_name celebmine.co.kr www.celebmine.co.kr;
+      return 301 http://celebmine.com$request_uri;
+  }
+
+  server {
+      listen        80 default_server;
+
+      if ($host = www.celebmine.com) {
+          return 301 http://celebmine.com$request_uri;
+      }
+
+      location / {
+          proxy_pass          http://springboot;
+          proxy_http_version  1.1;
+          proxy_set_header    Connection          $connection_upgrade;
+          proxy_set_header    Upgrade             $http_upgrade;
+
+          proxy_set_header    Host                $host;
+          proxy_set_header    X-Real-IP           $remote_addr;
+          proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+      }
+
+      access_log    /var/log/nginx/access.log main;
+
+      client_header_timeout 60;
+      client_body_timeout   60;
+      keepalive_timeout     60;
+      gzip                  off;
+      gzip_comp_level       4;
+
+      # Include the Elastic Beanstalk generated locations
+      include conf.d/elasticbeanstalk/healthd.conf;
+  }
+}
+```
+
+마지막으로 정리된 nginx.conf파일을 보자면 위와같이 적어주면 된다.
 
 <br>
 
