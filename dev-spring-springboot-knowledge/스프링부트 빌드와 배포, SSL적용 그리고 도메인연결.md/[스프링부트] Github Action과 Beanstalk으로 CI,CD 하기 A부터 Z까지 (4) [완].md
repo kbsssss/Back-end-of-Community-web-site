@@ -841,7 +841,7 @@ server {aaaasfawefwefwef
     listen [::]:80 default_server; #추가된 코드
 ```
 
-* **listen지시어** : listen지시어 다음에는 포트번호가 온다. 예를 들어, "listen 80처럼 되어있으면
+(1).**listen지시어** : listen지시어 다음에는 포트번호가 온다. 예를 들어, "listen 80처럼 되어있으면
 EC2에 들어온 요청중에 포트가 80번에 해당하는것을 받겠다." 라는 의미이다.(Nginx는 EC2 인스턴스 내부에 있다.)
 
 바로 다음에는 default_server 인자가 나오는걸 볼 수 있다.
