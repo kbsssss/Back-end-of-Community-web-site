@@ -59,6 +59,17 @@ www 하위도메인에대한 레코드 지정까지 끝내면 real-test.com 호�
 
 ```
 
+여기 엑세스로그도 전부 따로 지정해줘야
+이거 따로 지정하는 방식 vompressor.com/nginx-log/를
+참고하자.
+
+보니까, 엔진엑스에서 404에러같은거 에러페이지 보여주게 하는 방식 지정할 수 있다.
+기본 프로젝트는 안되도 그냥 다른 도메인 연결한거에 대해서는 지정할 수 있을듯
+dev-jwblog.tistory.com/42
+
+그리고 default_server도 전부 다시 지정해야해 보안강화게
+https://kamang-it.tistory.com/entry/WebServernginx%EB%A1%9C%EA%B7%B8%EB%93%A4-%EB%B3%B4%EA%B8%B0
+
 아니 잠깐만, Www.도메인.com을 그냥 cname으로 도메인.com으로 돌리는 경우도 있는데 ?
 https://jsikim1.tistory.com/153
 

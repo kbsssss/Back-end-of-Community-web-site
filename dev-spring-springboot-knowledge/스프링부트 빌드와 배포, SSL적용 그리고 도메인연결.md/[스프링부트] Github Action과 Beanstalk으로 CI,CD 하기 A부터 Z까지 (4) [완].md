@@ -516,6 +516,7 @@ http {
 
   server {
       listen        80 default_server;
+      listen        [::]:80 default_server;
 
       location / {
           proxy_pass          http://springboot;
@@ -810,11 +811,18 @@ upstream은 여러개를 만들 수 있으며,a
 > [upstream 지시어 (1)](https://narup.tistory.com/209)
 > 
 
+
+
+
+
+
+
 <br>
 
 ```conf
   server {
       listen        80 default_server;
+      listen        [::]:80 default_server;
 
       access_log    /var/log/nginx/access.log main;
 
@@ -836,9 +844,10 @@ server 블록의 역활을 간단히 말하면, 하나의 웹사이트를 선언
 <br>
 
 ```conf
-server {aaaasfawefwefwef
-    listen 80 default_server;
-    listen [::]:80 default_server; #추가된 코드
+  server {
+      listen         80 default_server;
+      listen         [::]:80 default_server;
+  }
 ```
 
 (1).**listen지시어** : listen지시어 다음에는 포트번호가 온다. 예를 들어, "listen 80처럼 되어있으면
@@ -862,21 +871,31 @@ listen지시어 값이 80 default_server로 지정된 server블록에서 처리 
 
 <br>
 
+> 만약, default_server가 따로 지정되어있지 않은경우 기본적으로 가장 먼저 정의된
+> 특정 포트에 대한 server블록이 default_server로 지정이 된다.     
+> [default_server의 자동 지정](http://i5on9i.blogspot.com/2016/01/nginx-server.html)
+
+<br>
+
 > listen [::]:80 와 같이 사용되면, 이는 IPv6형식의 요청을
 > 처리한다는 의미이다.    
-> [listen \[::\]:80에 관하여](https://architectophile.tistory.com/12)
+> [listen \[::\]:80에 관하여 (1)](https://architectophile.tistory.com/12)     
+> [listen \[::\]:80에 관하여 (2)](https://swiftcoding.org/nginx-routing)    
 
 <br>
 
 ```conf
   server {
-      listen        80 default_server;
+      listen         80 default_server;
   }
 ```
 
-실제로도 해본 결과, 위 처럼 단 하나의 server 블록내에 80포트에 대해 default_server가 설정되어있는경우,
-www.real-test.com, m.real-test.com, real-test.net, real-test.co.kr에 대해 모두
-listen 80 default_server가 있는 서버블록에서 요청을 받아가게 된다.
+또한, default_server가 명시된 server 블록의 경우, server_name 지시어를
+써주던 써주지 않던 그대로 정상적으로 기능을 한다. 예를 들면, 위처럼 listen 80 default_server;로
+지정해놓고, server_name지시어가 없거나 아니면 server_name 지시어 값이 real-test.com인 경우 여부에 상관없이
+www.real-test.com:80, m.real-test.com:80, real-test.net:80, real-test.co.kr:80와 같은 요청이
+오면 모두 listen 80 default_server; 가 있는 server에서 요청을 모두 받아간다.(이 경우에 server블록이 하나밖에
+설정을 안한경우였다.)
 
 <br>
 
@@ -885,15 +904,21 @@ listen 80 default_server가 있는 서버블록에서 요청을 받아가게 된
 
 <br>
 
-> [listen의 개념 (1)](https://architectophile.tistory.com/12)
-> [listen의 개념 (2)]()
+> [listen의 개념](https://architectophile.tistory.com/12)
 > [default_server의 개념 (1)](https://swiftcoding.org/nginx-routing)
 > [default_server의 개념 (2)](https://architectophile.tistory.com/12)
-> [default_server의 개념 (3)]()
 
 <br>
 
-* **server_name지시어** : server_name지시어는 클라이언트가 특정 포트로 요청을 하되, 어느 도메인으로
+```conf
+  server {
+      listen         80 default_server;
+      listen         [::]:80 default_server;
+      server_name    real-test.com   #추가된 지시어
+  }
+```
+
+(2).**server_name지시어** : server_name지시어는 클라이언트가 특정 포트로 요청을 하되, 어느 도메인으로
 요청을 했는지에 따라 매칭해주는 지시어이다. 예를 들면, listen 80; 이지만, server_name지시어의 값을 
 real-test.com으로 했으면 클라이언트가 브라우저 주소창에 real-test.com으로 입력해야지 해당 server 블록
 지시어로 요청이 매칭이 된다는 의미이다. 만약 www.real-test.com이나 혹은 real-test.net처럼 요청이 들어오면
@@ -909,8 +934,67 @@ server_name 지시어값과 달라서 해당 server 블록에는 매칭되지 �
 
 <br>
 
+> server_name에 대한 개념을 보기위해 지시어를 넣어서 적어주었으나, 우리는 server_name지시어를 적지않고
+> 배포하도록 하겠다. 뒤에 하위도메인에 대한 처리나 리다이렉팅을 위해서 필요한 개념이니 반드시 알고가자.
+
+<br>
+
 > [server_name의 개념 (1)](https://swiftcoding.org/nginx-routing)    
 > [server_name의 개념 (2)](https://narup.tistory.com/209)      
+
+<br>
+
+```conf
+  server {
+      listen        80 default_server;
+      listen        [::]:80 default_server;
+
+      access_log    /var/log/nginx/access.log main;
+  }
+```
+
+여기서는 access_log 지시어에 대해 보도록 하겠다.
+위 access_log는 nginx로 들어오는 요청이 해당 server에서 받아서 처리할 경우
+그에 대한 로그을 담을 파일의 저장위치를 지정해 주는것이다.
+
+access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
+에서 log출력형식을 지정하는 지시어에서 main 이름(alias)으로 설정된 format
+을 사용하겠다는 의미이다.
+
+<br>
+
+> 만약 server블록 내에서 access_log를 쓰지 않고, http블록 바로 하위나 아니면 루트 컨텍스트에서
+> access_log 지시어를 쓰면 모든 server블록에 대한 로그가 한 파일에 담기게 된다. 그렇게 되면, 나중에 로그분석을
+> 할 경우 어려움이 많아지니 server블록 단위로 access_log 지시어를 사용하여 각기 다른 파일에 저장해 주는게 좋다.
+
+<br>
+
+> [access_log 지시어에 관하여 (1)](https://kscory.com/dev/nginx/install)
+> [access_log 지시어에 관하여 (2)](https://youngwonhan-family.tistory.com/93)
+
+<br>
+
+```conf
+  server {
+      listen        80 default_server;
+      listen        [::]:80 default_server;
+
+      access_log    /var/log/nginx/access.log main;
+
+      client_header_timeout 60;
+      client_body_timeout   60;
+      keepalive_timeout     60;
+      gzip                  off;
+      gzip_comp_level       4;
+
+      # Include the Elastic Beanstalk generated locations
+      include conf.d/elasticbeanstalk/healthd.conf;
+  }
+```
+
+나머지 코드들을 정리해 보도록 하겠다.
+
+
 
 <br>
 
