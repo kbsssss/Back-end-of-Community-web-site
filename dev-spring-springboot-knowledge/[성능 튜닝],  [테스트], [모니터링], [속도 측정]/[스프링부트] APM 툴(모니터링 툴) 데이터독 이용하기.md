@@ -1,0 +1,2 @@
+https://medium.com/@herryhan2435/aws%EC%99%80-datadog%EC%9D%84-%ED%95%A8%EA%BB%98-%EC%82%AC%EC%9A%A9%ED%95%A0%EB%95%8C%EC%9D%98-%EB%AC%B8%EC%A0%9C%EC%A0%90%EB%93%A4-ca4b130a6699
+근데 너무비싸다고 차라리 센트리랑, elk얘기하는데 ?
