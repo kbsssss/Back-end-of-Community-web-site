@@ -1,17 +1,17 @@
 <p align="center">
-<img src="">
+<img src="https://user-images.githubusercontent.com/59492312/154410175-84610b73-0738-43f5-8984-18023f199650.png">
 </p>
 
 # 📖 [스프링부트] Github Action과 Beanstalk으로 CI/CD 하기 A부터 Z까지 (5) [완]
 
-* 
+* nginx.conf 작성
+* 소켓, 포트, handshake, 
 * 
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 * * *
 
 <br>
-
 
 
 
@@ -809,6 +809,28 @@ server:
 * 참조링크 : [Nginx 포트 5000 그대로 사용하는 방법 (1)](https://browndwarf.tistory.com/66)    
 * 참조링크 : [Nginx 포트 5000 그대로 사용하는 방법 (2)](https://stackoverflow.com/questions/54612962/502-bad-gateway-elastic-beanstalk-spring-boot)    
 * 참조링크 : [Nginx 포트 5000 그대로 사용하는 방법 (3)](https://wky.kr/6)
+
+<br>
+
+
+
+### 2.필수적으로 알아야 할 네트워크 지식에 대해서 정리하도록 하겠다.
+
+<p align="center">
+<img src="">
+</p>
+
+ㅁ
+
+#### 🪁 Reference
+* 참조링크 : []()
+* 참조링크 : []()
+
+<br>
+
+
+
+### 🚀 추가로
 
 <br>
 
