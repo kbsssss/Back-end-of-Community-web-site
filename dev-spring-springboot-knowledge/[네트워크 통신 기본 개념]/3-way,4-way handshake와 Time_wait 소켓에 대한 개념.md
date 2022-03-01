@@ -1,11 +1,12 @@
 <p align="center">
-<img src="">
+<img src="https://user-images.githubusercontent.com/59492312/156134675-b9190eec-3abc-46b7-b9b1-6acd22a4fb50.png">
 </p>
 
-# 📖 
+# 👨‍💻 3-way,4-way handshake와 Time_wait 소켓에 대한 개념
 
 * 3-way handshake와 4-way handshake에 대하여
-* 
+* Linux kernel 버전확인과 레드핫 계열 리눅스 버전확인
+* Time_wait 소켓이 문제가 되는 이유
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 * * *
@@ -220,7 +221,7 @@ OS에서는 최적화를 위하여 2MSL을 1분으로 설정하여 사용하도�
 <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/156119891-19d94d7a-888c-4d12-a835-d3fc7c27e9d1.png">
+<img src="https://user-images.githubusercontent.com/59492312/156133324-d88d6d45-1278-4513-883b-92fe476ea7b7.png">
 </p>
 
 그렇다면, EC2의 리눅스 커널 버전과 센토스(aws ec2는 센토스를 사용한다.) 버전을 확인하는 방법에
@@ -304,7 +305,7 @@ time_wait도 1분으로 생각하고 가도 충분할것이다.
 
 
 
-### 3.time-wait 소켓 발생에 대하여
+### 3.time-wait 소켓이 발생한다 했을때 이게 왜 문제가 될까?
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/154788409-5bb4fd57-b393-4b59-b8d0-37ad4783ab36.png">
