@@ -5,7 +5,7 @@
 # 📖 [스프링부트] Github Action과 Beanstalk으로 CI/CD 하기 A부터 Z까지 (5) [완]
 
 * nginx.conf 작성
-* 소켓, 포트, handshake, 
+* 
 * 
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
@@ -26,7 +26,7 @@ Nginx는 무중단 배포로도 사용이 되지만, 여기서는 Nginx가 받�
 
 <br>
 
-> 무중단 배포를 Nginx로 설정할 때도, 리버스 프록시 기능을 사용한다.
+> Nginx로 무중단 배포를 설정할 때도, 리버스 프록시 기능을 사용한다.
 
 <br>
 
@@ -765,6 +765,12 @@ http {
 * 참조링크 : []()
 
 <br>
+
+
+
+1.아래, port 5000이랑, server_sport 5000이랑은 달랐었다. 이거 체크하자.
+2.그리고 nginx가 리버스 프록시이면서 웹서버이다 ? 라는것도 정리하
+
 
 
 

@@ -147,7 +147,7 @@ Github Action이 시작된다는 의미이다. 즉, Github Action 트리거 브�
 > [push외에 다른 이벤트에 대한 Github Action 작동](https://hwasurr.io/git-github/github-actions/)
 > [pull request에 대한 트리거 설정 코드](https://stalker5217.netlify.app/devops/github-action-aws-ci-cd-1/)
 
-><br>
+<br>
 
 ##### (2).수동 실행
 ```yml
@@ -441,5 +441,7 @@ Personal access tokens에서 토큰을 발급받아서 권한을 부여해주어
 * 참조링크 : [깃헙액션의 코어개념](https://velog.io/@ggong/Github-Action%EC%97%90-%EB%8C%80%ED%95%9C-%EC%86%8C%EA%B0%9C%EC%99%80-%EC%82%AC%EC%9A%A9%EB%B2%95)
 
 <br>
+
+
 
 태그 : #Github Action, #Benastalk, #깃헙액션 코어개념, #extra-icons 플러그인, #deploy.yml, #깃헙액션 코어개념, #workflow, #runner, #job, #event, #step, #check out, #check out의 두가지 의미, #bash, #shell, #shell script, #cli, #커맨드 프롬프트, #git bash, #vim
