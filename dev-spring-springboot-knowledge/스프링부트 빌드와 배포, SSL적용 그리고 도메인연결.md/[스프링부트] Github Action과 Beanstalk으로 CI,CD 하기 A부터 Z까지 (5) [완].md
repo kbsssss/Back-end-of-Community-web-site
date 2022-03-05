@@ -783,10 +783,16 @@ http {
 위에 보이는것처럼 Nginx가 80번포트로 받은 외부의 요청들을 5000포트로 그대로 요청을 보내며, 스프링부트 어플리케이션을 5000포트로 실행시키는 방법에 대해서도 보고 가도록
 하겠다.
 
-첫번째는, 스프링부트 설정파일인 application.properties 또는 application.yml에     
-server.port:5000 (properties설정파일) 또는     
+첫번째는, 스프링부트 설정파일인 application.properties 또는 application.yml에      
+```properties
+server.port:5000   
+```
+(properties설정파일)
+```yml
 server:   
-  port: 5000 (yml설정파일)    
+  port: 5000
+```
+(yml설정파일)    
 와 같이 적어주면, 스프링부트 프로젝트가 실행될때 해당 5000포트에서 실행이 된다.
 
 <br>
@@ -818,31 +824,6 @@ server:
 
 <br>
 
-
-
-### 2.필수적으로 알아야 할 네트워크 지식에 대해서 정리하도록 하겠다.
-
-<p align="center">
-<img src="">
-</p>
-
-ㅁ
-
-#### 🪁 Reference
-* 참조링크 : []()
-* 참조링크 : []()
-
-<br>
-
-
-
-### 🚀 추가로
-
-<br>
-
-
-
-태그 : #
 
 
 
