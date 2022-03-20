@@ -359,6 +359,13 @@ http 블록은 웹 서버에 대한 동작을 설정하는 영역으로, server,
 
 <br>
 
+> 추가로 위의 include의 경로에 대해 알려주자면, include /etc~처럼 /로 시작하는 경우에는
+> 루트 디렉토리를 기반으로 시작한 경로의 파일을 의미하고 그냥 include conf.d/~로 사용하는 경우네는
+> 해당 코드(include conf.d/~)가 적혀진 파일의 위치를 기준 즉, 상대 경로로 해당 파일을 include 하겠다는
+> 의미이다.
+
+<br>
+
 > [include 지시어에 관하여 (1)](https://narup.tistory.com/209)    
 > [include 지시어에 관하여 (2)](https://aimaster.tistory.com/11)    
 > [mime.types에 관하여](https://kscory.com/dev/nginx/install)
@@ -391,7 +398,10 @@ log_format은 nginx의 access 로그의 형식을 지정해준다.
   }
 ```
 
-이제는 upstream 블록 디렉티브를 보겠다.    
+이제는 upstream 블록 디렉티브를 보겠다.   
+
+여기서부터 다시네.
+ 
 upstream은 origin은 WAS 즉, 웹 어플리케이션 서버를 의미한다. nginx와 연결한 웹 어플리케이션 서버를 지정하는데
 사용된다. 하위에 있는 server 지시어는 연결할 웹 어플리케이션 서버의 'IP주소(호스트주소):포트'로 지정해준다.
 
