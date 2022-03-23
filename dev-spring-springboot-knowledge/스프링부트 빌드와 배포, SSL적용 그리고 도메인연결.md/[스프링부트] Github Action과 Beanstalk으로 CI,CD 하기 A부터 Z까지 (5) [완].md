@@ -399,7 +399,7 @@ log_format은 nginx의 access 로그의 형식을 지정해준다.
 ```
 
 이제는 upstream 블록 디렉티브를 보겠다.   
-
+@@@@@@@@@@@@@@@@
 여기서부터 다시네.
  
 upstream은 origin은 WAS 즉, 웹 어플리케이션 서버를 의미한다. nginx와 연결한 웹 어플리케이션 서버를 지정하는데
@@ -430,7 +430,7 @@ upstream은 여러개를 만들 수 있으며,a
 
 
 
-
+@@@@@@@@@@@@@@@@
 
 
 <br>
@@ -470,7 +470,7 @@ server 블록의 역활을 간단히 말하면, 하나의 웹사이트를 선언
 EC2에 들어온 요청중에 포트가 80번에 해당하는것을 받겠다." 라는 의미이다.(Nginx는 EC2 인스턴스 내부에 있다.)
 
 바로 다음에는 default_server 인자가 나오는걸 볼 수 있다.
-이 default_server는 프로토콜(http, https, ftp등) 별로 단 하나의 
+이 default_server는 프로토콜(http, https, ftp등) 별로 즉, 포트별로 단 하나의 
 server 블록에만 존재해야한다. 즉, listen의 값이 80인 server블록이 여러개 있다면
 단 하나의 server블록내의 listen 80 지시어에 대해서만 default_server로 지시할 수 있다는것이다.
 
