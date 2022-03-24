@@ -2,17 +2,19 @@
 <img src="">
 </p>
 
-# 📖 
+# 🖼 HTTP 통신과 TCP 통신의 차이점과 HTTP 프로그래밍과 소켓 프로그래밍에 대한 개념 정리
 
-* 
-* 
+* HTTP 통신과 TCP 통신의 차이점
+* HTTP 프로그래밍과 소켓 프로그래밍
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 * * *
 
 <br>
 
-### 1.
+
+
+### 1.HTTP통신과 TCP통신의 차이점에 대해
 
 <p align="center">
 <img src="">
@@ -40,6 +42,21 @@ https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2
 
 
 
+그리고 그걸 알아야해 TIME_wait 소켓은 언제나 클라이언트단에서 발생해
+그리고 http 통신에서는 브라우저에서는 그런게 안생기는데 nginxdls flqjtm vmfhrtldptj
+WAS로 보낼때도 클라이언트,서버단의 관계인데 이때 nginx에서 time_wait소켓이 생성되는거다.
+- 조졸두 글중
+
+잠깐, time_wait 소켓에 대한 개념을 다시 보자. 정확하게
+이게, 한 연결에 대해서만 가능한건지 아니면 다른데서 끌어와서 사용하는건지 알자.
+그리고 핸드쉐이크 언제쯤에 이게 세션을 계속 살려두는지도 알자.
+
+네트워크 HANshake 관련글도 다시 정리해야해, 이거 http통신인지
+tcp통신인지에 대해 자세히 다시 구별해서 정
+
+그리고 fin을 보내서 연결을 끊는건 서버단에서도 가능하다하는데, 이거 http통신에서는
+대부분 클라이언트단에서 fin을 보내서 time_wait가 클라이언트단에서 생긴다는데 이거도
+찾아서 정리하
 
 
 앞으로, 이 이미지 앞에 <br> 붙이기
