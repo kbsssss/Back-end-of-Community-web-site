@@ -1,13 +1,13 @@
 <p align="center">
-<img src="">
+<img src="https://user-images.githubusercontent.com/59492312/159886777-d6c616ac-f01a-4343-8004-3a74017b4d10.png">
 </p>
 
 # 🖼 HTTP 통신과 TCP 통신의 차이점과 HTTP 프로그래밍과 소켓 프로그래밍에 대한 개념 정리
 
-* HTTP 통신과 TCP 통신의 차이점
-* HTTP 프로그래밍과 소켓 프로그래밍
+* HTTP 통신과 TCP 통신의 차이점, HTTP 프로그래밍과 소켓 프로그래밍
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
+
 * * *
 
 <br>
@@ -17,14 +17,85 @@
 ### 1.HTTP통신과 TCP통신의 차이점에 대해
 
 <p align="center">
-<img src="">
+<img src="https://user-images.githubusercontent.com/59492312/160339237-6c677536-0e9d-43fc-862d-cca439bd9cae.png">
 </p>
 
+우선 HTTP통신과 TCP통신에 대해 알기전에 OSI 7 Layer와 프로토콜이란것에 대해서 알아 가도록 하겠다.
 
+OSI(Open Systems Interconnection) 7 Layer는 ISO(국제표준기구)에서 
+만든 네트워크를 7계층으로 만든 모델이고, 프로토콜(Protocol, 통신규약)은 상호간의 
+접속이나 전달방식, 통신방식, 주고받을 자료의 형식, 오류 검출 방식, 코드 변환방식, 
+전송속도 등에 대하여 이미 정해진 약속이기 때문에 레이어별 프로토콜은 한마디로 
+OSI 7 계층의 계층간에 존재하는 네트워크 통신을 위한 규약을 뜻한다.
+
+즉, 우리가 이제 알려고 하는 HTTP(HyperText Transfer Protocol)와 TCP(Transmission Control Protocol)는
+모두 특정 layer(계층)의 규약으로 해석할 수 있다.
+
+<br>
+
+> HTTP는 7계층 규약이고, TCP는 4계층 규약이다.    
+> [HTTP와 TCP는 서로 다른 계층의 규약](https://itmining.tistory.com/127) 
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160337367-e64ee082-9cf4-4bb4-8dc1-8c2b9391dcba.png">
+</p>
+
+그렇기에, TCP통신과 HTTP통신이란 해당 계층에 해당되는 규약(protocol)아래에서 이루어지는
+통신을 의미한다.
+
+조금 더 각각의 통신에 대해 자세히 보도록 하겠다.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160337367-e64ee082-9cf4-4bb4-8dc1-8c2b9391dcba.png">
+</p>
+
+TCP통신은 3-way-handshake라는 과정을 거치고 연결이 이루어진다.
+그리고 연결을 종료할때는 4-way-handshake를 거치게 된다.
+
+또한, TCP통신에서는 소켓을 이용한 연결방식을 사용한다.
+그로인해, 양방향 통신이 가능하게 되는데 양방향 통신이란, 클라이언트단과
+서버단이 서로 연결되어 있을때 실시간으로 양방향(클라이언트 -> 서버, 서버 -> 클라이언트)
+으로 요청을 보내 통신을 할 수 있게 해주는 것이다. 
+
+이 소켓을 이용하여 TCP/IP 프로토콜을 기반에서 연결되는
+네트워크 통신을 소켓통신이라고도 부른다.
+
+마지막으로, 이러한 소켓 통신을 사용하도록 하게하는 프로그래밍을 
+소켓 프로그래밍이라고 한다.
+
+<br>
+
+> 3-way,4-way handshake에 대해서 잘 모르겠다면, 필자의 네트워크에 관한 [다른글](https://sooolog.dev/3-way,4-way-handshake%EC%99%80-Time_wait-%EC%86%8C%EC%BC%93%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B0%9C%EB%85%90/)을 참조하도록 하자.      
+> [3-way,4-way handshake에 관하여](https://sooolog.dev/3-way,4-way-handshake%EC%99%80-Time_wait-%EC%86%8C%EC%BC%93%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B0%9C%EB%85%90/)
+
+<br>
+
+> [TCP통신과 3-way-handshake](https://velog.io/@vov3616/Socket%ED%86%B5%EC%8B%A0%EA%B3%BC-TCP-UDP)        
+> [TCP통신과 4-way-handshake](https://bangu4.tistory.com/74)     
+> [TCP통신과 양방향통신 그리고 소켓통신](https://mangkyu.tistory.com/48)
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160351673-8f91f3a0-30bf-4d26-a1fc-169406f8afb8.png">
+</p>
+
+a
+
+4계층 외에 7계층에서도 사용할 수 있는데 실제 실시간 스트리밍 중계나 실시간 채팅을 그 예로 들 수 있다.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160337367-e64ee082-9cf4-4bb4-8dc1-8c2b9391dcba.png">
+</p>
 
 정리하자면,,
 
-1.TCP통신은 4 layer, http통신은 7 layer이다.
 2.TCP 기반 구성을 할 때 소켓을 이용하여 실시간 통신이되며, 양방향 통신이다.
 https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket
 3.근데 http는 애초에 tcp 기반으로 만들어진것이기에 소켓을 이용하여 통신을 하지만 양방향이 아닌 단방향이라고 한다.
