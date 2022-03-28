@@ -59,13 +59,14 @@ TCP통신은 3-way-handshake라는 과정을 거치고 연결이 이루어진다
 또한, TCP통신에서는 소켓을 이용한 연결방식을 사용한다.
 그로인해, 양방향 통신이 가능하게 되는데 양방향 통신이란, 클라이언트단과
 서버단이 서로 연결되어 있을때 실시간으로 양방향(클라이언트 -> 서버, 서버 -> 클라이언트)
-으로 요청을 보내 통신을 할 수 있게 해주는 것이다. 
+으로 요청을 보내 통신을 할 수 있게 해주는 것이다. 또한, 클라이언트단과 서버단의
+연결이 끊어지지않고 계속 연결을 유지해주어 실시간 소통이 가능하다.
 
-이 소켓을 이용하여 TCP/IP 프로토콜을 기반에서 연결되는
-네트워크 통신을 소켓통신이라고도 부른다.
+위와같이 소켓을 이용한 연결은 TCP 프로토콜 기반으로 맺어진 연결이며,
+**소켓통신**이라고도 부른다.
 
-마지막으로, 이러한 소켓 통신을 사용하도록 하게하는 프로그래밍을 
-소켓 프로그래밍이라고 한다.
+마지막으로, 이러한 소켓 통신을 사용하도록 설계하는 프로그래밍을 
+**소켓 프로그래밍**이라고 한다.
 
 <br>
 
@@ -74,17 +75,47 @@ TCP통신은 3-way-handshake라는 과정을 거치고 연결이 이루어진다
 
 <br>
 
-> [TCP통신과 3-way-handshake](https://velog.io/@vov3616/Socket%ED%86%B5%EC%8B%A0%EA%B3%BC-TCP-UDP)        
-> [TCP통신과 4-way-handshake](https://bangu4.tistory.com/74)     
-> [TCP통신과 양방향통신 그리고 소켓통신](https://mangkyu.tistory.com/48)
+> [TCP통신과 3-way-handshake](https://velog.io/@vov3616/Socket%ED%86%B5%EC%8B%A0%EA%B3%BC-TCP-UDP)         
+> [TCP통신과 4-way-handshake](https://bangu4.tistory.com/74)       
+> [TCP통신과 양방향통신 그리고 소켓통신](https://mangkyu.tistory.com/48)    
+> [TCP통신과 소켓 프로그래밍](https://mangkyu.tistory.com/48)    
 
 <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/160351673-8f91f3a0-30bf-4d26-a1fc-169406f8afb8.png">
+<img src="https://user-images.githubusercontent.com/59492312/160383592-90d4ec99-94cf-4e41-921b-594fc483bc9c.png">
 </p>
 
-a
+그렇다면, http통신은 어떻게 이루어지는것일까?    
+http통신에 대해 정리하고 대개 고민하고 헷갈리는 부분에 대해 한번에 정리하도록 하겠다.
+
+http통신은 tcp통신과는 다르게 단방향 통신이다. 즉, http통신은 클라이언트의
+요청이 있을때만, 서버단이 응답하고 처리를 해주며 해당 응답이 끝나면 연결을 바로 끊게 된다.
+(서버단에서 클라이언트단으로 요청을 먼저 보낼 수 있는 양방향 통신과는 다르다.) 예를 들면,
+우리가 특정 웹페이지(예를들어, sooolog.dev로 생각해보자.)를 들어가기위해 브라우저에 sooolog.dev를
+입력하면 서버단에 요청이 들어오고 sooolog.dev에 해당하는 내용들을 브라우저(클라이언트)에게 보내고
+연결이 끊기면서 끝나게된다.
+
+http통신은 또한, 위의 tcp통신에서 사용하던 3-way, 4-way handshake 과정을 그대로 거치며,
+소켓을 이용하여 소켓 기반 통신이기도 하다.
+
+그렇다면, 여기서 의문이 든다. 위에서 소켓통신은 양방향통신이며 실시간통신이 가능하다고 했는데
+왜 http통신은 단방향 통신이 되는것일까? 우선, HTTP통신이 소켓 기반인 이유는 애초에 http 규약은
+tcp 규약에 기반하여 만들어졌다. TCP가 있는 계층 위에서 만들어진것이 http규약이기 때문이다.
+
+(그렇기에, http통신은 소켓통신이라고 하지않으며, 소켓 기반의 통신이라고 볼 수 있다.)
+
+<br>
+
+>
+> [HTTP규약은 TCP](https://bitcodic.tistory.com/151)
+>
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160383387-058a42c6-29cd-40e8-8c25-d7b81fc83304.png">
+</p>
 
 4계층 외에 7계층에서도 사용할 수 있는데 실제 실시간 스트리밍 중계나 실시간 채팅을 그 예로 들 수 있다.
 
@@ -95,6 +126,12 @@ a
 </p>
 
 정리하자면,,
+
+
+그거 설명해야지, 그러면 엔진엑스-was, was-api, was-db 이거모두
+http통신이고 그러면 http통신에서 똑같이 소켓기반 연결이되며 이 time_wait소켓도
+생성이 되는건가. 즉, http통신은 소켓통신은 아니지만 소켓기반 통신이며 3-way,4-way handshake를
+http통신이 사용하는것은 물론이며 time_wait 소켓이 발생하는것도 http통신도 가능하냐 이것이다.
 
 2.TCP 기반 구성을 할 때 소켓을 이용하여 실시간 통신이되며, 양방향 통신이다.
 https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket
