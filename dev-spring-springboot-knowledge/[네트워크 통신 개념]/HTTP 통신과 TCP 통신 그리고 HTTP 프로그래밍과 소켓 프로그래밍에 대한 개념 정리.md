@@ -2,9 +2,13 @@
 <img src="https://user-images.githubusercontent.com/59492312/159886777-d6c616ac-f01a-4343-8004-3a74017b4d10.png">
 </p>
 
-# 🖼 HTTP 통신과 TCP 통신의 차이점과 HTTP 프로그래밍과 소켓 프로그래밍에 대한 개념 정리
+# 🖼 TCP 통신, HTTP통신, 소켓통신의 개념과 차이점 정리
 
-* HTTP 통신과 TCP 통신의 차이점, HTTP 프로그래밍과 소켓 프로그래밍
+이거 닫 다시 정리
+
+* TCP 통신, HTTP통신, 소켓통신의 개념과 차이점
+* Time_wait 소켓과 HTTP 통신에 관하여
+* HTTP 통신에서 양방향 통신을 위한 웹소켓의 개념
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 
@@ -14,7 +18,7 @@
 
 
 
-### 1.HTTP통신과 TCP통신의 차이점에 대해
+### 1.HTTP통신과 TCP통신의 개념과 차이점에 대해
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/160339237-6c677536-0e9d-43fc-862d-cca439bd9cae.png">
@@ -50,7 +54,7 @@ OSI 7 계층의 계층간에 존재하는 네트워크 통신을 위한 규약�
 <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/160337367-e64ee082-9cf4-4bb4-8dc1-8c2b9391dcba.png">
+<img src="https://user-images.githubusercontent.com/59492312/160531022-ec702e87-1783-483f-9698-5356951f3c35.png">
 </p>
 
 TCP통신은 3-way-handshake라는 과정을 거치고 연결이 이루어진다.
@@ -58,7 +62,7 @@ TCP통신은 3-way-handshake라는 과정을 거치고 연결이 이루어진다
 
 또한, TCP통신에서는 소켓을 이용한 연결방식을 사용한다.
 그로인해, 양방향 통신이 가능하게 되는데 양방향 통신이란, 클라이언트단과
-서버단이 서로 연결되어 있을때 실시간으로 양방향(클라이언트 -> 서버, 서버 -> 클라이언트)
+서버단이 서로 연결되어 있을때 양방향(클라이언트 -> 서버, 서버 -> 클라이언트)
 으로 요청을 보내 통신을 할 수 있게 해주는 것이다. 또한, 클라이언트단과 서버단의
 연결이 끊어지지않고 계속 연결을 유지해주어 실시간 소통이 가능하다.
 
@@ -86,30 +90,116 @@ TCP통신은 3-way-handshake라는 과정을 거치고 연결이 이루어진다
 <img src="https://user-images.githubusercontent.com/59492312/160383592-90d4ec99-94cf-4e41-921b-594fc483bc9c.png">
 </p>
 
-그렇다면, http통신은 어떻게 이루어지는것일까?    
-http통신에 대해 정리하고 대개 고민하고 헷갈리는 부분에 대해 한번에 정리하도록 하겠다.
+그렇다면, HTTP통신은 어떻게 이루어지는것일까?    
+HTTP통신에 대해 정리하고 대개 고민하고 헷갈리는 부분에 대해 한번에 정리하도록 하겠다.
 
-http통신은 tcp통신과는 다르게 단방향 통신이다. 즉, http통신은 클라이언트의
+위의 그림만 보더라도, HTTP통신은 TCP 위에서 이루어지는것을 알 수 있다.
+즉, HTTP통신이 이루어지려면 TCP를 거쳐야 한다는 말인데, 이 말이 무엇인지 아래
+그림을 보면서 설명하도록 하겠다.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160525481-ff3c189d-58f6-492c-ac09-5ecbb629fdeb.png">
+</p>
+
+위의 그림을 보면, 통신을 하기 위해서는 3-way handshake를 통해 데이터를 전송하기 전 연결하는 과정을 거치고,
+데이터 전송이 끝나면 4-way handshake를 통해 연결을 끊는 과정을 거친다. 위에서 말한대로
+TCP통신은 이 3-way handshake와 4-way handshake과정을 거치게 되는데, HTTP통신은 
+이 TCP통신 기반에서 데이터를 전송하는 부분만 맡아서 역활을 하게 된다. 즉, 쉽게말하자면 HTTP
+통신을 하기위해서는 OSI 계층에서 TCP 기반인 4계층에서 3-way-handshake로 연결과정을 거치고
+7계층에서 HTTP 기반으로 데이터 전송을 하고 다시 4계층에서 4-way-handshake로 연결을 끊는 과정을 거쳐야
+한다는것이다.(세부적으로 다른부분이 있지만 이렇게 이해하면 쉽다. 나중에 필요시 더 자세히 보도록 하자.)
+
+<br>
+
+> 한번 더 쉽게말하자면, TCP통신 자체가 connect -> transmit -> disconnect 의 과정을
+> 거치는데, HTTP통신에서는 connect와 disconnect를 TCP에서 맡고, transmit을 HTTP에서 맡아서
+> 진행한다는 것이다.    
+> [HTTP통신은 TCP기반이다.(1)](https://bitcodic.tistory.com/151)    
+> [HTTP통신은 TCP기반이다.(2)](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Connection_termination)
+
+<br>
+
+> [HTTP통신은 TCP위에서 이루어진다.(1)](https://bitcodic.tistory.com/151)    
+> [HTTP통신은 TCP위에서 이루어진다.(2)](https://www.stevenjlee.net/2020/02/09/%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0-osi-7%EA%B3%84%EC%B8%B5-%EA%B7%B8%EB%A6%AC%EA%B3%A0-tcp-ip-4%EA%B3%84%EC%B8%B5/)     
+> [HTTP통신은 TCP위에서 이루어진다.(3)](https://mysterico.tistory.com/29)    
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160525481-ff3c189d-58f6-492c-ac09-5ecbb629fdeb.png">
+</p>
+
+그러면, 이러한 배경지식을 기반으로 HTTP통신의 특징에 대해 보도록 하겠다.
+
+HTTP통신은 TCP통신과는 다르게 단방향 통신이다. 즉, http통신은 클라이언트의
 요청이 있을때만, 서버단이 응답하고 처리를 해주며 해당 응답이 끝나면 연결을 바로 끊게 된다.
 (서버단에서 클라이언트단으로 요청을 먼저 보낼 수 있는 양방향 통신과는 다르다.) 예를 들면,
 우리가 특정 웹페이지(예를들어, sooolog.dev로 생각해보자.)를 들어가기위해 브라우저에 sooolog.dev를
 입력하면 서버단에 요청이 들어오고 sooolog.dev에 해당하는 내용들을 브라우저(클라이언트)에게 보내고
 연결이 끊기면서 끝나게된다.
 
-http통신은 또한, 위의 tcp통신에서 사용하던 3-way, 4-way handshake 과정을 그대로 거치며,
-소켓을 이용하여 소켓 기반 통신이기도 하다.
+위에서 설명한대로, HTTP통신은 TCP를 거쳐야 하니, 3-way,4-way handshake의 과정을 거치는
+통신이며 TCP에서 소켓을 사용하여 연결과 끊음을 진행한다. 데이터를 전송하는 과정은 7계층에서 이루어지며,
+이 과정에서도 TCP에서 사용하던 소켓을 이용한다.
 
 그렇다면, 여기서 의문이 든다. 위에서 소켓통신은 양방향통신이며 실시간통신이 가능하다고 했는데
-왜 http통신은 단방향 통신이 되는것일까? 우선, HTTP통신이 소켓 기반인 이유는 애초에 http 규약은
-tcp 규약에 기반하여 만들어졌다. TCP가 있는 계층 위에서 만들어진것이 http규약이기 때문이다.
-
-(그렇기에, http통신은 소켓통신이라고 하지않으며, 소켓 기반의 통신이라고 볼 수 있다.)
+왜 http통신은 단방향 통신이 되는것일까? TCP통신이나 HTTP통신이나 데이터를 전송할 때 소켓이 사용되는것은 동일한데.
+우선, HTTP통신이 소켓 기반인 이유는 애초에 HTTP는 TCP에 기반하여 만들어졌기 때문이다. 그렇기에, HTTP통신은 
+3-way,4-way handshake를 거치고 데이터 전송에도 동일한 소켓이 사용되는데, 이때 데이터전송에 사용되는 소켓의 통신방식이
+TCP통신의 데이터전송에서 사용되는 소켓통신과는 다른 방식으로 사용이 된다.(애초에 TCP통신에서 사용되는 소켓은 4계층에서 
+사용되는것이고 HTTP통신의 데이터 전송에서 사용되는 소켓은 7계층에서 사용된다.)
+그렇기에, HTTP통신이 소켓 기반의 통신은 맞지만, 단방향으로 사용되고 있는것이다.
 
 <br>
 
->
-> [HTTP규약은 TCP](https://bitcodic.tistory.com/151)
->
+> [HTTP 통신도 소켓통신](https://bitcodic.tistory.com/151)     
+> [HTTP 통신이 단방향 통신인 이유](https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket)    
+
+<br>
+
+
+
+### 2.추가적으로 알아야할 개념들에 대해 정리
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160383387-058a42c6-29cd-40e8-8c25-d7b81fc83304.png">
+</p>
+
+양방향 통신을 위해서 소켓을 사용하도록 하는 프로그래밍을 소켓 프로그래밍이라 했는데,
+반대로 HTTP통신을 하기 위한 프로그래밍을 HTTP 프로그래밍이라고도 한다. 즉, 소켓을 사용한다고
+해서 HTTP통신을 하는경우 소켓 프로그래밍이라고는 하지 않는다.
+
+<br>
+
+> 추가로, HTTP 프로그래밍은 단방향 통신이 가능하게 하며 HTTP통신은 애초에,
+> html파일을 전송하거나, JSON, image파일등을 전송하는데 사용된다.    
+> [HTTP프로그래밍과 HTTP통신](https://kotlinworld.com/75)    
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160538133-1d57bebd-8090-4819-8b20-01b98de22092.png">
+</p>
+
+소켓 프로그래밍이 실제 사용되는 예로는 실시간 동영상 streaming서비스나 실시간
+채팅을 들 수 있다. 이는 뒤에 나올 웹 소켓이라는것을 사용하여 구현하는데, 잠시뒤에
+설명하도록 하겠다.
+
+HTTP 프로그래밍은 우리가 브라우저에서 특정 URL을 입력하고 이에 대한 결과값을 받아올때나
+요청을 보내 Server의 응답을 기다리는 어플리케이션(Android or Ios)의 개발에도 주로 사용된다.
+
+흔히 REST API도 모두 HTTP통신에 해당한다.
+
+<br>
+
+> 우리가 개발에서 사용하는 리버스프록시(Nginx)->WAS, WAS->API서버, WAS->DB
+> 도 모두 HTTP 통신이다.
+
+<br>
+
+> [HTTP통신의 쓰임](https://mangkyu.tistory.com/48)        
 
 <br>
 
@@ -117,7 +207,7 @@ tcp 규약에 기반하여 만들어졌다. TCP가 있는 계층 위에서 만�
 <img src="https://user-images.githubusercontent.com/59492312/160383387-058a42c6-29cd-40e8-8c25-d7b81fc83304.png">
 </p>
 
-4계층 외에 7계층에서도 사용할 수 있는데 실제 실시간 스트리밍 중계나 실시간 채팅을 그 예로 들 수 있다.
+HTTP 통신에서는 keepalive
 
 <br>
 
@@ -125,21 +215,8 @@ tcp 규약에 기반하여 만들어졌다. TCP가 있는 계층 위에서 만�
 <img src="https://user-images.githubusercontent.com/59492312/160337367-e64ee082-9cf4-4bb4-8dc1-8c2b9391dcba.png">
 </p>
 
-정리하자면,,
 
-
-그거 설명해야지, 그러면 엔진엑스-was, was-api, was-db 이거모두
-http통신이고 그러면 http통신에서 똑같이 소켓기반 연결이되며 이 time_wait소켓도
-생성이 되는건가. 즉, http통신은 소켓통신은 아니지만 소켓기반 통신이며 3-way,4-way handshake를
-http통신이 사용하는것은 물론이며 time_wait 소켓이 발생하는것도 http통신도 가능하냐 이것이다.
-
-2.TCP 기반 구성을 할 때 소켓을 이용하여 실시간 통신이되며, 양방향 통신이다.
-https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket
-3.근데 http는 애초에 tcp 기반으로 만들어진것이기에 소켓을 이용하여 통신을 하지만 양방향이 아닌 단방향이라고 한다.
-    그 이유는, 애초에 TCP 통신은 4계층에서 이루어지고 http통신은 7계층에서 이루어 지기에 계층에서 차이가 나며,
-    아무리 http 프로토콜이 tcp 기반의 프로토콜이라 해도 서로 다른 프로토콜에서 통신이 이루어지는것이기 때문에, 
-    소켓이 http 통신에 사용된다하더라도 단방향으로 사용이 되는거다. 
-4.그렇기에, http통신에서도 양방향 소켓이 사용되기 위해 웹소켓이 나오게 된거다.
+.그렇기에, http통신에서도 양방향 소켓이 사용되기 위해 웹소켓이 나오게 된거다.
     그전에는 단방향을 polling으로 해결하고 있었
 5.웹 소켓 통신은, WS, WSS 프로토콜 기반이며 tcp포트 80,443에서  동작하도록
     설계되었다. 그렇기에 HTTP 의 프록시를 지원할 수 있게 하기 위하여 HTTP 포트 80, 443에서 동작하도록 설계되었다. 이 때문에 HTTP 프로토콜과의 호환도 가능하다. 웹소켓을 사용하기 위해서는 HTTP Upgrade header라는 걸 사용하여 HTTP 프로토콜에서 WebSocket 프로토콜로 전환된다. 이 과정을 WebSocket HandShake라고 함.
@@ -150,24 +227,13 @@ https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2
 
 
 
-그리고 그걸 알아야해 TIME_wait 소켓은 언제나 클라이언트단에서 발생해
-그리고 http 통신에서는 브라우저에서는 그런게 안생기는데 nginxdls flqjtm vmfhrtldptj
-WAS로 보낼때도 클라이언트,서버단의 관계인데 이때 nginx에서 time_wait소켓이 생성되는거다.
-- 조졸두 글중
-
 잠깐, time_wait 소켓에 대한 개념을 다시 보자. 정확하게
 이게, 한 연결에 대해서만 가능한건지 아니면 다른데서 끌어와서 사용하는건지 알자.
 그리고 핸드쉐이크 언제쯤에 이게 세션을 계속 살려두는지도 알자.
 
-네트워크 HANshake 관련글도 다시 정리해야해, 이거 http통신인지
-tcp통신인지에 대해 자세히 다시 구별해서 정
-
 그리고 fin을 보내서 연결을 끊는건 서버단에서도 가능하다하는데, 이거 http통신에서는
 대부분 클라이언트단에서 fin을 보내서 time_wait가 클라이언트단에서 생긴다는데 이거도
 찾아서 정리하
-
-
-앞으로, 이 이미지 앞에 <br> 붙이기
 
 #### 🪁 References
 * 참조링크 : []()
@@ -177,13 +243,93 @@ tcp통신인지에 대해 자세히 다시 구별해서 정
 
 
 
-### 2.
+### 3.HTTP 통신에서 양방향 통신을 위한 웹소켓의 개념
 
 <p align="center">
-<img src="">
+<img src="https://user-images.githubusercontent.com/59492312/160541951-f3618a3b-a094-4e6e-9363-b44672b68730.png">
 </p>
 
-ㅁ
+기존의 HTTP통신은 connectionless로 기본적으로 연결이 유지되지 않으며
+단방향이라는 특징을 갖고있다. 그렇기에 이를 극복하고 양방향이면서 실시간 통신이
+필요한 기능들에 대해 여러가지 시도들이 있었다.
+
+대표적으로, http polling, http streaming등이 시도되었다.
+하지만, 비효율적이며 HTTP통신에서의 한계점 때문에 다른 대안이 제시되었다.
+
+<br>
+
+> http polling이나 http streaming에 대해 더 알고싶다면 아래 참조링크를 참고하도록 하자.    
+> [http polling과 http streaming의 개념](https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket)
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160541933-33f168ab-81a3-4dc0-8940-229bd61ad3c8.png">
+</p>
+
+그리하여, web socket(웹 소켓)이라는 개념이 나오게 됬다.
+웹 소켓은 일반 소켓(TCP 기반 소켓)처럼 양방향에 실시간 통신이 가능하며, IP와 포트를
+사용한 통신을 한다는점에서 공통점을 갖고 있다. 하지만, 웹 소캣은 기본적으로 
+HTTP 기반 계층(7 layer)에서 작동한다는점에서 일반 소켓이 TCP 기반 계층(4 layer)
+에서 작동한다는 점에서 다르다. 
+
+그렇기에, 웹 소켓과 소켓은 엄연히 다른것으로 보아야 한다.
+
+<br>
+
+> [웹 소켓과 소켓의 공통점과 차이점(1)](https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket)         
+> [웹 소켓과 소켓의 공통점과 차이점(2)](https://dalya-tech.tistory.com/27)  
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160547696-1694fffa-66c7-4ccd-b7eb-96fa1e98d74a.png">
+</p>
+
+웹 소켓을 기반으로 하는 통신은 WebSocket 프로토콜이라는 새로운 규약에서 이루어진다. 
+하지만, 웹 소켓 통신을 위한 별도의 포트는 없으며 기존 포트(http:80, https:443)를 
+사용하도록 설계되어져 있다. 그렇기에 HTTP 프로토콜과도 호환이 되도록 설계되어져 있다고 하는 것이다.
+(기존 HTTP도 포트80,443에서 이루어지기 때문)
+
+즉, 조금 더 풀어서 얘기하자면 최초 접속시 HTTP 프로토콜 위에서 3-way handshake를
+거치고, 그 이후에 웹 소켓을 이용해야하는 경우에 HTTP Upgrade header라는 걸 사용하여 
+HTTP 프로토콜에서 WebSocket 프로토콜로 전환시킨다.
+
+그렇기에, WebSocket 프로토콜이 HTTP 프로토콜을 대체하는 개념은 아니고 
+상호보완하는 개념으로 볼 수 있다.
+
+<br>
+
+> 웹 소켓을 이용하는 프로토콜의 표시는 WS(WebSocket)으로 나타낸다.     
+> [웹 소켓 프로토콜의 표시](https://dalya-tech.tistory.com/27)
+
+<br>
+
+> [](https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket)     
+> [](https://velog.io/@imacoolgirlyo/web-socket%EA%B3%BC-socket.io)     
+> [](https://dalya-tech.tistory.com/27)     
+> [](https://gnaseel.tistory.com/11)
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160547696-1694fffa-66c7-4ccd-b7eb-96fa1e98d74a.png">
+</p>
+
+웹 소켓은 HTML5 이후에 나온 개념이기 때문에, html5이전 기술로 구현된 서비스의 경우에는
+Socker.io, SockerJS를 사용하며, 이는 html5이전의 기술로 구현된 서비스에서 웹 소켓처럼 
+사용할 수 있도록 도와주는 기술이다. 
+
+그 외에, 예전에는 웹 소켓은 지원하지 않는 브라우저가 있었으나 현재는 거의 모든
+브라우저에서 지원해주고 있으며,버전이 낮은 경우 위의 Socker.io나 SockerJS를
+사용하여 크로스 브라우징을 해주면 된다.
+
+<br>
+
+> [](https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket)        
+> [](https://dalya-tech.tistory.com/27)
+
+<br>
 
 #### 🪁 References
 * 참조링크 : []()
