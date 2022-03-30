@@ -194,11 +194,6 @@ HTTP 프로그래밍은 우리가 브라우저에서 특정 URL을 입력하고 
 
 <br>
 
-> 우리가 개발에서 사용하는 리버스프록시(Nginx)->WAS, WAS->API서버, WAS->DB
-> 도 모두 HTTP 통신이다.
-
-<br>
-
 > [HTTP통신의 쓰임](https://mangkyu.tistory.com/48)        
 
 <br>
@@ -207,7 +202,7 @@ HTTP 프로그래밍은 우리가 브라우저에서 특정 URL을 입력하고 
 <img src="https://user-images.githubusercontent.com/59492312/160383387-058a42c6-29cd-40e8-8c25-d7b81fc83304.png">
 </p>
 
-HTTP 통신에서는 keepalive
+HTTP 통신에서는 keepalive aaaaaa
 
 <br>
 
@@ -296,7 +291,8 @@ HTTP 기반 계층(7 layer)에서 작동한다는점에서 일반 소켓이 TCP 
 HTTP 프로토콜에서 WebSocket 프로토콜로 전환시킨다.
 
 그렇기에, WebSocket 프로토콜이 HTTP 프로토콜을 대체하는 개념은 아니고 
-상호보완하는 개념으로 볼 수 있다.
+상호보완하는 개념으로 볼 수 있다. 더 자세한 내용들에 대해서는 실제로 웹 소켓을
+사용할 때 알아보도록 하자.
 
 <br>
 
@@ -317,29 +313,35 @@ HTTP 프로토콜에서 WebSocket 프로토콜로 전환시킨다.
 </p>
 
 웹 소켓은 HTML5 이후에 나온 개념이기 때문에, html5이전 기술로 구현된 서비스의 경우에는
-Socker.io, SockerJS를 사용하며, 이는 html5이전의 기술로 구현된 서비스에서 웹 소켓처럼 
+Socket.io, SocketJS를 사용하며, 이는 html5이전의 기술로 구현된 서비스에서 웹 소켓처럼 
 사용할 수 있도록 도와주는 기술이다. 
 
 그 외에, 예전에는 웹 소켓은 지원하지 않는 브라우저가 있었으나 현재는 거의 모든
-브라우저에서 지원해주고 있으며,버전이 낮은 경우 위의 Socker.io나 SockerJS를
+브라우저에서 지원해주고 있으며, 버전이 낮은 경우 위의 Socker.io나 SockerJS를
 사용하여 크로스 브라우징을 해주면 된다.
 
 <br>
 
-> [](https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket)        
-> [](https://dalya-tech.tistory.com/27)
+> 웹 소켓과 Socket.io, SocketJS는 같은 기능을 하는것은 맞지만 서로 다른 기술이다.
+> 상황에 맞게 사용하면 되는것이다. 자세한 사항은 아래 참조링크를 보도록 하자.      
+> [웹 소켓과 Socket io에 관하여](https://d2.naver.com/helloworld/1336)
 
 <br>
 
-#### 🪁 References
-* 참조링크 : []()
-* 참조링크 : []()
+> [웹 소켓과 Socket.io, SocketJS (1)](https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket)        
+> [웹 소켓과 Socket.io, SocketJS (2)](https://dalya-tech.tistory.com/27)
 
 <br>
 
 
 
 ### 🚀 추가로
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/160547696-1694fffa-66c7-4ccd-b7eb-96fa1e98d74a.png">
+</p>
+
+HTTP통신이 되기위한,aaa
 
 <br>
 
