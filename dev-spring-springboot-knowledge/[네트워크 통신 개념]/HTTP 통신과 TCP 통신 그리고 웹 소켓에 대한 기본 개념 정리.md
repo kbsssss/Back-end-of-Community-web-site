@@ -1,8 +1,8 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/159886777-d6c616ac-f01a-4343-8004-3a74017b4d10.png">
+<img src="https://user-images.githubusercontent.com/59492312/160745944-9985f171-9dfd-4a36-beac-92b1a5b5f1f5.png">
 </p>
 
-# 🖼 HTTP 통신과 TCP 통신 그리고 웹소켓에 대한 기본 개념 정리
+# 🖼 HTTP 통신과 TCP 통신 그리고 웹 소켓에 대한 기본 개념 정리
 
 * HTTP 통신과 TCP통신의 개념
 * HTTP 프로그래밍과 소켓 프로그래밍
