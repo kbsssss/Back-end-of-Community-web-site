@@ -2,13 +2,11 @@
 <img src="https://user-images.githubusercontent.com/59492312/159886777-d6c616ac-f01a-4343-8004-3a74017b4d10.png">
 </p>
 
-# 🖼 TCP 통신, HTTP통신, 소켓통신의 개념과 차이점 정리
+# 🖼 HTTP 통신과 TCP 통신 그리고 웹소켓에 대한 기본 개념 정리
 
-이거 닫 다시 정리
-
-* TCP 통신, HTTP통신, 소켓통신의 개념과 차이점
-* Time_wait 소켓과 HTTP 통신에 관하여
-* HTTP 통신에서 양방향 통신을 위한 웹소켓의 개념
+* HTTP 통신과 TCP통신의 개념
+* HTTP 프로그래밍과 소켓 프로그래밍
+* HTTP,HTTPS 통신에서 양방향 통신을 위한 웹 소켓의 개념
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 
@@ -18,7 +16,7 @@
 
 
 
-### 1.HTTP통신과 TCP통신의 개념과 차이점에 대해
+### 1.HTTP통신과 TCP통신의 개념
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/160339237-6c677536-0e9d-43fc-862d-cca439bd9cae.png">
@@ -161,15 +159,16 @@ TCP통신의 데이터전송에서 사용되는 소켓통신과는 다른 방식
 
 
 
-### 2.추가적으로 알아야할 개념들에 대해 정리
+### 2.HTTP 프로그래밍과 소켓 프로그래밍
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/160383387-058a42c6-29cd-40e8-8c25-d7b81fc83304.png">
 </p>
 
 양방향 통신을 위해서 소켓을 사용하도록 하는 프로그래밍을 소켓 프로그래밍이라 했는데,
-반대로 HTTP통신을 하기 위한 프로그래밍을 HTTP 프로그래밍이라고도 한다. 즉, 소켓을 사용한다고
-해서 HTTP통신을 하는경우 소켓 프로그래밍이라고는 하지 않는다.
+반대로 HTTP통신을 하기 위한 프로그래밍을 HTTP 프로그래밍이라고도 한다. 하지만, HTTP 통신에서도
+소켓을 사용한다고 했으니 꼭 소켓을 사용한다고 해서 소켓 프로그래밍이라고는 하지 않는다. 즉, 해당 소켓이 
+어떠한 용도로 사용되느냐에 따라 HTTP 프로그래밍이 될 수도 있고, 소켓 프로그래밍이 될 수도 있는것이다.
 
 <br>
 
@@ -198,47 +197,9 @@ HTTP 프로그래밍은 우리가 브라우저에서 특정 URL을 입력하고 
 
 <br>
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/160383387-058a42c6-29cd-40e8-8c25-d7b81fc83304.png">
-</p>
-
-HTTP 통신에서는 keepalive aaaaaa
-
-<br>
-
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/160337367-e64ee082-9cf4-4bb4-8dc1-8c2b9391dcba.png">
-</p>
 
 
-.그렇기에, http통신에서도 양방향 소켓이 사용되기 위해 웹소켓이 나오게 된거다.
-    그전에는 단방향을 polling으로 해결하고 있었
-5.웹 소켓 통신은, WS, WSS 프로토콜 기반이며 tcp포트 80,443에서  동작하도록
-    설계되었다. 그렇기에 HTTP 의 프록시를 지원할 수 있게 하기 위하여 HTTP 포트 80, 443에서 동작하도록 설계되었다. 이 때문에 HTTP 프로토콜과의 호환도 가능하다. 웹소켓을 사용하기 위해서는 HTTP Upgrade header라는 걸 사용하여 HTTP 프로토콜에서 WebSocket 프로토콜로 전환된다. 이 과정을 WebSocket HandShake라고 함.
-    WebSocket 프로토콜을 이용하면 이전에 서버와 클라이언트 간의 실시간, 양방향 통신을 가능하기 위해서 HTTP Polling 방식을 사용했던 것보다 overhead가 확실히 작아진다. 이는 클라이언트가 먼저 서버에게 요청하지 않고, 서버가 클라이언트에게 contents를 보내고 이 연결이 계속 열린채로 유지되기 때문에 가능하다.
-   https://velog.io/@imacoolgirlyo/web-socket%EA%B3%BC-socket.io
-6.웹소켓은 HTTP로 Handshake를 한 후 ws로 프로토콜을 변환하여 웹소켓 프레임을 통해 데이터를 전송합니다
-  출처: https://kellis.tistory.com/65 [Flying Whale]
-
-
-
-잠깐, time_wait 소켓에 대한 개념을 다시 보자. 정확하게
-이게, 한 연결에 대해서만 가능한건지 아니면 다른데서 끌어와서 사용하는건지 알자.
-그리고 핸드쉐이크 언제쯤에 이게 세션을 계속 살려두는지도 알자.
-
-그리고 fin을 보내서 연결을 끊는건 서버단에서도 가능하다하는데, 이거 http통신에서는
-대부분 클라이언트단에서 fin을 보내서 time_wait가 클라이언트단에서 생긴다는데 이거도
-찾아서 정리하
-
-#### 🪁 References
-* 참조링크 : []()
-* 참조링크 : []()
-
-<br>
-
-
-
-### 3.HTTP 통신에서 양방향 통신을 위한 웹소켓의 개념
+### 3.HTTP,HTTPS 통신에서 양방향 통신을 위한 웹소켓의 사용
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/160541951-f3618a3b-a094-4e6e-9363-b44672b68730.png">
@@ -282,17 +243,31 @@ HTTP 기반 계층(7 layer)에서 작동한다는점에서 일반 소켓이 TCP 
 </p>
 
 웹 소켓을 기반으로 하는 통신은 WebSocket 프로토콜이라는 새로운 규약에서 이루어진다. 
-하지만, 웹 소켓 통신을 위한 별도의 포트는 없으며 기존 포트(http:80, https:443)를 
-사용하도록 설계되어져 있다. 그렇기에 HTTP 프로토콜과도 호환이 되도록 설계되어져 있다고 하는 것이다.
-(기존 HTTP도 포트80,443에서 이루어지기 때문)
+하지만, 웹 소켓 통신을 위한 별도의 포트는 없으며 포트 80,443(http:80, https:443)을
+사용하도록 설계되어져 있다. 그렇기에 HTTP 프로토콜, HTTPS 프로토콜과도 호환이 되도록 설계되어져 있다고 하는 것이다.
+(기존 HTTP도 포트80, HTTPS는 443에서 이루어지기 때문)
 
-즉, 조금 더 풀어서 얘기하자면 최초 접속시 HTTP 프로토콜 위에서 3-way handshake를
+즉, 조금 더 풀어서 얘기하자면 최초 접속시 HTTP 혹은 HTTPS 위에서 3-way handshake를
 거치고, 그 이후에 웹 소켓을 이용해야하는 경우에 HTTP Upgrade header라는 걸 사용하여 
-HTTP 프로토콜에서 WebSocket 프로토콜로 전환시킨다.
+HTTP 프로토콜에서 혹은 HTTPS 프로토콜에서 WebSocket 프로토콜로 전환시킨다.
 
 그렇기에, WebSocket 프로토콜이 HTTP 프로토콜을 대체하는 개념은 아니고 
 상호보완하는 개념으로 볼 수 있다. 더 자세한 내용들에 대해서는 실제로 웹 소켓을
 사용할 때 알아보도록 하자.
+
+<br>
+
+> HTTPS는 HTTP의 보안이 강화된 버전으로 HTTP를 기반으로 하여 웹서버와 통신을 하되
+> 암호화 통신을 위한 별도의 협의 과정을 거치는것을 의미한다.     
+> [HTTPS와 HTTP의 관계](https://aws-hyoh.tistory.com/entry/HTTPS-%ED%86%B5%EC%8B%A0%EA%B3%BC%EC%A0%95-%EC%89%BD%EA%B2%8C-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0%EC%9A%B0%EB%A6%AC%EB%8A%94-%EA%B5%AC%EA%B8%80%EC%97%90-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%93%A4%EC%96%B4%EA%B0%80%EB%8A%94%EA%B0%80)
+
+<br>
+
+> 덧붙이자면, 모든 프로토콜에는 기본적으로 사용하는 포트들이 있다. SSH는 TCP기반의 22포트를
+> 사용하고, HTTP는 TCP기반의 80포트, HTTPS는 TCP기반의 443포트를 사용한다. 그렇기에 위에서 
+> 웹 소켓통신시에 80포트와 443포트를 사용한다고 했을때 HTTP와 WebSocket 프로토콜이 서로 호환된다고
+> 얘기가 가능한것이다.     
+> [각 프로토콜별 기본 포트](https://iamfreeman.tistory.com/entry/%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C-%EA%B8%B0%EB%B3%B8-%ED%8F%AC%ED%8A%B8-%EB%AA%A9%EB%A1%9D-Common-TCPIP-Protocols-and-Ports)
 
 <br>
 
@@ -301,10 +276,10 @@ HTTP 프로토콜에서 WebSocket 프로토콜로 전환시킨다.
 
 <br>
 
-> [](https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket)     
-> [](https://velog.io/@imacoolgirlyo/web-socket%EA%B3%BC-socket.io)     
-> [](https://dalya-tech.tistory.com/27)     
-> [](https://gnaseel.tistory.com/11)
+> [웹 소켓의 개념 (1)](https://intrepidgeeks.com/tutorial/clean-the-socket-and-web-socket-at-one-time-2-the-difference-between-socket-and-web-socket-everything-about-web-socket-and-the-relationship-between-http-tcp-socket)     
+> [웹 소켓의 개념 (2)](https://velog.io/@imacoolgirlyo/web-socket%EA%B3%BC-socket.io)     
+> [웹 소켓의 개념 (3)](https://dalya-tech.tistory.com/27)     
+> [웹 소켓의 개념 (4)](https://gnaseel.tistory.com/11)
 
 <br>
 
@@ -335,16 +310,5 @@ Socket.io, SocketJS를 사용하며, 이는 html5이전의 기술로 구현된 �
 
 
 
-### 🚀 추가로
+태그 : #OSI 7layer, #protocol, #HTTP, #TCP, #HTTP 통신, #TCP 통신, #3-way-handshake, #4-way-handshake, #양방향통신, #소켓 통신, #소켓 프로그래밍, #단방향통신, #HTTP 프로그래밍, #웹 소켓, #WebSocket, #WS
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/160547696-1694fffa-66c7-4ccd-b7eb-96fa1e98d74a.png">
-</p>
-
-HTTP통신이 되기위한,aaa
-
-<br>
-
-태그 : #
-
-> 처럼 띄우는거에는 항상 위아래로 <br> 붙여주기
