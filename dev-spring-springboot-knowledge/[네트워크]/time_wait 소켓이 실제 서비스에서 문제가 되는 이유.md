@@ -134,10 +134,27 @@ time_wait 소켓이 발생한 목록을 보면, 왼쪽은 127.0.0.1:고유포트
 <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/156504161-6c477067-119e-43c2-9127-764c9fb963da.png">
+<img src="https://user-images.githubusercontent.com/59492312/160988751-4735b191-b6c4-40be-8d60-73adae1b15a7.png">
 </p>
 
-a
+필자가 EC2 내부에 있는 Nginx와 WAS(톰캣)을 사용을 예로 들었었는데,
+실제로 이러한 연결말고도 흔히 time_wait가 발생할 수 있는경우가 두가지
+경우가 더 있다.
+
+위에서 말했다시피,    
+* Tomcat 서버와 DB의 연동
+* Tomcat 서버와 외부 API의 연동
+* Nginx와 Tomcat의 연동    
+가 있다.
+
+이 중에서 세번째는 우리가 방금 본 경우이고, Tomcat 즉, WAS에서 데이터베이스에 연결한다던지,
+아니면 WAS에서 외부 API에 요청을 보내는 경우 모두 time_wait 소켓 발생으로 문제가 발생할 수 있는
+경우들이다.(왜냐면 위 셋 모두 클라이언트단이 EC2 인스턴스 내부에 있는 Nginx 혹은 WAS이며 이로인해
+로컬포트 부족발생 현상이 나타날 수 있기 때문이다.)
+
+<br>
+
+> [timew_wait 소켓이 문제를 일으키는 이유](https://jojoldu.tistory.com/319?category=777282)
 
 <br>
 
