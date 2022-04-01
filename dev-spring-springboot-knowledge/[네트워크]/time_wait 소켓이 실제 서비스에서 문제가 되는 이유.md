@@ -6,6 +6,7 @@
 
 * 실제 서비스에서의 time-wait 발생과 적용원리
 * 실제 서비스에서 time-wait 소켓이 문제를 일으키는 이유
+* [부록] Nginx, WAS(톰캣), 외부AI, 데이터베이스간 통신은 HTTP 통신일까 ?
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 
@@ -60,7 +61,7 @@
 > 또 한가지 알아야 할것은 이 time_wait 소켓은 클라이언트단이나 서버단이나 연결을 먼저 끊으려고 하는쪽에서
 > 발생한다. 즉, 꼭 클라이언트단에서 생기는 소켓이 아니라는것이다. 하지만, 통상 클라이언트단에서 먼저 연결을 끊으려고 
 > FIN을 서버단에 보내기에 대부분 클라이언트단에서 time_wait 소켓이 발생한다고 볼 수 있다.      
-> [time_wait 소켓의 발생 (1)](https://puzzle-puzzle.tistory.com/entry/TIMEWAIT-%EC%86%8C%EC%BC%93%EC%9D%B4-%EC%84%9C%EB%B9%84%EC%8A%A4%EC%97%90-%EB%AF%B8%EC%B9%98%EB%8A%94-%EC%98%81%ED%96%A5)    
+> [time_wait 소켓의 발생 (1)](https://puzzle-puzzle.tistory.com/entry/TIMEWAIT-%EC%86%8C%EC%BC%93%EC%9D%B4-%EC%84%9C%EB%B9%84%EC%8A%A4%EC%97%90-%EB%AF%B8%EC%B9%98%EB%8A%94-%EC%98%81%ED%96%A5)     
 > [time_wait 소켓의 발생 (2)](https://jojoldu.tistory.com/319)
 
 <br>
@@ -68,7 +69,8 @@
 > 추가로, HTTP 기반의 통신의 경우는 대부분 서버가 먼저 연결을 끊는 경우가 많기 때문에 서버에서 TIME_WAIT가 생긴다.
 > 하지만, 주로 time_wait로 인해서 서비스에 문제가 생기는 경우는 로컬포트를 할당받은 클라이언트단에서 time_wait 발생으로
 > 인해 로컬포트 할당 부족현상이니 클라이언트에서 발생하는 time_wait 소켓외에는 논외로 해두겠다.     
-> [time_wait 소켓과 서버단, 그리고 HTTP 기반 통신](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=hanajava&logNo=221937962269)
+> [HTTP 통신과 서버단에서의 time_wait 발생](https://sunyzero.tistory.com/198)     
+> [time_wait 소켓과 서버단, 그리고 HTTP 기반 통신](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=hanajava&logNo=221937962269)     
 
 <br>
 
@@ -157,7 +159,12 @@ time_wait 소켓이 발생한 목록을 보면, 왼쪽은 127.0.0.1:고유포트
 
 <br>
 
-> 추가로,
+> 추가로, 우리가 브라우저에 특정 URL을 입력하여 서버에 접근할때는 (위와같이 EC2에 배포된 스프링부트 프로젝트(WAS)와
+> 리버스 프록시인 Nginx를 사용한다고 보겠다.) Nginx에서 WAS로 연결할때의 time_wait 소켓을 고려해야하는것을 물론이고
+> 동시에 WAS에서 API서버, 아니면 WAS에서 데이터베이스에 연결할 때 생성되는 time_wait도 신경써야 한다. 즉, 더 풀어말하자면 우리가
+> 웹서비스에서 정적파일을 요구하는 단순 요청을 보낼수도 있으나 실제로는 정적파일 외에 추가로 동적자원에 대한 요청을 보낼 수 있다. 이 과정에서
+> 외부 API를 WAS에서 요청을 보내야 하는 경우도 있고 동시에 WAS에서 데이터베이스로 특정 자료를 요청할 수도 있다. 그렇기 때문에 브라우저에서 단 한번의
+> 요청을 하더라도 실제로는 여러 연결을 동시에 고려해서 time_Wait 소켓을 관리해야 한다는 것이다.(결국은 이 모든게 EC2 인스턴스가 감수해야하는 부분인것이다.)
 
 <br>
 
@@ -167,11 +174,36 @@ time_wait 소켓이 발생한 목록을 보면, 왼쪽은 127.0.0.1:고유포트
 
 
 
-### 3.
+### 3.[부록] time_wait 소켓이 발생하는 Nginx, WAS, 데이터베이스, 외부API간의 통신, HTTP통신일까?
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/156504161-6c477067-119e-43c2-9127-764c9fb963da.png">
+<img src="https://user-images.githubusercontent.com/59492312/161027181-b39759d8-4c75-4f30-959c-dd3938ccac3f.png">
 </p>
+
+바로 위에서 우리는 Nginx, WAS, 데이터베이스, 외부API간의 통신에서 time_wait 소켓이 발생하고
+이를 통해서 문제가 된다는것을 알았다. 그렇다면 과연 이들간의 통신은 HTTP 아래에서 이루어지는 통신일까?
+
+답은 아니다 이다.     
+우선, time_wait 소켓은 TCP 통신기반(3-way handshake, 4-way handshake)에서 발생하는 소켓 상태이다.
+그러나, 기본적으로 HTTP 통신은 TCP 기반으로 이루어져 있기에 time_wait 소켓이 발생하는 것이고 그 외에도 다양한
+통신들이 TCP 통신기반으로 이루어지기 때문에 HTTP통신이 아니여도 time_wait 소켓이 발생하게 되는것이다. 
+
+<br>
+
+> HTTP 통신은 포트80, HTTPS 통신은 포트 443에서 이루어진다. Nginx가 WAS에 접근할때는 8080포트(물론 이것이 고정값은 아니다.)
+> WAS에서 데이터베이스에 접근할때는 3306포트를 이용하기 때문에 HTTP 규약 아래에서 이루어지는 통신이라고는 볼 수 없다. 하지만, 이
+> 통신들 또한 TCP기반에 3-way handshake와 4-way handshake가 통신에 사용되기에 time_wait 소켓이 발생하게 되는것이다.
+
+<br>
+
+> HTTP통신과 TCP통신에 관해 자세히 알고싶다면 [해당 글](https://sooolog.dev/HTTP-%ED%86%B5%EC%8B%A0%EA%B3%BC-TCP-%ED%86%B5%EC%8B%A0-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EC%9B%B9-%EC%86%8C%EC%BC%93%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B8%B0%EB%B3%B8-%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC/)을 참조하도록 하며, 3-way handshake와 4-way handshake에 관해서 알고싶다면
+> [해당 글](https://sooolog.dev/TCP-%ED%86%B5%EC%8B%A0%EA%B3%BC-3-way,4-way-handshake-%EA%B7%B8%EB%A6%AC%EA%B3%A0-time_wait-%EC%86%8C%EC%BC%93%EC%9D%98-%EA%B0%9C%EB%85%90/)을 참조하도록 하자.
+
+<br>
+
+> [각 프로토콜 별 기본 포트](https://iamfreeman.tistory.com/entry/%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C-%EA%B8%B0%EB%B3%B8-%ED%8F%AC%ED%8A%B8-%EB%AA%A9%EB%A1%9D-Common-TCPIP-Protocols-and-Ports)     
+
+<br>
 
 만약, 웹서비스에서 리버스 프록시인 Nginx를 사용하는 경우, 브라우저 클라이언트단에서 서버로 요청을 보낼때는
 80포트 혹은 443 포트를 이용한 HTTP, HTTPS 통신을 하고, Nginx에서 이를 받아 WAS로 보낼때는 TCP 기반의
@@ -183,7 +215,7 @@ WAS와 외부API통신, WAS와 RDS통신 모두 방금전과 같은 TCP 기반 �
 
 
 
-### 🚀 추가로, time_wait 소켓이 발생할 경우 어떻게 튜닝작업을 할것인지 방안은 무엇인지에 대해서는 실제 스프링부트 프로젝트를 다루면서 [성능튜닝] 카테고리에서 정리하도록 하겠다.
+### 🚀 추가로, time_wait 소켓이 발생할 경우 어떻게 튜닝작업을 할것인지 방안은 무엇인지에 대해서는 실제 스프링부트 프로젝트를 다루면서 [성능튜닝] 카테고리에서 다루도록 하겠다.
 
 <br>
 
