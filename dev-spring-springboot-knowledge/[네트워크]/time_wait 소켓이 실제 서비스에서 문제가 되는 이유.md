@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/160971578-134ca0b8-a60e-4152-bb08-938f247966d8.png">
+<img src="https://user-images.githubusercontent.com/59492312/161195102-0dd47b15-bbf4-49bd-85ac-d73c793fb9f3.png">
 </p>
 
 # 🗝 time_wait 소켓이 실제 서비스에서 문제가 되는 이유
