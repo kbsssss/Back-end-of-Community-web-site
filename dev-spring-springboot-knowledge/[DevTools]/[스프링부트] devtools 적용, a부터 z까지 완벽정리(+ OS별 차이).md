@@ -1,13 +1,14 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/144984641-dbeaf354-ded0-43d8-82d3-d4a55977c4ac.png">
+<img src="https://user-images.githubusercontent.com/59492312/161212879-0363726a-d315-403b-ad65-feb4d24a4f84.png">
 </p>
 
-# 👨‍💻 스프링부트 devtools 적용에 대한 a부터 z까지 한번에 파헤쳐 보자
+# 👨‍💻 [스프링부트] devtools 적용, a부터 z까지 완벽정리(+ OS별 차이)
 
 * springboot devtools 사용을 위한 의존성 설정과 기타설정
 * 기타 오류들 및 OS별, 프로젝트별 에러사항 정리
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
+
 * * * 
 
 ### 1.우선 빠르게 SpringBoot devtools 의존성을 추가해 보도록 하겠다.
@@ -151,7 +152,7 @@ Controller하나를 이와같이 작성해준다.
 
 
 ## 🪁 Reference
-* [스프링부트 Devtools 설정1](https://velog.io/@bread_dd/Spring-Boot-Devtools)
-* [스프링부트 Devtools 설정2](https://otrodevym.tistory.com/entry/spring-boot-설정하기-10-dev-tools-설정-및-테스트-소스)
-* [스프링부트 Devtools 설정3](https://otrodevym.tistory.com/entry/spring-boot-설정하기-10-dev-tools-설정-및-테스트-소스)
+* [스프링부트 Devtools 설정1](https://velog.io/@bread_dd/Spring-Boot-Devtools)      
+* [스프링부트 Devtools 설정2](https://otrodevym.tistory.com/entry/spring-boot-설정하기-10-dev-tools-설정-및-테스트-소스)      
+* [스프링부트 Devtools 설정3](https://otrodevym.tistory.com/entry/spring-boot-설정하기-10-dev-tools-설정-및-테스트-소스)      
 * [스프링부트 시작하기 책](https://velog.io/@sooolog)
