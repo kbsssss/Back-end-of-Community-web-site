@@ -66,7 +66,7 @@
 
 <br>
 
-> 추가로, HTTP 기반의 통신의 경우는 대부분 서버가 먼저 연결을 끊는 경우가 많기 때문에 서버에서 TIME_WAIT가 생긴다.
+> 예외적으로, HTTP 기반의 통신의 경우는 대부분 서버가 먼저 연결을 끊는 경우가 많기 때문에 서버에서 TIME_WAIT가 생긴다.
 > 하지만, 주로 time_wait로 인해서 서비스에 문제가 생기는 경우는 로컬포트를 할당받은 클라이언트단에서 time_wait 발생으로
 > 인해 로컬포트 할당 부족현상이니 클라이언트에서 발생하는 time_wait 소켓외에는 논외로 해두겠다.     
 > [HTTP 통신과 서버단에서의 time_wait 발생](https://sunyzero.tistory.com/198)     
@@ -191,8 +191,10 @@ time_wait 소켓이 발생한 목록을 보면, 왼쪽은 127.0.0.1:고유포트
 <br>
 
 > HTTP 통신은 포트80, HTTPS 통신은 포트 443에서 이루어진다. Nginx가 WAS에 접근할때는 8080포트(물론 이것이 고정값은 아니다.)
-> WAS에서 데이터베이스에 접근할때는 3306포트를 이용하기 때문에 HTTP 규약 아래에서 이루어지는 통신이라고는 볼 수 없다. 하지만, 이
-> 통신들 또한 TCP기반에 3-way handshake와 4-way handshake가 통신에 사용되기에 time_wait 소켓이 발생하게 되는것이다.
+> WAS에서 데이터베이스에 접근할때는 3306포트를 이용하기 때문에 HTTP 규약 아래에서 이루어지는 통신이라고는 볼 수 없다. 또한, HTTP 통신이라면
+> 요청과 응답에 기본적으로 정해진 구조를 갖추고 있어야 한다.     
+> [각 프로토콜 별 기본 포트](https://iamfreeman.tistory.com/entry/%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C-%EA%B8%B0%EB%B3%B8-%ED%8F%AC%ED%8A%B8-%EB%AA%A9%EB%A1%9D-Common-TCPIP-Protocols-and-Ports)     
+> [HTTP 통신이라면 요청과 응답에 갖추어야 할 기본 구조](https://leemyungjic.tistory.com/13)     
 
 <br>
 
@@ -201,24 +203,12 @@ time_wait 소켓이 발생한 목록을 보면, 왼쪽은 127.0.0.1:고유포트
 
 <br>
 
-> [각 프로토콜 별 기본 포트](https://iamfreeman.tistory.com/entry/%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C-%EA%B8%B0%EB%B3%B8-%ED%8F%AC%ED%8A%B8-%EB%AA%A9%EB%A1%9D-Common-TCPIP-Protocols-and-Ports)     
 
-<br>
 
-만약, 웹서비스에서 리버스 프록시인 Nginx를 사용하는 경우, 브라우저 클라이언트단에서 서버로 요청을 보낼때는
-80포트 혹은 443 포트를 이용한 HTTP, HTTPS 통신을 하고, Nginx에서 이를 받아 WAS로 보낼때는 TCP 기반의
-통신을 하게 된다.(HTTP,HTTPS에 속하지 않는다. 애초에 이 경우 8080포트를 사용하기 때문.) 즉, 3-way-handshake와
-4-way-handshake과정을 통신연결과정에서 그대로 거치기 때문에 이 연결에서도 Time_wait 소켓이 발생할 수 있다. 또한,
-WAS와 외부API통신, WAS와 RDS통신 모두 방금전과 같은 TCP 기반 통신으로 Time_wait 소켓이 발생할 수 있다.
+### 🚀 추가로, time_wait 소켓이 발생하여 문제가 생길경우 어떻게 튜닝작업을 할것인지 방안은 무엇인지에 대해서는 실제 스프링부트 프로젝트를 다루면서 [성능튜닝] 카테고리에서 다루도록 하겠다.
 
 <br>
 
 
 
-### 🚀 추가로, time_wait 소켓이 발생할 경우 어떻게 튜닝작업을 할것인지 방안은 무엇인지에 대해서는 실제 스프링부트 프로젝트를 다루면서 [성능튜닝] 카테고리에서 다루도록 하겠다.
-
-<br>
-
-
-
-태그 : #
+태그 : #time_wait 소켓, #커널, #로컬포트, #HTTP, #TCP
