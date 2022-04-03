@@ -194,7 +194,8 @@ time_wait 소켓이 발생한 목록을 보면, 왼쪽은 127.0.0.1:고유포트
 > WAS에서 데이터베이스에 접근할때는 3306포트를 이용하기 때문에 HTTP 규약 아래에서 이루어지는 통신이라고는 볼 수 없다. 또한, HTTP 통신이라면
 > 요청과 응답에 기본적으로 정해진 구조를 갖추고 있어야 한다.     
 > [각 프로토콜 별 기본 포트](https://iamfreeman.tistory.com/entry/%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C-%EA%B8%B0%EB%B3%B8-%ED%8F%AC%ED%8A%B8-%EB%AA%A9%EB%A1%9D-Common-TCPIP-Protocols-and-Ports)     
-> [HTTP 통신이라면 요청과 응답에 갖추어야 할 기본 구조](https://leemyungjic.tistory.com/13)     
+> [HTTP 통신이라면 요청과 응답에 갖추어야 할 기본 구조 (1)](https://leemyungjic.tistory.com/13)     
+> [HTTP 통신이라면 요청과 응답에 갖추어야 할 기본 구조 (2)](https://velog.io/@doomchit_3/Internet-HTTP-%EA%B0%9C%EB%85%90%EC%B0%A8%EB%A0%B7-IMBETPY)
 
 <br>
 
