@@ -16,10 +16,7 @@
   * SpringBoot Devtools 적용과 원리
 
 * 스프링부트 파일업로드 및 S3연동
-  * 
+  * 스프링부트 파일업로드 & S3연동
 
 * 스프링부트 CI/CD, SSL 설정, 도메인연결
   * 깃헙액션과 Beanstalk를 활용한 CI/CD
-  * 
-
-*
