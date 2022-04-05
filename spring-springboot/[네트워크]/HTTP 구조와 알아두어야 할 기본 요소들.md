@@ -88,9 +88,21 @@ HTTP(HyperText Transfer Protocol) 란?
 <img src="https://user-images.githubusercontent.com/59492312/161484177-a4fc147c-b430-4636-b31d-a6c98e1fbd33.png">
 </p>
 
-HTTP 요청(Request)에 대해 보도록 하겠다.
+**HTTP 요청(Request)**     
+클라이언트(사용자)가 서버에 HTTP Request (요청)하는 경우를 의미한다.
 
-a
+HTTP 요청(Request)을 보면 구조가 크게 3부분으로 나누어진다.     
+* start line
+* headers
+* body    
+하나하나 봐보도록 하겠다.
+
+  <1> start line    
+  
+  <2> headers    
+  
+  <3> body     
+  
 
 <br>
 
@@ -98,7 +110,8 @@ a
 <img src="https://user-images.githubusercontent.com/59492312/161689682-1bb606e1-be0b-4ff3-9e64-78d8a05b376e.png">
 </p>
 
-HTTP 응답(Response)에 대해 보도록 하겠다.
+**HTTP 응답(Response)**      
+서버가 사용자의 요청을 받고 클라이언트(사용자)에 HTTP Response (응답)하는 경우를 의미한다.
 
 a
 
