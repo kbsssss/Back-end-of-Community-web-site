@@ -6,7 +6,7 @@
 
 * HTTP에 대한 기본 내용
 * HTTP Request와 HTTP Response 구조
-* s
+* HTTP 메소드들과 Status Code들
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 
@@ -89,20 +89,63 @@ HTTP(HyperText Transfer Protocol) 란?
 </p>
 
 **HTTP 요청(Request)**     
-클라이언트(사용자)가 서버에 HTTP Request (요청)하는 경우를 의미한다.
+클라이언트(사용자)가 서버에 HTTP Request(요청)하는 경우를 의미한다.
 
-HTTP 요청(Request)을 보면 구조가 크게 3부분으로 나누어진다.     
+HTTP 요청(Request)을 보면 구조가 크게 3부분으로 나누어진다.   
+  
 * start line
 * headers
 * body    
-하나하나 봐보도록 하겠다.
 
-  <1> start line    
+3부분을 하나하나 봐보도록 하겠다.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/161952061-41e20e88-b8a7-4b8d-be80-e1372a440544.png">
+</p>
+
+제일 먼저 **start line**이다.    
+말 그대로 HTTP Request의 첫 라인이다. start line은 3가지 요소로 구성되어져 있다.    
+
+1. Request URL : 해당 요청(Request)의 목표 url을 의미한다. 바로 위의 이미지를 보면 
+  https://www.naver.com이라고 되어 있는것이 보인다.(필자는 크롬 브라우저에서 https://naver.com를
+  입력하고 개발자도구의 Network탭에 들어갔기 때문이다.)
+
+2. Request Method :  해당 요청에 대한 종류(액션)를 정의하는 부분
+
+3. HTTP Version : 사용되는 HTTP 버전 (주로 1.1 버전이 널리 쓰인다.)
+
+<br>
+
+> 위의 실제 예로 보여준 이미지와 앞으로 보여줄 이미지들은 모두 크롬 브라우저의 F12(개발자 도구)를 눌러서
+> Network탭에 있는 여러요소중 하나를 클릭해서 보여준것이다. 이렇게 실제 사용하는 예를 들어서 알아가면 더 많은 도움이
+> 되니 참고하도록 하자.
+
+<br>
+
+> []()     
+> []()    
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/161952082-cc529db6-5b0f-4199-b2a4-54adc4e94eb9.png">
+</p>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/161952087-84959da6-5a12-4c1b-afd9-7294239f321e.png">
+</p>
   
-  <2> headers    
+<2> **headers** - 
+1.    
   
-  <3> body     
+<3> body     
   
+<br>
+
+> start line을 request-line이라고 부르기도 한다.    
+> [start line을 request-line으로 (1)](https://velog.io/@doomchit_3/Internet-HTTP-%EA%B0%9C%EB%85%90%EC%B0%A8%EB%A0%B7-IMBETPY)    
+> [start line을 request-line으로 (2)](https://blog.wanzargen.me/20)
 
 <br>
 
@@ -113,9 +156,39 @@ HTTP 요청(Request)을 보면 구조가 크게 3부분으로 나누어진다.
 **HTTP 응답(Response)**      
 서버가 사용자의 요청을 받고 클라이언트(사용자)에 HTTP Response (응답)하는 경우를 의미한다.
 
+HTTP 응답(Response)도 구조가 크게 3부분으로 나누어진다.     
+* start line
+* headers
+* body    
+
+하나하나 봐보도록 하겠다.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/161952061-41e20e88-b8a7-4b8d-be80-e1372a440544.png">
+</p>
+
+<1> start line
+  
+<2> headers    
+  
+<3> body     
+
+<br>
+
+
+
+### 3.HTTP 메소드들과 Status Code들
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/161484168-8ce33c96-9910-4ab0-888c-59b23c4ee85a.png">
+</p>
+
 a
 
 <br>
+
 
 
 ### 🚀 추가로
