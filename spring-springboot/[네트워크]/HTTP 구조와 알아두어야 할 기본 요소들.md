@@ -112,7 +112,9 @@ HTTP 요청(Request)을 보면 구조가 크게 3부분으로 나누어진다.
   https://www.naver.com이라고 되어 있는것이 보인다.(필자는 크롬 브라우저에서 https://naver.com를
   입력하고 개발자도구의 Network탭에 들어갔기 때문이다.)
 
-2. Request Method :  해당 요청에 대한 종류(액션)를 정의하는 부분
+2. Request Method :  해당 요청에 대한 종류(액션)를 정의하는 부분이다. 위 이미지 예시를 보면
+  GET이라고 적혀져 있다. 주로 GET과 POST가 쓰이며 그 외에 PUT, DELETE, OPTION등이 있다. 이러한
+  메서드들에 대해서는 아래에서 다시 얘기하도록 하겠다.
 
 3. HTTP Version : 사용되는 HTTP 버전 (주로 1.1 버전이 널리 쓰인다.)
 
@@ -124,10 +126,23 @@ HTTP 요청(Request)을 보면 구조가 크게 3부분으로 나누어진다.
 
 <br>
 
+> start line을 request-line이라고 부르기도 하고, request-url을 request target이라고 부르기도
+> 한다. 또한, Request Method 대신, HTTP Method라고 부르기도 한다.    
+> [start line을 request-line으로 (1)](https://velog.io/@doomchit_3/Internet-HTTP-%EA%B0%9C%EB%85%90%EC%B0%A8%EB%A0%B7-IMBETPY)    
+> [start line을 request-line으로 (2)](https://blog.wanzargen.me/20)    
+> [request target과 HTTP Method (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)     
+> [request target과 HTTP Method (2)](https://velog.io/@sehy/Http)
+
+<br>
+
 > []()     
 > []()    
 
 <br>
+
+
+
+
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/161952082-cc529db6-5b0f-4199-b2a4-54adc4e94eb9.png">
@@ -141,12 +156,6 @@ HTTP 요청(Request)을 보면 구조가 크게 3부분으로 나누어진다.
   
 <3> body     
   
-<br>
-
-> start line을 request-line이라고 부르기도 한다.    
-> [start line을 request-line으로 (1)](https://velog.io/@doomchit_3/Internet-HTTP-%EA%B0%9C%EB%85%90%EC%B0%A8%EB%A0%B7-IMBETPY)    
-> [start line을 request-line으로 (2)](https://blog.wanzargen.me/20)
-
 <br>
 
 <p align="center">
@@ -168,6 +177,9 @@ HTTP 응답(Response)도 구조가 크게 3부분으로 나누어진다.
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/161952061-41e20e88-b8a7-4b8d-be80-e1372a440544.png">
 </p>
+
+예시 이미지를 보면 알겠지만 HTTP Request에 대한 내용과 HTTP Response에 대한 내용이
+함께 있다.
 
 <1> start line
   

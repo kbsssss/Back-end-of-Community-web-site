@@ -2,10 +2,10 @@
 <img src="">
 </p>
 
-# 🎹 SSL 인증서 사용을 위해 알아두면 좋을 HTTPS 기본개념 
+# 🎹 HTTPS 기본내용과 SSL에 대한 이해
 
-* 
-* 
+* 알아두면 좋을 HTTPS 기본 개념
+* SSL인증서의 작용원리
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 
@@ -15,7 +15,7 @@
 
 
 
-### 1.
+### 1.알아두면 좋을 HTTPS 기본 개념
 
 <p align="center">
 <img src="">
