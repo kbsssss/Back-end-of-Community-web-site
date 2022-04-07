@@ -88,6 +88,28 @@ HTTP(HyperText Transfer Protocol) 란?
 <img src="https://user-images.githubusercontent.com/59492312/161484177-a4fc147c-b430-4636-b31d-a6c98e1fbd33.png">
 </p>
 
+위에서 보았듯이, HTTP 요청은 Request(요청)와 Response(응답)로 이루어져 있다.
+이제부터 이 HTTP Request(요청)와 HTTP Response(응답)의 구조와 그 안의 요소들에 대해
+알아보도록 하겠다.
+
+제일 먼저 알아볼 것은 패킷이다.
+패킷은 간단하게 말해서, 데이터를 담은 블록이라고 보면 된다. 패킷 방식의 네트워크 통신에서는
+데이터를 주고받을 때 이 패킷을 사용하여 주고 받는다. HTTP 통신 또한 이 패킷을 이용한다.
+즉, HTTP 통신시 전송되는 데이터들이 이 패킷이라는 블록안에서 정해진 형식과 구조를 갖추어서 
+전송이 되는것이다.
+
+이 블록 형식의 패킷은 특정 구조를 갖추고 있다.     
+이 구조는 HTTP Request(요청)의 패킷과 HTTP Response(응답)의 패킷에 따라서
+약간씩 다른데, 이제부터 그 구조와 구조안에 있는 요소들에 대해서 알아보도록 하겠다.
+
+<br>
+
+> [](https://ko.wikipedia.org/wiki/%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%ED%8C%A8%ED%82%B7)    
+
+<br>
+
+
+
 **HTTP 요청(Request)**     
 클라이언트(사용자)가 서버에 HTTP Request(요청)하는 경우를 의미한다.
 
@@ -140,7 +162,14 @@ HTTP 요청(Request)을 보면 구조가 크게 3부분으로 나누어진다.
 
 <br>
 
-
+1.http 그 crlf인가 하는거 구조
++
+2.General정리된것도 다시
+https://blog.cordelia273.space/11
++
+3.소켓도
++
+4.content-type등 자세한 것도 있따.
 
 
 
