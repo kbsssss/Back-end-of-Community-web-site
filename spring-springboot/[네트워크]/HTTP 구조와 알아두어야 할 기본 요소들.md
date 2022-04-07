@@ -99,7 +99,8 @@ HTTP(HyperText Transfer Protocol) 란?
 전송이 되는것이다.
 
 이 블록 형식의 패킷은 HTTP Request(요청)와 HTTP Response(응답)에 따라서
-조금은 다른 구조를 갖는데, 이제부터 그 구조와 구조안에 있는 요소들에 대해서 알아보도록 하겠다.
+조금은 다른 구조를 갖는다. 따라서 이제부터 요청과 응답에 대한 패킷의 구조와 구조안에 있는 
+요소들에 대해서 각각 알아보도록 하겠다.
 
 <br>
 
@@ -110,20 +111,34 @@ HTTP(HyperText Transfer Protocol) 란?
 <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/161484177-a4fc147c-b430-4636-b31d-a6c98e1fbd33.png">
-<img src="https://user-images.githubusercontent.com/59492312/161484177-a4fc147c-b430-4636-b31d-a6c98e1fbd33.png">
+<img src="https://user-images.githubusercontent.com/59492312/162161460-3fd17a72-efe7-4f26-8ae5-ab7041d8b8ff.png">
 </p>
 
 **HTTP 요청(Request)**     
 클라이언트(사용자)가 서버에 HTTP Request(요청)하는 경우를 의미한다.
 
-HTTP 요청(Request)을 보면 구조가 크게 3부분으로 나누어진다.   
+HTTP 요청(Request)의 패킷을 보면 구조가 크게 3부분으로 나누어진걸 알 수 있다.
+(공백은 말 그대로 공백이다.)  
   
-* start line
-* headers
-* body    
+* 스타트 라인(start line)
+* 헤더(header)
+* 바디(body)    
 
-3부분을 하나하나 봐보도록 하겠다.
+<br>
+
+> 스타트 라인(start line)을 요청 라인(request-line)이라고 부르기도 하고(실제로 위의 이미지에서는 
+> start line이 아닌 요청라인(request-line)이라고 나와있다.)     
+> [start line을 request-line으로 (1)](https://velog.io/@doomchit_3/Internet-HTTP-%EA%B0%9C%EB%85%90%EC%B0%A8%EB%A0%B7-IMBETPY)    
+> [start line을 request-line으로 (2)](https://blog.wanzargen.me/20)    
+
+<br>
+
+> 조금 더 이 패킷 안의 구조를 자세히 표현한다면, 라인공백(CRLF=엔터)과 더불어 
+> [요청/응답 라인] [헤더] [CRLF] [바디]와 같이 표현할 수 있으나 이 부분은 나중에 우리가
+> 프로젝트를 진행하면서 알아야 할 필요가 있다면 보도록 하겠다. 혹시 그래도 궁금하다면 아래 참조링크들을
+> 참고하도록 하자.     
+> [CRLF를 사용한 HTTP의 구체적인 형식 (1)](https://codinggom.github.io/HTTP-%ED%8C%A8%ED%82%B7/)     
+> [CRLF를 사용한 HTTP의 구체적인 형식 (2)](https://blog.wanzargen.me/20)         
 
 <br>
 
@@ -142,40 +157,74 @@ HTTP 요청(Request)을 보면 구조가 크게 3부분으로 나누어진다.
   GET이라고 적혀져 있다. 주로 GET과 POST가 쓰이며 그 외에 PUT, DELETE, OPTION등이 있다. 이러한
   메서드들에 대해서는 아래에서 다시 얘기하도록 하겠다.
 
-3. HTTP Version : 사용되는 HTTP 버전 (주로 1.1 버전이 널리 쓰인다.)
+3. HTTP Version : 사용되는 HTTP 버전이 적힌다.(주로 1.1 버전이 널리 쓰인다.)
 
 <br>
 
-> 위의 실제 예로 보여준 이미지와 앞으로 보여줄 이미지들은 모두 크롬 브라우저의 F12(개발자 도구)를 눌러서
-> Network탭에 있는 여러요소중 하나를 클릭해서 보여준것이다. 이렇게 실제 사용하는 예를 들어서 알아가면 더 많은 도움이
-> 되니 참고하도록 하자.
-
-<br>
-
-> start line을 request-line이라고 부르기도 하고, request-url을 request target이라고 부르기도
-> 한다. 또한, Request Method 대신, HTTP Method라고 부르기도 한다.    
-> [start line을 request-line으로 (1)](https://velog.io/@doomchit_3/Internet-HTTP-%EA%B0%9C%EB%85%90%EC%B0%A8%EB%A0%B7-IMBETPY)    
-> [start line을 request-line으로 (2)](https://blog.wanzargen.me/20)    
+> request URL을 request target이라고 부르기도 한다. 
+> 또한, Request Method 대신, HTTP Method라고 부르기도 한다.    
 > [request target과 HTTP Method (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)     
 > [request target과 HTTP Method (2)](https://velog.io/@sehy/Http)
 
 <br>
 
-> []()     
+> 위의 실제 예로 보여준 이미지와 앞으로 보여줄 이미지들은 모두 크롬 브라우저의 F12(개발자 도구)를 눌러서
+> Network탭에 있는 여러요소중 하나를 클릭해서 보여준것이다. 이렇게 실제 사용하는 예를 들어서 알아가면 더 많은 도움이
+> 되니 참고하도록 하자.   
+
+<br>
+
+> [HTTP 요청 패킷의 시작라인(start line)에 대해 (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)      
+> [HTTP 요청 패킷의 시작라인(start line)에 대해 (2)](https://velog.io/@sehy/Http)    
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162161467-f81ebee3-e8a1-4499-a891-8050d28a2936.png">
+</p>
+
+그 다음은 **헤더(header)** 이다.
+
+이 요청(Request)의 헤더(header)부분은 다양한 정보를 갖고 있다.
+예를 들어, request 메세지 body의 총 길이 (Content-Length),
+요청하는 클라이언트 PC, 브라우저정보, 사용자언어환경, 쿠키 등 에 대한 정보가
+포함되어 있다. 대표적으로 알아두면 좋을것들은
+
+1. a
+
+2.
+
+3.
+
+4.
+
+<br>
+
 > []()    
 
 <br>
 
-1.http 그 crlf인가 하는거 구조
-+
-2.General정리된것도 다시
-https://blog.cordelia273.space/11
-+
-3.소켓도
-+
-4.content-type등 자세한 것도 있따.
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162161467-f81ebee3-e8a1-4499-a891-8050d28a2936.png">
+</p>
 
+a
 
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/161952061-41e20e88-b8a7-4b8d-be80-e1372a440544.png">
+</p>
+
+a
+
+<br>
+
+> 아까 본 HTTP Request의 start line에서 본 이미지와 같은 이미지라는것을 알 수 있다. 
+> 실제로 start line과 status line이 한 패킷에 있는것은 아니지만(엄연히 서로 다른 패킷이다.),
+> 크롬 개발자도구의 네트워크 탭에서는 이를 General이라는 요소에서 하나로 묶어서 보여주고 있는것이다.
+
+<br>
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/161952082-cc529db6-5b0f-4199-b2a4-54adc4e94eb9.png">
