@@ -191,38 +191,41 @@ HTTP 요청(Request)의 패킷을 보면 구조가 크게 3부분으로 나누�
 포함되어 있다. Request Method(HTTP Method)가 GET이냐 아니면 POST냐에 따라
 전달되는 요소가 달라지는데, 그중에 알아두면 좋을 요소들을 짚고 넘어가도록 하겠다.
 
-**공통**     
-* User-Agent
+**GET, POST 공통**     
+* User-Agent : 요청을 보내는 클라이언트의 대한 정보이다. 예를 들면, aaaaa
+  a
+  
+* cookie : 
 
-* 
+* accept : 요청을 보낼 때 서버에게 어떤 터입으로 응답을 보내줬으면 좋겠다고 명시하는 것이다.
+  ㅁ
+  
+* referer : 이전에 어느 웹사이트에서 온것인지 알 수 있어서 이걸로 애널리틱스를
+  하는데 많은 도움이 된다.
 
-* 
-
-* 
-
-**GET 요청**  
-*   
-
-*   
-
-*   
-
-*   
 
 **POST 요청**    
 * Content-Type : 요청할 때 보내는 BODY의 메시지 타입을 의미한다. 예를 들면,
   application/json을 예로 들 수 있다. 추가로 ~~~~
+  
+* Content-length : 
 
-*   
+* 
 
-*   
+보면, 네트워크 탭의 response 부분이 바디다. 즉, 결과물 반응에 의한 결과물을
+의미하는것같고 preview가 그걸 그냥 화면에 보여주는 거같다. post나 get이나 같은듯
+근데, post의 body부분은 볼 수 없는거같다.
 
-*   
+PUT이나, DELETE의 경우에 ~~~~~
+추가로, GET의 경우 아래 HTTP 메서드에 대해서 설명해 놓았지만, 데이터를 전송하더라도 BODY를 이용하지않고
+쿼리스트링으로 바로 전송해버리기 때문에, POST 메서드보다도 사용되는 요소들이 적은것이다. 또한, 이 쿼리스트링으로
+전달되는 값들마저도 Header에서 전송되기 때문에 GET 메서드와 POST 메서드가 헤더 요소들이 겹치는것은 있으나 GET
+만이 갖고있는 요소는 고려하지 않아도 된다.
 
 <br>
 
 > 크롬의 개발자도구 네트워크탭에서 보여지는 항목들은 실제 패킷내에 있는 요소들과는 다소 차이가 있을 수 있다. 예를들면
-> HOST라는 요소도 원래는 header란에 있어야 하지만, 개발자 도구의 네트워크탭에서는 보이지 않는다. 하지만, 보통 실무에서는
+> HOST라는 요소도 원래는 header란에 있어야하지만, 개발자 도구의 네트워크탭에서는 보이지 않는다. 하지만, 보통 실무에서는
 > 이 네트워크탭을 많이 이용하고 문제가 되지 않기에 우리는 그대로 개발자 도구의 네트워크 탭에 보여지는 내용만 다루도록 하겠다.
 > 나중에 보여지지않는 요소들에 대해서도 알아야 한다면 추가적으로 정리하도록 하겠다.     
 > [개발자 도구의 네트워크탭과 실제 패킷내 요소의 차이 (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)     
@@ -239,6 +242,40 @@ HTTP 요청(Request)의 패킷을 보면 구조가 크게 3부분으로 나누�
 
 > [HTTP 요청(Request)의 header에 대해 (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)    
 > [HTTP 요청(Request)의 header에 대해 (2)]()    
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162430759-cbb542c7-a063-4e31-82d5-209ae3b8ae54.png">
+</p>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162430761-08a76702-9231-4d3f-bc8d-c9b869e59db8.png">
+</p>
+
+GET 메서드의 응답(Response)의 경우 Body의 내용이다.
+
+Preview는 실제로 이걸 반영해서 브라우저에 보여주는 것으로 볼 수 있다.
+
+<br>
+
+> []()     
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162430744-00e88dba-614d-4248-80f5-d091b73537f6.png">
+</p>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162430753-5651db8d-0b34-4853-b3c2-10441a105878.png">
+</p>
+
+POST 메서드의 응답(Response)의 경우 Body의 내용이다.
+
+Preview는 실제로 이걸 반영해서 브라우저에 보여주는 것으로 볼 수 있다.
+
+<br>
+
+> []()   
 
 <br>
 
