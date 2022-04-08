@@ -186,21 +186,59 @@ HTTP 요청(Request)의 패킷을 보면 구조가 크게 3부분으로 나누�
 그 다음은 **헤더(header)** 이다.
 
 이 요청(Request)의 헤더(header)부분은 다양한 정보를 갖고 있다.
-예를 들어, request 메세지 body의 총 길이 (Content-Length),
+예를 들어, request 패킷 body의 총 길이(Content-Length),
 요청하는 클라이언트 PC, 브라우저정보, 사용자언어환경, 쿠키 등 에 대한 정보가
-포함되어 있다. 대표적으로 알아두면 좋을것들은
+포함되어 있다. Request Method(HTTP Method)가 GET이냐 아니면 POST냐에 따라
+전달되는 요소가 달라지는데, 그중에 알아두면 좋을 요소들을 짚고 넘어가도록 하겠다.
 
-1. a
+**공통**     
+* User-Agent
 
-2.
+* 
 
-3.
+* 
 
-4.
+* 
+
+**GET 요청**  
+*   
+
+*   
+
+*   
+
+*   
+
+**POST 요청**    
+* Content-Type : 요청할 때 보내는 BODY의 메시지 타입을 의미한다. 예를 들면,
+  application/json을 예로 들 수 있다. 추가로 ~~~~
+
+*   
+
+*   
+
+*   
 
 <br>
 
-> []()    
+> 크롬의 개발자도구 네트워크탭에서 보여지는 항목들은 실제 패킷내에 있는 요소들과는 다소 차이가 있을 수 있다. 예를들면
+> HOST라는 요소도 원래는 header란에 있어야 하지만, 개발자 도구의 네트워크탭에서는 보이지 않는다. 하지만, 보통 실무에서는
+> 이 네트워크탭을 많이 이용하고 문제가 되지 않기에 우리는 그대로 개발자 도구의 네트워크 탭에 보여지는 내용만 다루도록 하겠다.
+> 나중에 보여지지않는 요소들에 대해서도 알아야 한다면 추가적으로 정리하도록 하겠다.     
+> [개발자 도구의 네트워크탭과 실제 패킷내 요소의 차이 (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)     
+> [개발자 도구의 네트워크탭과 실제 패킷내 요소의 차이 (2)](https://codinggom.github.io/HTTP-%ED%8C%A8%ED%82%B7/)    
+
+<br>
+
+> 헤더(header) 부분도 3부분(general headers, request headers, entity headers)
+> 으로 나누어져 있지만, 각각에 대해 자세하게 다루는것은 지금 당장 급하지 않으니 3부분으로 나누어져 있다는것만
+> 인지하고 가자.  
+> [헤어(header)의 3부분](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)
+
+<br>
+
+> [HTTP 요청(Request)의 header에 대해 (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)    
+> [HTTP 요청(Request)의 header에 대해 (2)]()    
 
 <br>
 
@@ -260,32 +298,96 @@ HTTP 응답(Response)도 구조가 크게 3부분으로 나누어진다.
 <img src="https://user-images.githubusercontent.com/59492312/161952061-41e20e88-b8a7-4b8d-be80-e1372a440544.png">
 </p>
 
-예시 이미지를 보면 알겠지만 HTTP Request에 대한 내용과 HTTP Response에 대한 내용이
-함께 있다.
-
-<1> start line
-  
-<2> headers    
-  
-<3> body     
-
-<br>
-
-<awefa~
-
-그런데, 크롬의 네트워크탭은 이 반응과 요청을 다 한꺼번에 보여주는거같다.
+g
 
 <br>
 
 
 
-### 3.HTTP 메소드들과 Status Code들
+### 3.HTTP 메소드들과 Status Code
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/161484168-8ce33c96-9910-4ab0-888c-59b23c4ee85a.png">
+<img src="https://user-images.githubusercontent.com/59492312/162356550-56cf232e-88a8-45db-8d04-234287834285.png">
 </p>
 
-a
+위에서, HTTP 패킷에서 HTTP Method와 Status Code가 포함되어져 있다는걸 알았다.
+
+HTTP Method에는 GET, POST, PUT, DELETE가 있고, Status Code에는 100대부터 500대까지의
+상태 코드(Status Code)가 있는데, 이러한 요소들은 잘 알고만 있다면 실제 실무에서 많은 도움이 되기때문에,
+꼭 알아야 할 요소들에 대해 짚고 넘어가도록 하겠다.
+
+<br>
+
+> HTTP 메서드로는 PATCH와 OPTIONS 외에 여러 메서드들이 더 있으나, 우리는 제일 대중적인 GET, POST, PUT, DELETE
+> 메서드들에 대해서만 알아보고 가도록 하겠다. 또한, 이 4개의 메서드들(CRUD - Create, Read, Update, Delete)만이 
+> 후에 배울 REST 서비스에서 사용된다.    
+> [다양한 HTTP 메서드들 (1)](https://javaplant.tistory.com/18)      
+> [다양한 HTTP 메서드들 (2)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)     
+> [REST 서비스에서 사용되는 CRUD 메서드](https://velog.io/@thisisemptyyy/TIL-021-CRUD-vs-REST-API)
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162356558-0c07e4e9-2e3f-48ba-9856-89701fef0df9.png">
+</p>
+
+제일먼저 GET 메서드이다.
+* 서버로 부터 정보를 조회하기위한 메서드이다. 즉, 다른말로 하면 클라이언트가 정보를 보내는게 주 목적이 아닌
+  서버로부터 정보를 갖고와서 조회하기 위한 메서드이다.
+* 그렇기에, GET요청을 보낼시 패킷의 BODY와 Content-type은 비게된다.
+* 물론 쿼리스트링(URL에서 ? 이후의 문자열)을 이용하여 필요한 정보(값)를 서버에 전달 할 수는 있다.
+* 이 경우에는, 패킷의 BODY가 아닌 Header 안에 포함시켜서 전송한다. 
+
+POST 메서드를 보겠다.
+* POST 메서드는 주로 새로운 리소스를 생성(create)할 때 사용한다.
+* 데이터를 생성하는 것이기 때문에, 요청시에 BODY를 사용하며, Content-type도
+  사용하게 된다.
+* BODY에 담아서 보낼경우 암호화정도는 아니여도 기본 보안은 된다.
+
+PUT 메서드를 보겠다.
+* 데이터를 수정하는것이기 때문에, POST 메서드와 마찬가지로 데이터를 서버에 전송하게 된다.
+* 이 과정에서 BODY를 통해서 보내기 때문에, BODY와 Content-type을 함께 사용하게 된다. 
+
+DELETE 메서드를 보겠다.
+* DELETE 메서드는 저장된 리소스(정보)를 삭제하는 메서드이다.
+* 따로 데이터를 보내지 않기에 BODY와 Content-type이 사용되지 않는다.
+* 단, GET과 마찬가지로 쿼리스트링이나 URL을 통해서 어떠한 데이터를 삭제할지 보내게 된다.
+* 이 또한, 패킷의 header에 담아져서 보내지게 된다.
+
+<br>
+
+> 그러면 사실 PUT과 POST메서드는 같은거고 GET과 DELETE가 같은건데 용도만 다르게 쓰는것 아닌가 ?
+> 라고 할 수도 있다. 물론, 다른 용도에 따라 다르게 표현할 수도 있다. 또한, 실제 @PostMapping이나 @PutMapping
+> 을 스프링부트(백엔드 프레임워크다.)에서 사용할 때 클라이언트가 요청한 HTTP Method에 맞게 컨트롤러를 매칭시켜줄 뿐
+> 차이점은 없는것으로 봐도 무방하다. 또한, 실제 데이터베이스 쿼리에서 역활할 때도 Insert, Update, Create등과 같이   
+> 작성해주어서 데이터를 생성하거나 조회하거나 수정 혹은 삭제하는 역활을 하기에 실제 데이터 작업에도 영향을 주지 않는다.
+> 하지만, POST와 PUT은 멱등성이란 분명한 차이점이 존재하고, 자세하게 들어가면 다른부분들이 엄연히 존재한다. 하지만 이 부분들에 대해서는
+> 나중에 필요시 다시보도록 하겠다.(GET과 DELETE도 용도에 따라 표기법만 다른것으로 봐도 무방하다. 물론 GET은 조회이고 DELETE는 삭제이니
+> 사용하는 방법이 다를 뿐 메서드 자체에 큰 차이점이 있지는 않다.)
+> [멱등성이란](https://wordrow.kr/%EC%9D%98%EB%AF%B8/%EB%A9%B1%EB%93%B1/)    
+> [PUT 메서드와 POST의 차이점 (1)](https://velog.io/@53_eddy_jo/RESTful%ED%95%9C-%EC%84%B8%EA%B3%84%EC%97%90%EC%84%9C%EC%9D%98-POST%EC%99%80-PUT%EC%9D%98-%EC%B0%A8%EC%9D%B4-%EA%B1%B0%EA%B8%B0%EC%97%90-FETCH%EA%B9%8C%EC%A7%80)    
+> [PUT 메서드와 POST의 차이점 (2)](https://2ham-s.tistory.com/265)
+
+<br>
+
+> 각 메서드들에 대해 더 자세하게 알고싶다면, 필자의 [깃헙 레포지토리](https://github.com/sooolog/spring-springboot)에서 GET메서드와 POST메서드에 대한 글을 읽도록 하자.
+> 실제 서비스에서 어떠한 영향을 주는지 더 자세하게 알 수 있다.
+
+<br>
+
+> [HTTP GET, POST, PUT, DELETE 메서드에 대해 (1)](https://free-eunb.tistory.com/41)         
+> [HTTP GET, POST, PUT, DELETE 메서드에 대해 (2)](https://velog.io/@yh20studio/CS-Http-Method-%EB%9E%80-GET-POST-PUT-DELETE)     
+> [HTTP GET, POST, PUT, DELETE 메서드에 대해 (3)](https://javaplant.tistory.com/18)
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162356561-8cfe717d-1352-4edd-9fc2-d40df8fe45c2.png">
+</p>
+
+마지막으로, 상태 코드(Status Code)에 대해 보도록 하겠다.
+
+ㅁ
 
 <br>
 
