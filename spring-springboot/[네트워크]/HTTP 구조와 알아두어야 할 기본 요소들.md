@@ -121,8 +121,8 @@ HTTP 요청(Request)의 패킷을 보면 구조가 크게 3부분으로 나누�
 (공백은 말 그대로 공백이다.)  
   
 * 스타트 라인(start line)
-* 헤더(header)
-* 바디(body)    
+* 요청헤더(header)
+* 요청바디(body)    
 
 <br>
 
@@ -184,7 +184,7 @@ HTTP 요청(Request)의 패킷을 보면 구조가 크게 3부분으로 나누�
 <img src="https://user-images.githubusercontent.com/59492312/162666110-9b299eb7-8aab-4615-b749-60c20d9b6068.png">
 </p>
 
-그 다음은 **헤더(header)** 이다.
+그 다음은 **요청 헤더(header)** 이다.
 
 이 요청(Request)의 헤더(header)부분은 다양한 정보를 갖고 있다.
 예를 들어, request 패킷 body의 총 길이(Content-Length),
@@ -276,13 +276,54 @@ HTTP 요청(Request)의 패킷을 보면 구조가 크게 3부분으로 나누�
 서버가 사용자의 요청을 받고 클라이언트(사용자)에 HTTP Response (응답)하는 경우를 의미한다.
 
 HTTP 응답(Response)도 구조가 크게 3부분으로 나누어진다.     
-* start line
-* headers
-* body    
+* 상태 라인(status line)
+* 응답헤더(header)
+* 응답바디(body)    
 
 하나하나 봐보도록 하겠다.
 
 <br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/161952061-41e20e88-b8a7-4b8d-be80-e1372a440544.png">
+</p>
+
+제일 먼저 **상태 라인(status line)** 이다.    
+상태 라인(status line)은 3가지 요소로 구성되어져 있지만, 우리는 1가지 요소만 알고가도록 하겠다.    
+
+1. Status Code : 응답메시지의 상태코드이다. 숫자로 표시된다. ex) Status Code: 200
+
+각각의 상태코드(status code)는 100대부터 500대까지의 숫자로 표현된다. 알아두면 좋을 숫자에 대해서는
+맨 아래 챕터에서 다시 설명하도록 하겠다.
+
+<br>
+
+> 이 외에도 HTTP Version, Status Text라는 요소가 있지만 위의 이미지에서 보이는것만 체크하고
+> 넘어가도록 하겠다. 만약 나머지 두 요소에 대해서도 알고 싶다면 아래 참조링크를 보도록 하자.    
+> [Status line의 나머지 두 요소 (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)    
+> [Status line의 나머지 두 요소 (2)](https://velog.io/@sehy/Http)    
+
+<br>
+
+> 위의 이미지는 아까 start line에서 본 이미지와 같은 이미지다. 크롬 개발자도구의 네트워크에서 보여주는
+> 위 이미지는 HTTP 통신의 start line과 status line에 대한 요소를 General 탭에서 한번에 보여주기 때문에
+> 한곳에 모아져 보이는것이다.
+
+<br>
+
+> [Status line과 그 요소 (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)    
+> [Status line과 그 요소 (2)](https://velog.io/@sehy/Http)    
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162717961-526cadc6-5ede-4403-8f74-ba381307a7ef.png">
+</p>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162718018-88ae72e5-4c00-4cdf-bb6b-17b28e8bb9ed.png">
+</p>
+
+b
 
 <br>
 
