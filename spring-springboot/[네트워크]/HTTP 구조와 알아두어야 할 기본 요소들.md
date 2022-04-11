@@ -180,7 +180,8 @@ HTTP 요청(Request)의 패킷을 보면 구조가 크게 3부분으로 나누�
 <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/162161467-f81ebee3-e8a1-4499-a891-8050d28a2936.png">
+<img src="https://user-images.githubusercontent.com/59492312/162666108-27290a5d-2bdf-4230-9fdc-0bf0b92d314b.png">
+<img src="https://user-images.githubusercontent.com/59492312/162666110-9b299eb7-8aab-4615-b749-60c20d9b6068.png">
 </p>
 
 그 다음은 **헤더(header)** 이다.
@@ -192,42 +193,56 @@ HTTP 요청(Request)의 패킷을 보면 구조가 크게 3부분으로 나누�
 전달되는 요소가 달라지는데, 그중에 알아두면 좋을 요소들을 짚고 넘어가도록 하겠다.
 
 **GET, POST 공통**     
-* User-Agent : 요청을 보내는 클라이언트의 대한 정보이다. 예를 들면, aaaaa
-  a
-  
-* cookie : 
+* user-Agent : 요청을 보내는 클라이언트의 대한 정보로 어떤 브라우저나 운영체제등을
+  이용해 요청을 보냈는지 보여준다. 
 
-* accept : 요청을 보낼 때 서버에게 어떤 터입으로 응답을 보내줬으면 좋겠다고 명시하는 것이다.
-  ㅁ
-  
+* cookie : 쿠키 값으로, Key:Value로 표현된다. ex) attr1=value1; attr2=value2
+
+* accept : 요청을 보낼 때 서버에게 어떤 터입으로 응답을 보내줬으면 좋겠다고 명시하는 것이다. 브라우저가 알아서 생성한다. 실제, 개발자도구 네트워크
+  탭에서 보면 굉장히 다양한 값들이 설정되어있는걸 알 수 있다. 예를들면, */*처럼 모든 타입처리이거나 application/json 처럼 json데이터 처리가능이라고 
+  명시해서 서버에 보내주는거다.
+
 * referer : 이전에 어느 웹사이트에서 온것인지 알 수 있어서 이걸로 애널리틱스를
   하는데 많은 도움이 된다.
 
+그 다음은, POST 메서드만이 갖고있는 요소에 대해 보도록 하겠다.
+
+<br>
+
+> 물론, GET 메서드만이 갖고있는 요소도 있다. GET메서드는 POST메서드와는 다르게 캐싱이 가능하기에 cache 관련 요소들이
+> 있다. 하지만, POST 메서드와 다르게 이러한 요소가 있다는것만 알아두어도 된다. 조금 더 자세히 알고싶다면 아래 참조링크를
+> 참고하거나 실제 스프링부트 프로젝트를 진행하면서 다시 자세히 다루도록 하겠다.     
+> [GET메서드는 캐싱이 가능하고, POST메서드는 캐싱이 가능하지 않는 이유](https://github.com/sooolog/dev-spring-springboot)
+
+<br>
+
+> [GET, POST 헤더의 공통요소 (1)](https://bentist.tistory.com/35)    
+> [GET, POST 헤더의 공통요소 (2)](https://velog.io/@sehy/Http)    
+> [GET, POST 헤더의 공통요소 (3)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)    
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162666099-07ea2fa5-988c-4a3e-b45d-4f8e3069b6ac.png">
+<img src="https://user-images.githubusercontent.com/59492312/162666105-29bbc695-d15d-4ecf-abee-af10cfa10d93.png">
+</p>
 
 **POST 요청**    
-* Content-Type : 요청할 때 보내는 BODY의 메시지 타입을 의미한다. 예를 들면,
-  application/json을 예로 들 수 있다. 추가로 ~~~~
-  
-* Content-length : 
+* content-length : 본문의 길이, 메세지 크기에 따라 자동으로 생성한다. 여기에서 본문이란
+  Body에 보내는 메시지를 의미한다.
 
-* 
+* content-Type : 요청할 때 보내는 BODY의 메시지 타입을 의미한다. 예를 들면,
+  application/json등이 있다.
 
-보면, 네트워크 탭의 response 부분이 바디다. 즉, 결과물 반응에 의한 결과물을
-의미하는것같고 preview가 그걸 그냥 화면에 보여주는 거같다. post나 get이나 같은듯
-근데, post의 body부분은 볼 수 없는거같다.
-
-PUT이나, DELETE의 경우에 ~~~~~
-추가로, GET의 경우 아래 HTTP 메서드에 대해서 설명해 놓았지만, 데이터를 전송하더라도 BODY를 이용하지않고
-쿼리스트링으로 바로 전송해버리기 때문에, POST 메서드보다도 사용되는 요소들이 적은것이다. 또한, 이 쿼리스트링으로
-전달되는 값들마저도 Header에서 전송되기 때문에 GET 메서드와 POST 메서드가 헤더 요소들이 겹치는것은 있으나 GET
-만이 갖고있는 요소는 고려하지 않아도 된다.
+* origin : 서버로 Post 요청을 보낼 때 요청이 어느 주소에서 시작되었는지 나타내는 
+  값으로 요청을 보낸 주소와 받는 주소가 다르면 CORS 에러가 난다.
 
 <br>
 
 > 크롬의 개발자도구 네트워크탭에서 보여지는 항목들은 실제 패킷내에 있는 요소들과는 다소 차이가 있을 수 있다. 예를들면
 > HOST라는 요소도 원래는 header란에 있어야하지만, 개발자 도구의 네트워크탭에서는 보이지 않는다. 하지만, 보통 실무에서는
 > 이 네트워크탭을 많이 이용하고 문제가 되지 않기에 우리는 그대로 개발자 도구의 네트워크 탭에 보여지는 내용만 다루도록 하겠다.
-> 나중에 보여지지않는 요소들에 대해서도 알아야 한다면 추가적으로 정리하도록 하겠다.     
+> 나중에 보여지지 않는 요소들에 대해서도 알아야 한다면 추가적으로 정리하도록 하겠다.     
 > [개발자 도구의 네트워크탭과 실제 패킷내 요소의 차이 (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)     
 > [개발자 도구의 네트워크탭과 실제 패킷내 요소의 차이 (2)](https://codinggom.github.io/HTTP-%ED%8C%A8%ED%82%B7/)    
 
@@ -240,8 +255,34 @@ PUT이나, DELETE의 경우에 ~~~~~
 
 <br>
 
+> 교차출처리소스공유(CORS)는 동일출처원칙(SOP)와는 다르다. 이는 추가 HTTP 헤더를 사용하여, 한 출처에서 실행 중인 웹 애플리케이션이 다른 출처의 선택한 
+> 자원에 접근할 수 있는 권한을 부여하도록 브라우저에 알려주는 체제이다. orgin이라는 요소가 CORS에서 사용된다. CORS에 대해 더 자세히 알고 싶다면 다른 글들을
+> 참고하기 바란다.    
+> [교차출처리소스공유(CORS)란 무엇인가](https://developer.mozilla.org/ko/docs/Web/HTTP/CORS) 
+
+<br>
+
 > [HTTP 요청(Request)의 header에 대해 (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)    
-> [HTTP 요청(Request)의 header에 대해 (2)]()    
+> [HTTP 요청(Request)의 header에 대해 (2)](https://bentist.tistory.com/35)    
+> [HTTP 요청(Request)의 header에 대해 (3)](https://velog.io/@sehy/Http) 
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/162161467-f81ebee3-e8a1-4499-a891-8050d28a2936.png">
+</p>
+
+**HTTP 응답(Response)**      
+서버가 사용자의 요청을 받고 클라이언트(사용자)에 HTTP Response (응답)하는 경우를 의미한다.
+
+HTTP 응답(Response)도 구조가 크게 3부분으로 나누어진다.     
+* start line
+* headers
+* body    
+
+하나하나 봐보도록 하겠다.
+
+<br>
 
 <br>
 
@@ -251,6 +292,10 @@ PUT이나, DELETE의 경우에 ~~~~~
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/162430761-08a76702-9231-4d3f-bc8d-c9b869e59db8.png">
 </p>
+
+보면, 네트워크 탭의 response 부분이 바디다. 즉, 결과물 반응에 의한 결과물을
+의미하는것같고 preview가 그걸 그냥 화면에 보여주는 거같다. post나 get이나 같은듯
+근데, post의 body부분은 볼 수 없는거같다.
 
 GET 메서드의 응답(Response)의 경우 Body의 내용이다.
 
@@ -276,14 +321,6 @@ Preview는 실제로 이걸 반영해서 브라우저에 보여주는 것으로 
 <br>
 
 > []()   
-
-<br>
-
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/162161467-f81ebee3-e8a1-4499-a891-8050d28a2936.png">
-</p>
-
-a
 
 <br>
 
@@ -319,17 +356,6 @@ a
 <img src="https://user-images.githubusercontent.com/59492312/161689682-1bb606e1-be0b-4ff3-9e64-78d8a05b376e.png">
 </p>
 
-**HTTP 응답(Response)**      
-서버가 사용자의 요청을 받고 클라이언트(사용자)에 HTTP Response (응답)하는 경우를 의미한다.
-
-HTTP 응답(Response)도 구조가 크게 3부분으로 나누어진다.     
-* start line
-* headers
-* body    
-
-하나하나 봐보도록 하겠다.
-
-<br>
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/161952061-41e20e88-b8a7-4b8d-be80-e1372a440544.png">
