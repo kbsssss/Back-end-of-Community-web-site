@@ -532,4 +532,4 @@ DELETE 메서드를 보겠다.
 
 
 
-태그 : #
+태그 : #비연결성(Connectionless), #무상태성(Stateless), #쿠키(Cookie), #세션(Session), #패킷, #스타트라인, #헤더, #바디, #상태라인, #CRLF, #CORS, #GET, #POST, #PUT, #DELETE, #상태코드
