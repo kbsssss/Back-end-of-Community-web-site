@@ -26,6 +26,8 @@ https://danidani-de.tistory.com/39
 그저, 로드벨런서에 SSL인증서를 등록하여 사용하기 때문에 ROUTE53에서 라우팅 값을
 로드벨런서로 해줘야지 ssl이 정상작동된다는거였다.
 
+즉, 왜 빈스톡이아닌 route53에서 로드벨런서로 지정해줘야 ssl사용이 가능한지 그거 풀기
+
 이게 A레코드로 celebmine.com만 하면, www.celebmine.com은 아무곳도
 가리키지않게된다. 근데, default_server 80이 되어있으니 그래도 이거 가리키는거
 아님 ? 맞다.(그때 default_server없애니 안들어가졌다.)
