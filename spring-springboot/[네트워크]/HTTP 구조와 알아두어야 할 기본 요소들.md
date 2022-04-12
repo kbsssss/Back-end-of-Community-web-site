@@ -323,7 +323,22 @@ HTTP 응답(Response)도 구조가 크게 3부분으로 나누어진다.
 <img src="https://user-images.githubusercontent.com/59492312/162718018-88ae72e5-4c00-4cdf-bb6b-17b28e8bb9ed.png">
 </p>
 
-b
+그 다음은 **응답 헤더(header)** 이다.
+
+응답 헤더에서는 요청 헤더에서는 없는 응답 헤더에만 있는 요소들에 대해
+짚고 넘어가도록 하겠다.
+
+* server : 웹 서버의 종류를 나타낸다. ex)Nginx, Cloudflare
+
+* location : 301, 302 상태코드일 때만 볼 수 있는 헤더로 서버의 
+  응답이 다른 곳에 있다고 알려주면서 해당 위치(URI)를 지정한다. 
+  예를 들면, bit.ly같은 서비스 이용시에 location요소를 볼 수 있다.
+
+이 외에도 다른 요소들이 많지만, 이 두가지 요소만 보고 가도록 하겠다.
+
+<br>
+
+> [HTTP 응답(response)의 헤더(Header)](https://bentist.tistory.com/35)    
 
 <br>
 
@@ -334,17 +349,25 @@ b
 <img src="https://user-images.githubusercontent.com/59492312/162430761-08a76702-9231-4d3f-bc8d-c9b869e59db8.png">
 </p>
 
-보면, 네트워크 탭의 response 부분이 바디다. 즉, 결과물 반응에 의한 결과물을
-의미하는것같고 preview가 그걸 그냥 화면에 보여주는 거같다. post나 get이나 같은듯
-근데, post의 body부분은 볼 수 없는거같다.
+이는 HTTP 응답(Response)의 body 부분이다.
 
-GET 메서드의 응답(Response)의 경우 Body의 내용이다.
+크롬 개발자도구 네트워크 탭의 response 부분이 바로 이 응답의 body 즉, 서버에서 보내온
+데이터를 의미한다. response탭의 옆에있는 preview는 브라우저에서 해당 데이터를 보여준다고 했을때
+보여지는 화면을 의미한다. 
 
-Preview는 실제로 이걸 반영해서 브라우저에 보여주는 것으로 볼 수 있다.
+위의 이미지들은 GET 메서드에 의해 HTML을 Body에 담아서 갖고온것이다.
 
 <br>
 
-> []()     
+> 위의 POST 메서드의 HTTP 요청에 대해서 Body부분을 언급한적이 없다.
+> 분명 Body에 담기는 데이터도 존재하지만, 크롬 개발자도구 네트워크 탭에서는 요청에 해당하는 Body를
+> 보여주지 않기에 언급하지 않았다. 또한, 다시 한번 언급하자면 요청의 Body는 GET,DELETE는 비어있고
+> POST와 PUT만 전송할 데이터가 있을시에 Body에 담아서 보낸다.
+
+<br>
+
+> [HTTP 응답(response)의 Body (1)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)     
+> [HTTP 응답(response)의 Body (2)](https://velog.io/@sehy/Http)     
 
 <br>
 
@@ -355,54 +378,16 @@ Preview는 실제로 이걸 반영해서 브라우저에 보여주는 것으로 
 <img src="https://user-images.githubusercontent.com/59492312/162430753-5651db8d-0b34-4853-b3c2-10441a105878.png">
 </p>
 
-POST 메서드의 응답(Response)의 경우 Body의 내용이다.
-
-Preview는 실제로 이걸 반영해서 브라우저에 보여주는 것으로 볼 수 있다.
-
-<br>
-
-> []()   
+추가적으로 하나 더 보겠다. 이는 Post 메서드를 요청하고 Body에
+JSON데이터를 받아온것이다. GET 메서드가 HTML, Post 메서드가 JSON 데이터를
+받아오는것은 아니며, 단순 서로 다른 데이터를 받아오는것을 보여주기 위해 이미지를 추가로
+첨부했다.
 
 <br>
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/161952061-41e20e88-b8a7-4b8d-be80-e1372a440544.png">
-</p>
-
-a
-
-<br>
-
-> 아까 본 HTTP Request의 start line에서 본 이미지와 같은 이미지라는것을 알 수 있다. 
-> 실제로 start line과 status line이 한 패킷에 있는것은 아니지만(엄연히 서로 다른 패킷이다.),
-> 크롬 개발자도구의 네트워크 탭에서는 이를 General이라는 요소에서 하나로 묶어서 보여주고 있는것이다.
-
-<br>
-
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/161952082-cc529db6-5b0f-4199-b2a4-54adc4e94eb9.png">
-</p>
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/161952087-84959da6-5a12-4c1b-afd9-7294239f321e.png">
-</p>
-  
-<2> **headers** - 
-1.    
-  
-<3> body     
-  
-<br>
-
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/161689682-1bb606e1-be0b-4ff3-9e64-78d8a05b376e.png">
-</p>
-
-
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/161952061-41e20e88-b8a7-4b8d-be80-e1372a440544.png">
-</p>
-
-g
+> 반드시 HTTP 응답(response)에 대해 Body가 채워져 있는것은 아니다. 서버에서 데이터를
+> 전송할 필요가 없을경우 Body에 아무것도 담지 않는다.        
+> [Body와 데이터](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)
 
 <br>
 
@@ -490,17 +475,61 @@ DELETE 메서드를 보겠다.
 </p>
 
 마지막으로, 상태 코드(Status Code)에 대해 보도록 하겠다.
+상태 코드(Status Code)는 서버가 클라이언트에게 응답의 상태를 알리는 수단이며
+1xx부터 ~ 5xx까지 다섯가지로 분류된다.
 
-ㅁ
+* 1xx : 서버가 요청을 클라이언트에서 성공적으로 수신했으며 서버 끝에서 처리 중이라는 정보를 나타낸다.
+        서버의 임시 응답이며 일반적으로 상태 줄과 선택적 헤더 만 포함하며 빈 줄로 끝난다.
+        현재는 거의 사용하지 않는다.
+
+* 2xx : 서버가 요청을 받고 성공적으로 처리되었음을 나타낸다.
+
+* 3xx : 브라우저는 자동으로 다른 URL로 리디렉션되므로 브라우저 창에는이 코드가 표시되지 않지만,
+        이미지 파일처럼 캐싱된 파일을 새로고침 후 확인하면 3xx 코드를 확인할 수 있다.
+
+* 4xx : 서버가 해결할 수 없는 클라이언트 측 에러 코드다.
+        주로 클라이언트(사용자)가 서버에 잘못된 요청을 했을 경우 발생한다.
+
+* 5xx : 서버가 클라이언트의 요청을 처리하지 못했을 때 발생한다.
+        서버는 보안 상 통신하지 않는 것이 가장 좋으므로 대부분의 에러 코드를 500 Error로 처리한다.
+
+가장 많이 사용되는 상태코드들에 대해서도 보겠다.
+
+* 200 : 가장 자주 보게 되는 status code이다. 문제없이 다 잘 실행 되었다는 의미
+
+* 301 : 해당 URI가 다른 주소로 바뀌었을때 보내는 코드이다. bit.ly같은 서비스를 쓰면 볼 수 있다.
+
+* 400 : 해당 요청이 잘못된 요청일 때 보내는 코드로, 주로 요청에 포함된 input 값들이 잘못된
+        값들로 보내졌을 때 발생한다. 예를 들면, 전화번호를 보내야하는데 text를 보낸경우이다.
+
+* 401 : 유저가 해당 요청을 진행 할려면 먼저 로그인을 하거나 회원 가입을 하거나 등등이 
+        필요하다는것을 나타내려 할때 쓰이는 코드이다.
+
+* 403 : 유저가 해당 요청에 대한 권한이 없다는 뜻이다. 과금을 한 유저만 볼 수 있는
+        데이터를 요청했을 때 등과 같은 상황에서 볼 수 있다.
+
+* 404 : 요청된 uri가 서버에 맵핑되는게 존재 하지 않는다는 뜻이다. 
+
+* 500 : 서버에서 에러가 났을때 사용되는 코드이다. 서버 내부에 문제일 경우 주로 발생한다.
+
+<br>
+
+> 이 외에 상태코드들에 대해서는 그때 그때 필요할 때 보기로 하겠다.
+
+<br>
+
+> [HTTP 통신과 상태 코드 (1)](https://velog.io/@doomchit_3/Internet-HTTP-%EA%B0%9C%EB%85%90%EC%B0%A8%EB%A0%B7-IMBETPY)        
+> [HTTP 통신과 상태 코드 (2)](https://velog.io/@teddybearjung/HTTP-%EA%B5%AC%EC%A1%B0-%EB%B0%8F-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%86%8C)   
+> [HTTP 통신과 상태 코드 (3)](https://codinggom.github.io/HTTP-%ED%8C%A8%ED%82%B7/)   
 
 <br>
 
 
 
-### 🚀 추가로
+#### 🚀 이론적인 내용들이 많아서 실제 프로젝트를 진행하면서 알아가는편이 더 쉽고 빠르게 이해된다. 언급이 되지않은 부분이나 부족한 부분에 대해서는 프로젝트를 함께 진행하면서 보도록 하겠다.
 
 <br>
+
+
 
 태그 : #
-
-> 처럼 띄우는거에는 항상 위아래로 <br> 붙여주기
