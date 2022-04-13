@@ -1,12 +1,13 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/153751897-1f53ab1c-3e98-4c42-acb6-d6925fb77eef.png">
+<img src="https://user-images.githubusercontent.com/59492312/162917312-c8efd342-b14d-4158-9af7-26e25f5ddb8b.png">
 </p>
 
 # 📖 Beanstalk기반 환경에 Route53, Nginx를 이용하여 하위도메인 연결과 도메인 리다이렉팅
 
 * 하위도메인(www.도메인)연결과 리다이렉팅
 * 도메인.net, 도메인.co.kr을 도메인.com으로 리다이렉팅
-* 하위도메인(m.도메인)연결과 설계
+* 하위도메인(m.도메인)설계와 리다이렉팅
+* http:// -> https:// 리다이렉팅
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 * * *
@@ -53,6 +54,19 @@ A레코드로 로드벨런서에 라우팅값이 지정된 것을 볼 수 있다
 www 하위도메인에대한 레코드 지정까지 끝내면 real-test.com 호스팅 영역에 위와같이 나타나게 된다.
 여기까지 하면 route53에 대한 설정은 끝이다.
 
+그 기능도 넣어야해, pc에서는 naver.com하면 당연히 PC버전 나오고 pc에서 m.naver.com하면 모바일버전도
+들어가진다. 근데 모바일에서는 m.naver.com하면 당연히 들어가지고 naver.com해도 m.naver.com으로 들어가진다. 그러니
+pc버전으로 보기를 따로 만들어야 한다. 모바일 버전에서
+그러면 pc nginx에서 모바일이나 태블릿 체크해주고 이를 m.naver.com 리다이렉트 시켜주어야 한다는건데 ?
+
+추가로, http://www.naver.com이나 http://naver.com으로 들어오면 https://www.naver.com, https://naver.com
+으로 리다이렉팅해주는거도 해야
+http://www.starry.info는 https://www.starry.info로,
+http://starry.info는 https://starry.info 로,
+https://www.starry.info는 https://starry.info로 돌려줘서 최종 도착지가 모두 https://starry.info 가 됩니다.
+
+잠깐, 이 redirect도 301 status code인가, 그럼 302는 뭐고 bitly 이거 원리는 뭐지
+
 <br>
 
 ```conf
@@ -89,7 +103,8 @@ https://jsikim1.tistory.com/153
 <img src="https://user-images.githubusercontent.com/59492312/153786550-53963f11-6d02-4b65-a0b8-3ea3b02856c3.png">
 </p>
 
-a
+여기 그것도 해야돼, DEFAULT_SERVER을 이용해서 맞는 URI가 아니면 반려하는거
+https://xetown.com/tips/1172256
 
 <br>
 

@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/154410175-84610b73-0738-43f5-8984-18023f199650.png">
+<img src="https://user-images.githubusercontent.com/59492312/163088078-f5b45b97-edb2-4b24-88ec-7b70c813ff2a.png">
 </p>
 
 # 📖 [스프링부트] Github Action과 Beanstalk으로 CI/CD 하기 A부터 Z까지 (5) [완]
@@ -615,6 +615,13 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
 
 나머지 코드들을 정리해 보도록 하겠다.
 
+* client_header_timeout : 
+
+* client_body_timeout : 
+
+* keepalive_timeout : 
+
+a
 
 
 <br>
@@ -855,7 +862,7 @@ server:
 
 아니, 이거 server 지시어에서 그러면, url이 달라도 포트만 같으면 그냥 매칭해준다는거잖아. server의 default_server가
 그런의미라는데, 이거 그때 뭐가 틀리면 받지않게 하는 방법이 있다고 하는데 그거를 알아서 적용해야한다.
-
+a
 위에 있는거 로그 스토리지 s3까지 버켓생성하고 다시봐야 한다.
 
 그거랑 ssl할때 보안그룹에 443 포트도 이해해야
