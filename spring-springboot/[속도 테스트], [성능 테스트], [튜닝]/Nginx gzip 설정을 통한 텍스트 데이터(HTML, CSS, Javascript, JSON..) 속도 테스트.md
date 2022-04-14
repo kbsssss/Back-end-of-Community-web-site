@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/163303761-ca860882-d96-4dbb-a3f7-672519c5798c.png">
+<img src="https://user-images.githubusercontent.com/59492312/163343790-d47a36a9-2ad4-4bc4-ac2b-b8ed4dda4eef.png">
 </p>
 
 # 📖 Nginx gzip 설정을 통한 텍스트 데이터(HTML, CSS, Javascript, JSON..) 속도 테스트
@@ -112,13 +112,13 @@ CPU 사용량을 더 높아진다.
 
 ### 3.Nginx의 gzip, gzip_comp_level 설정으로 텍스트 데이터에 대한 성능테스트
 
-``conf
+```conf
       client_header_timeout 60;
       client_body_timeout   60;
       keepalive_timeout     10;
       gzip                  on;
       gzip_comp_level       4;
-``
+```
 
 nginx.conf을 보면, server블록에 위와같은 코드를 작성할 수 있다. gzip의 값을 ON으로
 적용해서 gzip을 사용한다 해주고, gzip_comp_level은 4로 지정하여 중간값으로 설정했다.
