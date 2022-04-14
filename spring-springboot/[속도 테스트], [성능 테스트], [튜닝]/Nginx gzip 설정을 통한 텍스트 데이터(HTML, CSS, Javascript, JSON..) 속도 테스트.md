@@ -1,0 +1,170 @@
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/163303761-ca860882-d96-4dbb-a3f7-672519c5798c.png">
+</p>
+
+# 📖 Nginx gzip 설정을 통한 텍스트 데이터(HTML, CSS, Javascript, JSON..) 속도 테스트
+
+* gzip에 대한 개념과 텍스트 데이터
+* gzip compression level(gzip_comp_level)의 개념
+* Nginx의 gzip 설정으로 텍스트 데이터에 대한 속도 테스트
+
+> 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
+
+* * *
+
+<br>
+
+
+
+### 1.gzip에 대한 개념과 텍스트 데이터
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/163304532-943b3931-988b-4ad6-8b7c-78a767b08994.png">
+</p>
+
+gzip 이란 ?
+
+gzip은 리눅스/유닉스 시스템에서 널리쓰이는 압축 소프트웨어이다. 웹서버 통신을 할 때 데이터를 gzip 압축하여 전송하면 속도가 더 빨라진다.
+조금 더 쉽게 이해하기 위해 예시를 보겠다.
+
+* gzip을 사용한 경우 : [서버에서 HTML 데이터 전송] -> [클라이언트 브라우저가 표시]       
+* gzip을 사용하지 않은 경우 : [서버에서 HTML 데이터를 압축 후 전송] -> [클라이언트 브라우저가 압축을 풀고 표시]    
+
+이렇게 데이터를 압축하면 데이터의 크기가 줄어들고 전송속도가 빨라져 서비스의 속도개선이 이루어진다. 또한, gzip을
+사용하여 압축을 진행하고 압축을 푸는 과정을 진행 하더라도 요즘 서버나 PC의 경우 충분히 고사양이기때문에 CPU(웹서버와 클라이언트의 브라우저)의 
+사용량은 아주 약간 늘어나기에 무시가 가능한 수준이다.(0.1%미만)
+
+특히, 국가간 트래픽이나 느린 인터넷 환경에서 속도가 더 빨라진 것을 크게 느낄 수 있다.
+
+<br>
+
+> 하지만, 아무 데이터들에 대해서나 압축을 진행한다해서 성능이 좋아지고 속도가 빨라지는것은 아니다. 너무 작은 파일은 그냥 전송하는게 더 빠르고
+> 이미 충분히 압축된 파일인 바이너리 데이터(image, video, pdf, zip)들은 압축을 진행하면 데이터 크기가 더 커지거나 혹은 불필요한 압축 & 해제
+> 단계가 추가되어 오히려 비효율적인 경우가 많다. 그에 반해, 텍스트 데이터는 압축효율이 좋다. 그러기에 주로 텍스트 데이터가 주로 사용되는 경우에
+> gzip을 사용하는것이 속도 향상에 도움이 된다.
+
+<br>
+
+> [gzip에 대한 개념](https://blog.lael.be/post/6553)    
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/163304538-6c26d0f7-ec6a-48e2-9727-0fbfefa6fb4b.png">
+</p>
+
+그렇다면, 텍스트 데이터는 구체적으로 무슨 데이터를 의미하는걸까 ?
+
+텍스트 데이터는 문자를 기반으로 하는 코드값이 저장된 파일이다. 즉, 문자라는 가공 조건이 하나 추가된 형식의
+데이터인 것이다. 우리가 아는 HTML, CSS, Javascript모두 텍스트 데이터이며 JSON 또한 텍스트 데이터이다.
+
+<br>
+
+> 바이너리 데이터도 간단하게 짚고 넘어가자면, 바이너리 데이터는 이진 데이터로 0과 1로 표현되는 데이터이다.
+> 예를 들면, jpg, png같은 그림파일이나 mp3와 같은 음악파일 exe같은 실행 파일등이 바이너리 파일에 해당한다.    
+> [바이너리 데이터(이진 데이터)란](https://ko.wikipedia.org/wiki/%EC%9D%B4%EC%A7%84_%EB%8D%B0%EC%9D%B4%ED%84%B0)    
+
+<br>
+
+> [텍스트 파일이란 (1)](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=tipsware&logNo=221353023593)     
+> [텍스트 파일이란 (2)](https://recordsoflife.tistory.com/595)  
+
+<br>
+
+
+
+### 2.gzip compression level(gzip_comp_level)에 대해
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/163313399-c96e6a6b-0a13-40e8-9345-da4b5c4b9e33.png">
+</p>
+
+본격적으로 gzip을 사용하여 텍스트 데이터에 대한 속도 테스트 비교를 해보기 이전에
+gzip compression level(gzip_comp_level)에 대해 보고 가보도록 하겠다.
+
+gzip compression level이란, 압축률을 의미한다. 이는 1부터 9까지 설정할 수 있으며
+아래에서 nginx.conf파일로 설정하겠지만, gzip_comp_level의 값으로 이를 조정 할 수 있다.
+
+숫자가 높아질수록 압축률이 높아지고 파일 크기가 줄어들지만, 동시에 압축과 해제에서 더 많은
+리소스(resource)가 들어갈 수 밖에 없다. 즉, 압축률이 높아질 수록 서버 혹은 브라우저 클라이언트단에서
+CPU 사용량을 더 높아진다.
+
+<br>
+
+> 그러면, gzip_comp_level을 몇으로 해야 가장 효율이 좋을까. 어느곳은 레벨을 9로 해야 제일 효율이
+> 좋다고 하며 다른 참조링크는 3에서 4사이가 좋다고 한다. 통상 압축률이 올라갈수록 CPU가 더 많이 필요하고
+> 만약 서버가 CPU 사용량으로 어려움을 겪고 있는경우 압축률을 높이올리는거에 굉장히 한계점이 크고 억지로 끓어올려도
+> 올리기 전과의 차이가 그렇게 크지 않아 통상 4정도의 중간 압축률을 유지하는게 좋다고 한다. 하지만, 조금 더 정확하게
+> 하려면 내 실제 프로젝트의 EC2 성능과 구성 데이터 파일들을 고려하여 실제 테스트를 해보고 압축률을 지정하는것이 정확하다.
+> [gzip_comp_level 추천 9](https://blog.lael.be/post/6553)        
+> [gzip_comp_level 추천 3~4](https://minholee93.tistory.com/entry/Nginx-Compressed-Response-with-gzip)      
+> [gzip_comp_level 추천 4](https://www.linuxcapable.com/ko/how-to-enable-configure-gzip-compression-on-nginx/)    
+
+<br>
+
+> [gzip compression level에 대해 (1)](https://minholee93.tistory.com/entry/Nginx-Compressed-Response-with-gzip)     
+> [gzip compression level에 대해 (2)](https://www.lesstif.com/system-admin/nginx-gzip-59343019.html)     
+> [gzip compression level 1부터 9까지](https://www.pingdom.com/blog/can-gzip-compression-really-improve-web-performance/)
+
+<br>
+
+
+
+### 3.gzip 설정으로 텍스트 데이터에 대한 속도 테스트
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/163304543-c2bfc4ac-253f-4e01-8c0a-cec39e49795e.png">
+</p>
+
+그거 테스트 해보자. 아래 리으보면 그리고 실제로도 텍스트 데이터를 월등히 전송되는 속도가 빠르다고 한다. 내꺼는 커뮤니티 사이트이고
+동영상이나 사진들은 s3혹은 외부 유튜브 링크에서 갖고오는거니 대부분 텍스트 데이터이다.(머스테치이건, html이건 텍스트인건 같다.) 그러니 이거
+전 후 비교해서 얼마나 속도차이가 나는지 해보자.
+https://ko.linux-console.net/?p=1877
+
+그거도 해야해, html말고 doc으로 쓰이는데 이 doc은 html도 전부보여주고
+내 celebmine.com들어갔을때 이거는 rest여서 string 데이터만 보여주는건데 string 데이터도
+보여줬다. 그니까 doc을 조금 더 큰 개념으로 봐도 될거같다.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/163319734-3c64dc87-dd9e-4da7-bb46-d902f017e96f.png">
+</p>
+
+a
+
+<br>
+
+
+
+### 🚀 추가로,
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/163314916-5217e83d-a8c5-4876-a1dd-ae2cb44ae54a.png">
+</p>
+
+다른 웹사이트가 gzip을 사용하는지 알 수 있는 방법이 있다.
+
+위의 이미지는 네이버를 들어간 후 크롬 개발자도구의 네트워크 탭을 들어간것이다.
+그리고 파일의 종류인 All이나 Doc을 클릭하여 맨 위의 www.naver.com을 클릭하면
+이미지와 같은 화면이 뜬다.
+
+여기서 Response-Headers의 content-encoding을 클릭하면 gzip이라고 적혀있는것이
+보인다. 네이버 또한, 메인화면 Document(Doc)을 가져올때 gzip이 사용된걸 알 수 있다.
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/163317573-2093029b-1ae5-4131-b9fb-3207d1c2cf3c.png">
+</p>
+
+한 가지만 더 보자면,
+위의 네트워크 탭에서 All 부터 시작해서 Fetch/XHR 등등 여러 파일 종류들을 선택해서 볼 수 있는란이 있다.
+이 중에 Doc은 HTML이나 String형 문자열등을 볼 수 있는 유형이다. 즉, html 유형의 파일도 Type으로는 
+Document에 속한다. 
+
+<br>
+
+
+
+태그 : #
