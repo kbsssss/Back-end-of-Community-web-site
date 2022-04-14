@@ -110,20 +110,31 @@ CPU 사용량을 더 높아진다.
 
 
 
-### 3.gzip 설정으로 텍스트 데이터에 대한 속도 테스트
+### 3.Nginx의 gzip, gzip_comp_level 설정으로 텍스트 데이터에 대한 성능테스트
+
+``conf
+      client_header_timeout 60;
+      client_body_timeout   60;
+      keepalive_timeout     10;
+      gzip                  on;
+      gzip_comp_level       4;
+``
+
+nginx.conf을 보면, server블록에 위와같은 코드를 작성할 수 있다. gzip의 값을 ON으로
+적용해서 gzip을 사용한다 해주고, gzip_comp_level은 4로 지정하여 중간값으로 설정했다.
+
+<br>
+
+> gzip의 값을 off로 하면 gzip을 사용하지 않는다는 의미이다.    
+> [gzip on과 off 값](https://twpower.github.io/48-set-up-gzip-in-nginx)
+
+<br>
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/163304543-c2bfc4ac-253f-4e01-8c0a-cec39e49795e.png">
 </p>
 
-그거 테스트 해보자. 아래 리으보면 그리고 실제로도 텍스트 데이터를 월등히 전송되는 속도가 빠르다고 한다. 내꺼는 커뮤니티 사이트이고
-동영상이나 사진들은 s3혹은 외부 유튜브 링크에서 갖고오는거니 대부분 텍스트 데이터이다.(머스테치이건, html이건 텍스트인건 같다.) 그러니 이거
-전 후 비교해서 얼마나 속도차이가 나는지 해보자.
-https://ko.linux-console.net/?p=1877
-
-그거도 해야해, html말고 doc으로 쓰이는데 이 doc은 html도 전부보여주고
-내 celebmine.com들어갔을때 이거는 rest여서 string 데이터만 보여주는건데 string 데이터도
-보여줬다. 그니까 doc을 조금 더 큰 개념으로 봐도 될거같다.
+a
 
 <br>
 
@@ -132,6 +143,14 @@ https://ko.linux-console.net/?p=1877
 </p>
 
 a
+
+<br>
+
+> 위는 다른 참조사이트의 실제 속도 개선 결과값을 갖고와서 보여준것이다. 실제로 내 프로젝트에 gzip과 gzip_comp_level을
+> 사용하는경우, 텍스트 데이터가 많이 사용되는지 아니면 사진이나 음악 실행파일등이 많이 사용되는 서비스라 하더라도 이는
+> S3같은 스토리지에서 따로 관리해주는지 등을 모두 따져보아야 한다. gzip을 사용하면 스토리지를 따로 두어서 사진파일등은 따로 관리해주는것이
+> 좋다. 또한, 서버의 CPU성능에 따라서도 압축률을 고려해야하기 때문에 처음은 중간 압축률인 4로 잡고 최종 프로젝트가 완료되면 압축률을
+> 조절하여 서비스별로 커스터마이즈하면 된다.
 
 <br>
 
