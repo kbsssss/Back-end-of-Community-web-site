@@ -134,7 +134,8 @@ nginx.conf을 보면, server블록에 위와같은 코드를 작성할 수 있�
 <img src="https://user-images.githubusercontent.com/59492312/163304543-c2bfc4ac-253f-4e01-8c0a-cec39e49795e.png">
 </p>
 
-a
+gzip을 적용하기 이전의 네트워크탭에서 본 속도이다.
+다음 이미지를 봐보겠다.
 
 <br>
 
@@ -142,7 +143,18 @@ a
 <img src="https://user-images.githubusercontent.com/59492312/163319734-3c64dc87-dd9e-4da7-bb46-d902f017e96f.png">
 </p>
 
-a
+노란색으로 된 부분이 서비스 서버에서 보내는 응답이다. 다른 응답들은 서비스 서버
+외의 외부로 요청을 보내온거에 대한 응답이다.
+
+바로 위의 이미지와 비교해보면    
+
+index.html: 15ms -> 4ms   
+Creative.min.css: 18ms -> 8ms   
+jquery.min.js: 17ms -> 7ms   
+
+텍스트 데이터에 대한 전송시간이 상당히 개선된것을 볼 수 있다. 물론, bootstrap.min.css나
+font-awesome.min.css의 경우는 다소 전송시간이 늘어났지만, 전반적으로 전송시간이 상당히
+단축된것을 알 수 있다.
 
 <br>
 
@@ -156,6 +168,10 @@ a
 
 > 또한, 크롬 개발자도구의 네트워크 탭에서 속도가 얼마나 개선되었는지 보는것도 중요하지만, 그 외에 웹사이트
 > 속도를 측정해주는 구글의 Paged insight등의 툴을 사용하여 전반적으로 한번 더 점검해보는게 좋다.
+
+<br>
+
+> [nginx의 gzip을 활용한 전송속도 개선](https://ko.linux-console.net/?p=1877)
 
 <br>
 
@@ -182,10 +198,45 @@ a
 <img src="https://user-images.githubusercontent.com/59492312/163317573-2093029b-1ae5-4131-b9fb-3207d1c2cf3c.png">
 </p>
 
-한 가지만 더 보자면,
+두번째로 알아두면 좋은것이,
 위의 네트워크 탭에서 All 부터 시작해서 Fetch/XHR 등등 여러 파일 종류들을 선택해서 볼 수 있는란이 있다.
 이 중에 Doc은 HTML이나 String형 문자열등을 볼 수 있는 유형이다. 즉, html 유형의 파일도 Type으로는 
 Document에 속한다. 
+
+<br>
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/163337825-fa792f54-1956-4fb1-8469-cd6a042a9d95.png">
+</p>
+
+마지막으로,
+위의 이미지를 보면 맨 하단에     
+4requests, Finish: 592ms, DOMContentLoaded: 414ms, Load: 568ms
+라고 적혀져 있는걸 알 수 있다. 
+
+* requests는 브라우저에서 보낸 모든 요청을 뜻한다. 내 서비스와
+  관련이 없이 클라이언트가 구글 확장프로그램을 쓰거나 그 외의 것들도 모두 브라우저단에서 요청을 보내는것이니
+  이 모든것들이 요청에 포함된다.
+
+* Finish는 모든 요청에 대한 응답이 끝난 시간을 의미한다. 요청이라고 꼭 웹서비스에 접속했을때만이
+  아닌 위의 request에서 본것처럼 시간을 두고 주기적으로 요청을 보낼 수 있기때문에 finish의 값은 얼마든지
+  커질 수 있다.
+
+* DOMContentLoaded는 DOM Tree를 그리는데 걸리는 시간을 의미한다.
+
+* Load는 DoM Tree를 그리는것과 이미지를 화면에 로드하는것까지 포함하는 시간을 의미한다.
+
+이 중, DOMContentLoaded와 Load는 사용자 경험을 판단하는 기준 중, 가장 기본이 되는 것으로
+속도나 성능개선에 참고할 수 있다.
+
+<br>
+
+> DOM Tree 구조란 쉽게 말해서 우리가 아는 <html>~</html> 즉, html요소와
+> 그 안의 모든 요소들을 포함한 구조라고 이해하면 된다.
+
+<br>
+
+> [개발자도구 네트워크탭 요소들](https://velog.io/@te-ing/%EA%B0%9C%EB%B0%9C%EC%9E%90%EB%8F%84%EA%B5%AC-Network%ED%83%AD-%EC%B4%9D%EC%A0%95%EB%A6%AC)    
 
 <br>
 
