@@ -95,7 +95,7 @@ CPU 사용량을 더 높아진다.
 > 좋다고 하며 다른 참조링크는 3에서 4사이가 좋다고 한다. 통상 압축률이 올라갈수록 CPU가 더 많이 필요하고
 > 만약 서버가 CPU 사용량으로 어려움을 겪고 있는경우 압축률을 높이올리는거에 굉장히 한계점이 크고 억지로 끓어올려도
 > 올리기 전과의 차이가 그렇게 크지 않아 통상 4정도의 중간 압축률을 유지하는게 좋다고 한다. 하지만, 조금 더 정확하게
-> 하려면 내 실제 프로젝트의 EC2 성능과 구성 데이터 파일들을 고려하여 실제 테스트를 해보고 압축률을 지정하는것이 정확하다.
+> 하려면 내 실제 프로젝트의 EC2 성능과 구성 데이터 파일들을 고려하여 실제 테스트를 해보고 압축률을 지정하는것이 정확하다.      
 > [gzip_comp_level 추천 9](https://blog.lael.be/post/6553)        
 > [gzip_comp_level 추천 3~4](https://minholee93.tistory.com/entry/Nginx-Compressed-Response-with-gzip)      
 > [gzip_comp_level 추천 4](https://www.linuxcapable.com/ko/how-to-enable-configure-gzip-compression-on-nginx/)    
@@ -242,4 +242,4 @@ Document에 속한다.
 
 
 
-태그 : #
+태그 : #gzip, #텍스트 데이터, #바이너리 데이터, #gzip compression level, #gzip_comp_level, #content-encoding, #Doc, #DOMContentLoaded, #Load, #finish, #requests
