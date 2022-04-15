@@ -615,9 +615,10 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
 
 나머지 코드들을 정리해 보도록 하겠다.
 
-* client_header_timeout : 
+* client_header_timeout : 클라이언트와 서버가 연결된 후 지정된 시간안에 클라이언트가 온전한 헤더 전체를
+  전송하지 않으면 해당 요청은 제거되고, 408(Request Time-out)로 끝난다. 디폴트 값은 60초다.
 
-* client_body_timeout : 
+* client_body_timeout : 클라이언트가 서버로 데이터를 보냈을때 즉, 요청(Request) body를 보냈을때, 
 
 * keepalive_timeout : 
 
@@ -806,6 +807,9 @@ http {
 
 <br>
 
+
+
+### 3. server_tokens off 로 버전정보 노출안되게해서 보안 up
 
 
 1.아래, port 5000이랑, server_sport 5000이랑은 달랐었다. 이거 체크하자.
