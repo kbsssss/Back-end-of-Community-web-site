@@ -621,8 +621,22 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
 
 * keepalive_timeout : 
 
-a
+* gzip : HTTP 응답(Response)에서 데이터를 클라이언트에게 보낼 때 압축해서 보낼지 아니면 그냥
+  보낼지 설정할 수 있다.
 
+* gzip_comp_level : gzip의 압축기능의 압축률을 지정하는 설정이다. 
+
+<br>
+
+> 위의 gzip과 gzip_comp_level은 HTTP 응답(Response)의 데이터 전송속도에 영향을 미치기 때문에 조금 더
+> 자세히 알아보기 위해서 따로 [부록](https://sooolog.dev/Nginx-gzip-%EC%84%A4%EC%A0%95%EC%9D%84-%ED%86%B5%ED%95%9C-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0(HTML,-CSS,-Javascript,-JSON/)-%EC%86%8D%EB%8F%84-%ED%85%8C%EC%8A%A4%ED%8A%B8/)으로 글을 정리해두었다.
+> 꼭 참고하길 바란다.
+
+<br>
+
+> []()    
+> []()    
+> []()
 
 <br>
 
