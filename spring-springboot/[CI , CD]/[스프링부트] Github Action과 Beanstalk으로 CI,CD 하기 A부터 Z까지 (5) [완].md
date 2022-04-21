@@ -605,7 +605,7 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
       client_max_body_size  10m;
       client_header_timeout 60;
       client_body_timeout   60;
-      keepalive_timeout     10;
+      keepalive_timeout     60;
       server_tokens off;
       gzip                  off;
       gzip_comp_level       4;
