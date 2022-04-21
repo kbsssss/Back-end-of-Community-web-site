@@ -602,9 +602,11 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
 
       access_log    /var/log/nginx/access.log main;
 
+      client_max_body_size  10m;
       client_header_timeout 60;
       client_body_timeout   60;
-      keepalive_timeout     60;
+      keepalive_timeout     10;
+      server_tokens off;
       gzip                  off;
       gzip_comp_level       4;
 
@@ -615,17 +617,45 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
 
 나머지 코드들을 정리해 보도록 하겠다.
 
-* client_header_timeout : 클라이언트와 서버가 연결된 후 지정된 시간안에 클라이언트가 온전한 헤더 전체를
-  전송하지 않으면 해당 요청은 제거되고, 408(Request Time-out)로 끝난다. 디폴트 값은 60초다.
+* client_max_body_size : 클라이언트가 보내는 HTTP 요청(Request)에서 body 사이즈의 크기를 제한하는 것이다.
 
-* client_body_timeout : 클라이언트가 서버로 데이터를 보냈을때 즉, 요청(Request) body를 보냈을때, 
+* client_header_timeout : 클라이언트와 서버가 연결된 후 지정된 시간안에 클라이언트가 온전한 헤더 전체를
+  전송하지 않으면 해당 요청은 제거되고, 408(Request Time-out) 에러로 끝난다. 디폴트 값은 60초다.
+
+* client_body_timeout : 클라이언트가 서버로 데이터를 보냈을때 즉, 요청(Request) body를 보냈을때
+  request body 전체 전송 시간에 대한 것은 제외한, 두개의 연속적인 읽기 작업 사이의 timeout 시간이다.
+  디폴트 값은 60초이며, 만약 클라이언트가 이 시간안에 아무것도 전송하지 않는다면 요청(request)은 제거되고
+  408 에러를 발생시킨다.
 
 * keepalive_timeout : 
+
+* server_tokens off : 
 
 * gzip : HTTP 응답(Response)에서 데이터를 클라이언트에게 보낼 때 압축해서 보낼지 아니면 그냥
   보낼지 설정할 수 있다.
 
 * gzip_comp_level : gzip의 압축기능의 압축률을 지정하는 설정이다. 
+
+
+gzip_minlength
+keep,timeout,body - 10s
+access log off?
+
+
+<br>
+
+> client_max_body_size는 위에서도 보았듯이 클라이언트가 보내는 HTTP 요청(Request)의 body 사이즈 크기제한을 설정하는 디렉티브이다.
+> 실제로 실 서비스에서 사용할 때는 여러 상황들을 고려하여 값을 지정해야 한다. 우선 여기서는 10m(=10mb)으로 지정하도록 하겠다. 
+> 따로 디렉티브값을 명시해 주지않으면 디폴트값은 1m(1mb)이다. 만약 클라이언트에서 요청을 보낼 때 해당 디렉티브 값을 넘어서 요청을 보내면,
+> 413 에러가 발생하며 브라우저에서는 이에 대한 오류를 명확하게 보여주지 않으니 미리 인지하고 설정값을 지정하여야 한다.(request의 Content-Length 헤더값은
+> client_max_body_size에 설정된 값을 초과할 수 없다)     
+> [Nginx의 client_max_body_size 디렉티브 (1)](https://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size)    
+> [Nginx의 client_max_body_size 디렉티브 (2)](https://velog.io/@jongwoo328/Nginx-request-size-%EB%B3%80%EA%B2%BD%ED%95%98%EA%B8%B0)     
+> [Nginx의 client_max_body_size 디렉티브 (3)](https://ohdowon064.tistory.com/293)
+
+<br>
+
+> keepalive_timeout은 
 
 <br>
 
@@ -635,9 +665,9 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
 
 <br>
 
-> []()    
-> []()    
-> []()
+> [nginx.conf의 디렉티브들에 관하여 (1)](https://nginx.org/en/docs/http/ngx_http_core_module.html)    
+> [nginx.conf의 디렉티브들에 관하여 (2)](https://yangbongsoo.tistory.com/12)    
+> [nginx.conf의 디렉티브들에 관하여 (3)](https://intrepidgeeks.com/tutorial/nginx-timeout-setting)
 
 <br>
 
