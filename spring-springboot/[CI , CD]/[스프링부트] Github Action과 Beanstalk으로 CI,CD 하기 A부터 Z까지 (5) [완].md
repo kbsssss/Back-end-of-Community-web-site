@@ -606,8 +606,8 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
       client_header_timeout 60;
       client_body_timeout   60;
       keepalive_timeout     60;
-      server_tokens off;
-      gzip                  off;
+      server_tokens         off;
+      gzip                  on;
       gzip_comp_level       4;
 
       # Include the Elastic Beanstalk generated locations
@@ -627,9 +627,13 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
   디폴트 값은 60초이며, 만약 클라이언트가 이 시간안에 아무것도 전송하지 않는다면 요청(request)은 제거되고
   408 에러를 발생시킨다.
 
-* keepalive_timeout : 
+* keepalive_timeout : HTTP 요청(Request)을 처리한 후에 연결을 끊지말고 유지하라는 KeepAlive 모드가 있다.
+  이 keepalive 상태 즉, 연결을 끊지않고 유지하는 시간 값을 입력하면 된다. 디폴트값은 75s(75초)이며 일부 브라우저 에서는
+  60s(60초)까지만 유지하기에 60초로 설정이 된다.
 
-* server_tokens off : 
+* server_tokens : 에러페이지나 아니면 서버의 응답(Response) 헤더에 어떤 nginx의 버전이 쓰였는지를
+  명시하거나 아니면 명시하지 않을지를 설정하는 부분이다. 디폴트값은 on이다. Nginx의 버전이 노출되면 이를 이용하여
+  악의적인 공격이 들어올 수 있어 보안상 off값으로 명시해주는게 좋다.
 
 * gzip : HTTP 응답(Response)에서 데이터를 클라이언트에게 보낼 때 압축해서 보낼지 아니면 그냥
   보낼지 설정할 수 있다.
@@ -641,6 +645,7 @@ gzip_minlength
 keep,timeout,body - 10s
 access log off?
 
+그 외에 버퍼도 좀 보자. 다른 튜닝요소들도 좀 보고
 
 <br>
 
@@ -655,10 +660,6 @@ access log off?
 
 <br>
 
-> keepalive_timeout은 
-
-<br>
-
 > 위의 gzip과 gzip_comp_level은 HTTP 응답(Response)의 데이터 전송속도에 영향을 미치기 때문에 조금 더
 > 자세히 알아보기 위해서 따로 [부록](https://sooolog.dev/Nginx-gzip-%EC%84%A4%EC%A0%95%EC%9D%84-%ED%86%B5%ED%95%9C-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0(HTML,-CSS,-Javascript,-JSON/)-%EC%86%8D%EB%8F%84-%ED%85%8C%EC%8A%A4%ED%8A%B8/)으로 글을 정리해두었다.
 > 꼭 참고하길 바란다.
@@ -667,7 +668,8 @@ access log off?
 
 > [nginx.conf의 디렉티브들에 관하여 (1)](https://nginx.org/en/docs/http/ngx_http_core_module.html)    
 > [nginx.conf의 디렉티브들에 관하여 (2)](https://yangbongsoo.tistory.com/12)    
-> [nginx.conf의 디렉티브들에 관하여 (3)](https://intrepidgeeks.com/tutorial/nginx-timeout-setting)
+> [nginx.conf의 디렉티브들에 관하여 (3)](https://intrepidgeeks.com/tutorial/nginx-timeout-setting)     
+> [nginx.conf의 server_tokens와 보안](https://goodgid.github.io/Nginx-Option-Server-Tokens/)
 
 <br>
 

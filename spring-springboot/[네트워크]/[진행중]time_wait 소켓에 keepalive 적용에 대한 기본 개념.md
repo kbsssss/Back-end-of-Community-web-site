@@ -35,6 +35,9 @@ https://interconnection.tistory.com/74
 
 웹서버 keepalive도 참고
 
+http keepalive에 대해서, 이게 socket i/o가 완전히 끝나고부터 시작되는 시간 기준이라는
+등 이러한 자세한 내용에 대해서 한번 정리
+
 <br>
 
 #### 🪁 References

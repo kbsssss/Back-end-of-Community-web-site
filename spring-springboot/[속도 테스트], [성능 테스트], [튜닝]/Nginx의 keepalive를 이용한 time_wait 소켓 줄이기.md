@@ -24,6 +24,8 @@
 여기 아래에 보면 알겠지만 개발자도구 네트워크 탭에서 keepalive가 쓰였는지 안쓰였는지 알 수 있다.
 https://www.lesstif.com/system-admin/nginx-gzip-59343019.html
 
+추가로 크롬 개발자도구 네트워크 탭에서 keepalive사용되는지 응답 헤더인가 볼 수 있는것도 정리하자.
+
 <br>
 
 #### 🪁 References
