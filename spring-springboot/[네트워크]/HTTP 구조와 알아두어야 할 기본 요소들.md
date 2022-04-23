@@ -344,6 +344,8 @@ HTTP 응답(Response)도 구조가 크게 3부분으로 나누어진다.
 <br>
 
 > [HTTP 응답(response)의 헤더(Header)](https://bentist.tistory.com/35)    
+> [요청과 응답의 content-Type 개념 (1)](https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Content-Type)    
+> [요청과 응답의 content-Type 개념 (2)](https://webstone.tistory.com/66)    
 
 <br>
 

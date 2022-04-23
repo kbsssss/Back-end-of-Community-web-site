@@ -640,12 +640,7 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
 
 * gzip_comp_level : gzip의 압축기능의 압축률을 지정하는 설정이다. 
 
-
-gzip_minlength
-keep,timeout,body - 10s
-access log off?
-
-그 외에 버퍼도 좀 보자. 다른 튜닝요소들도 좀 보고
+이 외에도 성능과 속도와 관련된 디렉티브들이 많이 있다. 기본적인 세팅은 이대로 진행하며, 추가적인 디렉티브의 설정과 개념들에서는 다시한번 정리하도록 하겠다.
 
 <br>
 
@@ -673,49 +668,6 @@ access log off?
 
 <br>
 
-정리하자면,      
-그렇기에, server블록은 하나의 웺사이트를 선언하는데 사용되며, server 블록이 여러개이면, 한대의 머신(호스트)에 여러 웹사이트를 서빙할 수
-있게되는것이다.(server_name으로 여러 도메인을 지정할 수 있기때문) 여기서 호스트란 EC2로 보아도 되고, Nginx 웹서버로 볼 수도 있다.
-
-이렇게, 실제로 호스트는 한대지만, 여러 웹사이트를 서빙하기에 마치 가상으로 호스트가 여러개 존재하는 것처럼
-동작하게 되기에 이런 개념을 가상 호스트라고 한다. server 블록 자체가 가상 호스팅을 가능하게 하는것이다. 
-
-<br>
-
-> [server 블록이란 (1)](https://prohannah.tistory.com/136)    
-> [server 블록이란 (2)](https://juneyr.dev/nginx-basics)
-
-<br>aaaaaaaaaaa
-
-다음, access log가 어디 저장될지 보이는건데, 이는 이 서버에 해당하는 거에 대해서만
-로그를 남긴다. 이것도 상속의 개념aaa
-
-<br>
-
-server 블록 또한 여러개 만들 수 있는데, 그렇게되면 한대의 머신(=호스트)에
-여러 웹사이트를 서빙할 수 있게 되어 실제로 호스트는 한대지만, 가상으로 마치 호스트가 여러개 존재하는 것처럼 동작하게 할 수 있기에 가상 호스트라고 한다.
-
-조금 더 쉽게 말하자면, http 컨텐스트 내에 아래와 같이    
-
-그리고 http 블록도 server, location이런거 끝내고 개념 한번 더 정리
-
-```conf
-server {
-    server_name test123.com
-}
-
-server {
-    server_name test456.com
-}
-```
-
-<br>
-
-> 위에는 적혀져 있지 않지만, server_name이라는 지시어를 server 컨텐스트내에 사용할 수 있다.
-> 
-
-<br>
-
 ```conf
       location / {
           proxy_pass          http://springboot;
@@ -729,18 +681,50 @@ server {
       }
 ```
 
-마지막으로, location 블록 지시어를 보겠다.
-a
+마지막으로 location 블록 지시어와 location 블록 지시어안의 
+심플 지시어들을 보도록 하겠다.
+
+aaaa
+   
+<br>
+
+정리하자면 server블록은 하나의 웹사이트(도메인)를 선언하는데 사용되며, server 블록이 여러개면 
+한대의 호스트에 여러 웹사이트(도메인)를 서빙할 수 있게되는것이다.(server_name으로 여러 도메인을 지정할 수 있기때문) 
+
+이렇게, 실제로 호스트는 한대지만, server 블록을 여러개 만들어 설정하게되면, 하나의 호스트에
+여러 웹사이트(도메인)를 서빙할 수 있게 되어, 마치 가상으로 호스트가 여러개 존재하는 것처럼 동작하기에
+이를 가상 호스트라고 한다. server 블록 자체가 가상 호스팅을 가능하게 하는것이다. 
 
 <br>
 
-아니 근데, 이거하고 디렉티브니 이런 기본 개념도 정리해야해, 블럭이니
+> 여기서 호스트란 IP를 가지고 있는 양방향 통신이 가능한 컴퓨터를 의미한다. 조금 더 정확하게 얘기하자면
+> 네트워크에 연결된 모든 종류의 장치를 노드(node)라고 하는데, 노드중에서도 네트워크 주소(IP)가 할당된 것을
+> 호스트(host)라고 한다.    
+> [호스트(host)란 무엇인가](https://m.blog.naver.com/jysaa5/221736421275)      
 
-(3). http 블록 : 웹서버에 대한 동작을 설정하는 영역으로 server블록과 location블록 그리고 upstream블록의 루트 블록이다. 여기서 선언된
-값은 하위블록에 상속되어, 서버의 기본값이 된다.
+<br>
 
-(4). server블록과 location블록 : server블록은 하나의 웹사이트를 선언하는데 사용되며, 가상 호스팅의 개념이다. location블록은 server블록 내에서
-특정 URL을 처리하는 방법을 정의한다. 
+> [server 블록이란 (1)](https://prohannah.tistory.com/136)    
+> [server 블록이란 (2)](https://juneyr.dev/nginx-basics)
+> []()
+
+<br>aaaaaaaaaaa
+
+다음, access log가 어디 저장될지 보이는건데, 이는 이 서버에 해당하는 거에 대해서만
+로그를 남긴다. 이것도 상속의 개념aaa
+
+<br>
+
+```conf
+server {
+    server_name test123.com
+}
+
+server {
+    server_name test456.com
+}
+```
+<br>
 
 (5). upstream블록 : origin서버라고도 하며, 여기서는 WAS를 의미한다. nginx는 downstream에 해당한다.
 
@@ -785,24 +769,10 @@ http {
     server 127.0.0.1:8080;
     keepalive 1024;
   }
-  server {
-      listen 80;
-      server_name celebmine.net www.celebmine.net;
-      return 301 http://celebmine.com$request_uri;
-  }
-
-  server {
-      listen 80;
-      server_name celebmine.co.kr www.celebmine.co.kr;
-      return 301 http://celebmine.com$request_uri;
-  }
 
   server {
       listen        80 default_server;
-
-      if ($host = www.celebmine.com) {
-          return 301 http://celebmine.com$request_uri;
-      }
+      listen        [::]:80 default_server;
 
       location / {
           proxy_pass          http://springboot;
@@ -817,10 +787,12 @@ http {
 
       access_log    /var/log/nginx/access.log main;
 
+      client_max_body_size  10m;
       client_header_timeout 60;
       client_body_timeout   60;
       keepalive_timeout     60;
-      gzip                  off;
+      server_tokens         off;
+      gzip                  on;
       gzip_comp_level       4;
 
       # Include the Elastic Beanstalk generated locations
@@ -829,20 +801,23 @@ http {
 }
 ```
 
-마지막으로 정리된 nginx.conf파일을 보자면 위와같이 적어주면 된다.
-
-<br>
-
-#### 🪁 Reference
-* 참조링크 : []()
-* 참조링크 : []()
+마지막으로 정리된 nginx.conf 파일의 코드들이다.
 
 <br>
 
 
 
-### 3. server_tokens off 로 버전정보 노출안되게해서 보안 up
+### 3. 빈스톡, Nginx 리버스프록시에서 템플릿 에러
 
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152488115-f6e4b0d7-2953-4d84-ac7e-e122c588f229.png">
+</p>
+
+여기 그거해야해, 원래 일반 로컬에서는 템플릿 반환이 문자열 "main","/main"이건
+상관없었는데, 이게 빈스톡 엔진엑스 상황에서는 404에러가 뜬다. 음.. 왜그러는거지 ?
+그리고 아마존 책 그거 빈스톡한거도 그러면 어떻게 반환형이 써있는지보자.
+그리고
+404에러면 아예 맵핑되는게 없다는건데 이게 말이되나 ?
 
 1.아래, port 5000이랑, server_sport 5000이랑은 달랐었다. 이거 체크하자.
 2.그리고 nginx가 리버스 프록시이면서 웹서버이다 ? 라는것도 정리하
@@ -850,7 +825,7 @@ http {
 
 
 
-### 🚀 추가로
+### 🚀 추가로,
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/152488115-f6e4b0d7-2953-4d84-ac7e-e122c588f229.png">
