@@ -681,8 +681,8 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
       }
 ```
 
-마지막으로 location 블록 지시어와 location 블록 지시어안의 
-심플 지시어들을 보도록 하겠다.
+마지막으로 location 블록 지시어와 
+location 블록 지시어안의 심플 지시어들을 보도록 하겠다.
 
 aaaa
    
@@ -706,25 +706,10 @@ aaaa
 
 > [server 블록이란 (1)](https://prohannah.tistory.com/136)    
 > [server 블록이란 (2)](https://juneyr.dev/nginx-basics)
-> []()
-
-<br>aaaaaaaaaaa
-
-다음, access log가 어디 저장될지 보이는건데, 이는 이 서버에 해당하는 거에 대해서만
-로그를 남긴다. 이것도 상속의 개념aaa
 
 <br>
 
-```conf
-server {
-    server_name test123.com
-}
-
-server {
-    server_name test456.com
-}
-```
-<br>
+sdvsd
 
 (5). upstream블록 : origin서버라고도 하며, 여기서는 WAS를 의미한다. nginx는 downstream에 해당한다.
 
@@ -822,6 +807,19 @@ http {
 1.아래, port 5000이랑, server_sport 5000이랑은 달랐었다. 이거 체크하자.
 2.그리고 nginx가 리버스 프록시이면서 웹서버이다 ? 라는것도 정리하
 
+<br>
+
+
+
+### 4. 프리티어 t2.micro 서버가 다운
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/152488115-f6e4b0d7-2953-4d84-ac7e-e122c588f229.png">
+</p>
+
+a
+
+<br>
 
 
 

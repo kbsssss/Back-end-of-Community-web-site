@@ -1,8 +1,8 @@
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/59492312/148671338-fb2f1d35-9ea1-4da9-bccd-3b88c2c8c4c1.png">
-    </p>
+<img src="https://user-images.githubusercontent.com/59492312/164885788-9ff0b820-9486-4bf4-bd2d-6be87630a282.png">
+</p>
 
-# 🗝 스프링부트 파일업로드 S3 연동하기 A부터 Z까지 (1)
+# 🗝 [스프링부트] 이미지 S3에 업로드하기 A부터 Z까지 (1)
 
 * IAM 설정
 * S3 버켓 생성
