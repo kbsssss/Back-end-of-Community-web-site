@@ -160,7 +160,7 @@ nginx.conf에 작성된 코드이다. 이제부터 각 문단이나 중요키워
 위의 코드중에 user, error_log, pid, http, server모두 디렉티브이다. 또한, 디렉티브는 블록(혹은 컨텍스트)디렉티브와
 심플 디렉티브로 나뉜다.
  
-* **심플디렉티브** : 세미콜론(;)으로 끝나는 디렉티브이다. 위의 디렉티브중 user,error_log,pid가 심플디렉티브이다.
+* **심플 디렉티브** : 세미콜론(;)으로 끝나는 디렉티브이다. 위의 디렉티브중 user,error_log,pid가 심플디렉티브이다.
  
 * **블록 디렉티브** : 세미콜론 대신에 중괄호({})로 끝난다. 또한, 블록 디렉티브는 중괄호 안에 다른 디렉티브를 가질 수 있다.
 위의 디렉티브중 http, server가 블록 디렉티브이다..
@@ -185,7 +185,7 @@ nginx.conf파일은 기본적으로 /etc/nginx/ 폴더안에 위치하게 된다
 
 즉, 조금 더 풀어서 말하자면, 우리가 EC2인스턴스에 ssh로 접속하게 되면 제일 먼저 홈디렉토리에서 시작하게 된다.
 그곳에서 명령어 cd /etc/nginx로 들어가보면 각종 nginx 설정파일들과 폴더들이 있고 거기에 nginx.conf파일도 있는것이다.
-그 중에 nginx.conf파일이 가장 주요한 설정파일이다.
+그 중에 nginx.conf 파일이 가장 주요한 설정파일이다.
 
 <br>
 
@@ -403,13 +403,38 @@ log_format은 nginx의 access 로그의 형식을 지정해준다.
   }
 ```
 
-이제는 upstream 블록 디렉티브를 보겠다.   
-@@@@@@@@@@@@@@@@
- 
+이제는 upstream 블록 디렉티브와 그 안의 다른 디렉티브들인 server, keepalive에 대해서 알아보겠다.   
+
+upstream의 역활은 nginx로 들어온 HTTP 요청(Request)을 다시 설정한 server 지시어(upstream 지시어 안에 있는)에
+설정한 경로로 보내는 역활을 한다. upstream 다음에 나오는 명칭(여기서는 springboot)은 뒤에서 나올 location 블록 지시어안에서
+쓰이는 값이다.(springboot 말고 원하는 명칭명을 적어주어도 된다.)
+
+
+
+
+<br>
+
+> upstream의 한국어 의미는 상류이고, downstream의 한국어 의미는 하류이다. 물이 흘러 내려가서 받는 곳이 하류(downstream)이고
+> 윗쪽에서 물을 흘러 내려보내는 곳이 상류(upstream)이다. 물을 데이터 패킷으로 비유 하자면, 네트워크에서 데이터를 보내는 쪽 즉, 흘러 보내는
+> 쪽이 상류(upstream)이고, 데이터 패킷을 받는쪽은 하류(downstream)가 되는것이다. 위의 upstream 지시어는 '상류'로써 
+> 자신의 localhost인 127.0.0.1:8080으로 들어온 HTTP 요청(Request)을 다시 내보낸다는 의미이다.    
+> [upstream 지시어의 의미](https://developer88.tistory.com/299)
+
+<br>
+
+> [upstream 지시어의 개념과 역활 (1)](https://developer88.tistory.com/299)      
+> [upstream 지시어의 개념과 역활 (2)](https://nginx.org/en/docs/http/ngx_http_upstream_module.html#upstream)      
+> []()      
+
+<br>
+
 upstream은 origin은 WAS 즉, 웹 어플리케이션 서버를 의미한다. nginx와 연결한 웹 어플리케이션 서버를 지정하는데
 사용된다. 하위에 있는 server 지시어는 연결할 웹 어플리케이션 서버의 'IP주소(호스트주소):포트'로 지정해준다.
 
 upstream은 여러개를 만들 수 있으며,a
+
+우선, 이 Upstream 블록 지시어에 있는 심플 지시어 server는 아래에서 볼 server 블록 지시어와는 다른것이다.
+지시어의 명칭은 같지만 하나는 심플 지시어이고 다른 하나는 블록 지시어이다.
 
 <br>
 
@@ -684,7 +709,7 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
 마지막으로 location 블록 지시어와 
 location 블록 지시어안의 심플 지시어들을 보도록 하겠다.
 
-aaaa
+aaaaaaaaaaa
    
 <br>
 
@@ -806,18 +831,6 @@ http {
 
 1.아래, port 5000이랑, server_sport 5000이랑은 달랐었다. 이거 체크하자.
 2.그리고 nginx가 리버스 프록시이면서 웹서버이다 ? 라는것도 정리하
-
-<br>
-
-
-
-### 4. 프리티어 t2.micro 서버가 다운
-
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/152488115-f6e4b0d7-2953-4d84-ac7e-e122c588f229.png">
-</p>
-
-a
 
 <br>
 
