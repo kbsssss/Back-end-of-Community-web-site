@@ -405,63 +405,53 @@ log_format은 nginx의 access 로그의 형식을 지정해준다.
 
 이제는 upstream 블록 디렉티브와 그 안의 다른 디렉티브들인 server, keepalive에 대해서 알아보겠다.   
 
-upstream의 역활은 nginx로 들어온 HTTP 요청(Request)을 다시 설정한 server 지시어(upstream 지시어 안에 있는)에
-설정한 경로로 보내는 역활을 한다. upstream 다음에 나오는 명칭(여기서는 springboot)은 뒤에서 나올 location 블록 지시어안에서
-쓰이는 값이다.(springboot 말고 원하는 명칭명을 적어주어도 된다.)
+upstream 블록 지시어는 origin 서버(server)를 가리키는데, 위에서는 WAS를 가리키고 있다. upstream 블록 지시어 안에 
+심플 지시어인 server 값으로 origin 서버(server)의 호스트명(혹은 ip주소)과 포트를 적어주어서 설정하게 된다. 이렇게 설정해주어서
+origin 서버(server)를 가리키는 upstream 블록 지시어를 사용하는 이유는 후에 nginx로 HTTP 요청(Request)이 들어오게 되면 
+우리가 설정한 upstream의 origin 서버(server)로 요청을 다시 보내기 위함이다. 
 
+upstream 블록 지시어까지는 origin 서버(server)를 설정하기 위함이고, Nginx으로 들어오는 HTTP 요청(Request)을
+다시 origin server(여기서는 WAS)로 보내는 역활(=리버스 프록시)을 하는 지시어는 뒤에서 location 블록 디렉티브안에 있는 
+proxy_pass 심플 디렉티브에서 더 자세히 보도록 하겠다.
 
+다음으로 upstream 다음에 명칭을 적게되는데 위에서는 springboot라고 적었지만, 얼마든지 내가 해당 origin 서버(server)를
+표현하고자 하는 명칭을 적어주면 된다. 이 부분이 뒤에 나올 proxy_pass에서 사용하게 된다.
 
+<br>
+
+> origin 서버는 하나의 컴퓨터로써 들어오는 요청에 대해 응답할 수 있게 구조화된 서버를 의미한다. 여기서는
+> WAS가 origin 서버이다.     
+> [origin server의 개념](https://www.cdnetworks.com/ko/knowledge-center/what-is-origin-server/)
 
 <br>
 
 > upstream의 한국어 의미는 상류이고, downstream의 한국어 의미는 하류이다. 물이 흘러 내려가서 받는 곳이 하류(downstream)이고
 > 윗쪽에서 물을 흘러 내려보내는 곳이 상류(upstream)이다. 물을 데이터 패킷으로 비유 하자면, 네트워크에서 데이터를 보내는 쪽 즉, 흘러 보내는
-> 쪽이 상류(upstream)이고, 데이터 패킷을 받는쪽은 하류(downstream)가 되는것이다. 위의 upstream 지시어는 '상류'로써 
-> 자신의 localhost인 127.0.0.1:8080으로 들어온 HTTP 요청(Request)을 다시 내보낸다는 의미이다.    
-> [upstream 지시어의 의미](https://developer88.tistory.com/299)
+> 쪽이 상류(upstream)이고, 데이터 패킷을 받는쪽은 하류(downstream)가 되는것이다. 위의 upstream 지시어가 가리키는 origin 서버(server)는
+> upstream이 되고 우리는 WAS로 지정했기에 WAS가 upstream이 되는것이다.('상류'로써 들어오는 요청에 응답을 하며 데이터를 내보내는 쪽이기때문) 
+> Nginx는 이 경우 WAS로 부터 데이터를 받는 쪽이니 downstream이 되는것이다.        
+> [upstream 지시어의 의미](https://developer88.tistory.com/299)     
 
 <br>
 
-> [upstream 지시어의 개념과 역활 (1)](https://developer88.tistory.com/299)      
-> [upstream 지시어의 개념과 역활 (2)](https://nginx.org/en/docs/http/ngx_http_upstream_module.html#upstream)      
-> []()      
+> upstream 블록 지시어 안에 있는 심플 지시어 server는 아래에서 볼 server 블록 지시어와는 다른것이다.
+> 지시어의 명칭은 같지만 하나는 심플 지시어이고 다른 하나는 블록 지시어이다.
 
 <br>
 
-upstream은 origin은 WAS 즉, 웹 어플리케이션 서버를 의미한다. nginx와 연결한 웹 어플리케이션 서버를 지정하는데
-사용된다. 하위에 있는 server 지시어는 연결할 웹 어플리케이션 서버의 'IP주소(호스트주소):포트'로 지정해준다.
-
-upstream은 여러개를 만들 수 있으며,a
-
-우선, 이 Upstream 블록 지시어에 있는 심플 지시어 server는 아래에서 볼 server 블록 지시어와는 다른것이다.
-지시어의 명칭은 같지만 하나는 심플 지시어이고 다른 하나는 블록 지시어이다.
+> [upstream 지시어와 server 지시어의 개념과 역활 (1)](https://developer88.tistory.com/299)      
+> [upstream 지시어와 server 지시어의 개념과 역활 (2)](https://nginx.org/en/docs/http/ngx_http_upstream_module.html#upstream)      
+> [upstream 지시어와 server 지시어의 개념과 역활 (3)](https://juneyr.dev/nginx-basics)      
+> [upstream 지시어와 server 지시어의 개념과 역활 (4)](https://hyeo-noo.tistory.com/205)     
 
 <br>
 
-> nginx서버를 가리키는것은 downstream에 해당한다.
+마지막으로 keepalive는
 
 <br>
 
-> upstream 지시어 안에, server 지시어를 여러개 적어서 로드벨런싱으로써 작용하게 할 수도 있다.    
-> upstream test{    
->         server 호스트주소:포트    
->         server 호스트주소:포트    
-> }    
-> 와 같이 써주며, 순서대로 요청을 돌아가며 처리해주는 라운드로빈 방식과 서버마다 가중치를 주고 가중ㅊ치가 높은곳 부터 부하를 보내는 가중치
-> 라운드 로빈 방식이 있는데, 다른 설정이 없다면 라운드 로빈 방식으로 작동한다.       
-> [엔진엑스로 로드벨런싱 이용하기](https://cantcoding.tistory.com/77)
-
-<br>
-
-> [upstream 지시어 (1)](https://narup.tistory.com/209)
-> 
-
-
-/var/log/nginx/access.log이거 형식 있었는데 main;
-이거 서버마다 로그 이름 다르게 하는거 있었다.
-
-@@@@@@@@@@@@@@@@
-
+> []()    
+> []()    
 
 <br>
 
@@ -709,35 +699,45 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
 마지막으로 location 블록 지시어와 
 location 블록 지시어안의 심플 지시어들을 보도록 하겠다.
 
-aaaaaaaaaaa
-   
+location은 server 블록 지시어의 하위 블록 지시어로 특정 url을 처리하는 지시어다.
+예를들면,    
+www.dev_monster.com/nginx     
+www.dev_monster.com/apache     
+와 같이 요청이 들어오는 경우 location 블록 지시어를      
+
+location / {
+
+location 그 길이중 매칭되는게 많으면 더 많이 매칭되는곳으로 연결한다.    
+
+또한, 정적 데이터를 내보내다가 proxy_pass를 사용하는경우 리버스 프록시로써 was를 가리킬 때 사용한다.     
+
+근데 궁금한게 proxy_pass 하고 http나 https를 골라서 해야하는데 왜 나는 그냥 celebmine.com을      
+들어가도 https://로 되는거지 심지어 listen이 443이 없어도 매칭이 잘되었었다.     
+
+a
+
+a
+
 <br>
 
-정리하자면 server블록은 하나의 웹사이트(도메인)를 선언하는데 사용되며, server 블록이 여러개면 
-한대의 호스트에 여러 웹사이트(도메인)를 서빙할 수 있게되는것이다.(server_name으로 여러 도메인을 지정할 수 있기때문) 
+정리하자면 server블록은 하나의 웹사이트(도메인)를 선언하는데 사용되며, server 블록이 여러개면
+한대의 호스트에 여러 웹사이트(도메인)를 서빙할 수 있게되는것이다.(server_name으로 여러 도메인을 지정할 수 있기때문)
 
 이렇게, 실제로 호스트는 한대지만, server 블록을 여러개 만들어 설정하게되면, 하나의 호스트에
 여러 웹사이트(도메인)를 서빙할 수 있게 되어, 마치 가상으로 호스트가 여러개 존재하는 것처럼 동작하기에
-이를 가상 호스트라고 한다. server 블록 자체가 가상 호스팅을 가능하게 하는것이다. 
+이를 가상 호스트라고 한다. server 블록 자체가 가상 호스팅을 가능하게 하는것이다.
 
 <br>
 
 > 여기서 호스트란 IP를 가지고 있는 양방향 통신이 가능한 컴퓨터를 의미한다. 조금 더 정확하게 얘기하자면
 > 네트워크에 연결된 모든 종류의 장치를 노드(node)라고 하는데, 노드중에서도 네트워크 주소(IP)가 할당된 것을
 > 호스트(host)라고 한다.    
-> [호스트(host)란 무엇인가](https://m.blog.naver.com/jysaa5/221736421275)      
+> [호스트(host)란 무엇인가](https://m.blog.naver.com/jysaa5/221736421275)         
 
 <br>
 
 > [server 블록이란 (1)](https://prohannah.tistory.com/136)    
-> [server 블록이란 (2)](https://juneyr.dev/nginx-basics)
-
-<br>
-
-sdvsd
-
-(5). upstream블록 : origin서버라고도 하며, 여기서는 WAS를 의미한다. nginx는 downstream에 해당한다.
-
+> [server 블록이란 (2)](https://juneyr.dev/nginx-basics)    
 
 <br>
 
@@ -826,8 +826,7 @@ http {
 여기 그거해야해, 원래 일반 로컬에서는 템플릿 반환이 문자열 "main","/main"이건
 상관없었는데, 이게 빈스톡 엔진엑스 상황에서는 404에러가 뜬다. 음.. 왜그러는거지 ?
 그리고 아마존 책 그거 빈스톡한거도 그러면 어떻게 반환형이 써있는지보자.
-그리고
-404에러면 아예 맵핑되는게 없다는건데 이게 말이되나 ?
+그리고 404에러면 아예 맵핑되는게 없다는건데 이게 말이되나 ?
 
 1.아래, port 5000이랑, server_sport 5000이랑은 달랐었다. 이거 체크하자.
 2.그리고 nginx가 리버스 프록시이면서 웹서버이다 ? 라는것도 정리하
