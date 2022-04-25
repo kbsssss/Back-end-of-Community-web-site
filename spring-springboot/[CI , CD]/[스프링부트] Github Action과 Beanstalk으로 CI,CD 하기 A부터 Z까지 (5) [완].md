@@ -446,7 +446,7 @@ proxy_pass 심플 디렉티브에서 더 자세히 보도록 하겠다.
 
 <br>
 
-마지막으로 keepalive는
+마지막으로 keepalive는 
 
 <br>
 
