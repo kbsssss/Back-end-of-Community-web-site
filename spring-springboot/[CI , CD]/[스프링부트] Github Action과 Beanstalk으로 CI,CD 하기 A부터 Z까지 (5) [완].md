@@ -446,12 +446,19 @@ proxy_pass 심플 디렉티브에서 더 자세히 보도록 하겠다.
 
 <br>
 
-마지막으로 keepalive는 
+마지막으로 keepalive는 해당 origin 서버로 통신을 할 때 캐싱할 커넥션 수를 의미한다.
+조금 더 쉽게 말하자면 keepalive기능을 사용하는데 몇개의 커넥션들에 대해 keepalive를 사용할지
+개수를 설정하는 지시어다.
+
+만약, 위에 처럼 keepalive 1024;이면 keepalive를 사용할 커넥션 수를 1024개로 설정한다는
+의미이다. keepalive 값을 설정했는데 만약 요청이 계속해서 들어오고 keepalive가 적용된 커넥션 수가
+설정 값에 다다르게 되면 초과되는 요청에 대해서는 LRU(Least Recently Used)에 따라서 가장 최근에
+사용되지않은 keepalive 커넥션의 소켓 연결을 닫는다.
 
 <br>
 
-> []()    
-> []()    
+> [upstream 지시어의 keepalive 하위 지시어 (1)](https://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive)    
+> [upstream 지시어의 keepalive 하위 지시어 (2)](https://fuirosun.tistory.com/entry/nginx-keepalive-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0)    
 
 <br>
 
@@ -707,6 +714,11 @@ www.dev_monster.com/apache
 
 location / {
 
+For HTTP, the proxy_http_version directive should be set to “1.1” and the “Connection” header field should be cleared:
+이렇다는데 ?
+
+http 1.1버전부터는 디폴트가 되었다 이런것도 정리
+
 location 그 길이중 매칭되는게 많으면 더 많이 매칭되는곳으로 연결한다.    
 
 또한, 정적 데이터를 내보내다가 proxy_pass를 사용하는경우 리버스 프록시로써 was를 가리킬 때 사용한다.     
@@ -738,13 +750,6 @@ a
 
 > [server 블록이란 (1)](https://prohannah.tistory.com/136)    
 > [server 블록이란 (2)](https://juneyr.dev/nginx-basics)    
-
-<br>
-
-> 위의 nginx.conf설정 그대로 빈스톡 환경 구성의 소프트웨어 환경 속성에서 PORT로 8080 혹은 
-> 5000으로 설정하고 해도 정상적으로 작동한다.(특히, PORT 5000은 빈스톡 환경을 생성하자마자 자동으로 소프트웨어
-> 환경 속성에 적혀져있는데, 위의 nginx.conf설정이 담긴 프로젝트를 배포하면 해당 환경 속성 PORT 5000이 없어진다.)      
-> [PORT 8080 적용](https://stackoverflow.com/questions/54612962/502-bad-gateway-elastic-beanstalk-spring-boot)
 
 <br>
 
@@ -817,18 +822,25 @@ http {
 
 
 
-### 3. 빈스톡, Nginx 리버스프록시에서 템플릿 에러
+### 3. 빈스톡, nginx 리버스프록시에서 템플릿 에러
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/152488115-f6e4b0d7-2953-4d84-ac7e-e122c588f229.png">
 </p>
+
+두가지 해야해, 이게 맵핑이되는거 전혀없으면 아예 배포가 안됬어
+두번째는
 
 여기 그거해야해, 원래 일반 로컬에서는 템플릿 반환이 문자열 "main","/main"이건
 상관없었는데, 이게 빈스톡 엔진엑스 상황에서는 404에러가 뜬다. 음.. 왜그러는거지 ?
 그리고 아마존 책 그거 빈스톡한거도 그러면 어떻게 반환형이 써있는지보자.
 그리고 404에러면 아예 맵핑되는게 없다는건데 이게 말이되나 ?
 
-1.아래, port 5000이랑, server_sport 5000이랑은 달랐었다. 이거 체크하자.
+
+그 모냐, 이게 REdirect에서는 / 이거쓰면 절대경로가 되고 /안쓰면 상대경로가 되는데
+그냥 로컬로하면 되는데 이게 엔진엑스를 거치면서 /를 하게되면 TEmplates부터 모두 써주어야 하는거고
+/를 안쓰면 그냥 index만 적어주면 되는건가 근데 모든 곳들이 전부 /를 안쓰고 return한다.
+
 2.그리고 nginx가 리버스 프록시이면서 웹서버이다 ? 라는것도 정리하
 
 <br>
@@ -873,7 +885,16 @@ server:
 
 > 그런데, properties나 yml설정파일을 사용하는것이나, 빈스톡 환경 구성에서 직접 SERVER_PORT를 5000으로 잡아주는 방식은
 > 어디까지나, 위에 작성한 nginx.conf파일처럼 포트를 직접 설정해주지 않았을 때 이야기다. nginx.conf 파일도 그대로 사용하면서 바로 위의
-> 설정들도 함께 사용하지 말길 바란다.
+> 설정들도 함께 사용하면 안된다.
+
+<br>
+
+> 추가로, 스프링부트 설정파일에서 어플리케이션 실행 포트를 설정해주는 것외에 빈스톡 환경의 추가 옵션 구성에서
+> 소프트웨어 편집을 열고 PORT로 8080 설정을 해주는 방법이 있다. 이는 Nginx가 가리키는 포트 지정이 아닌 스프링부트
+> 어플리케이션이 실행되는 포트를 지정하는 설정이다.(PORT 5000은 빈스톡 환경을 생성하자마자 자동으로 소프트웨어 환경 속성에 
+> 적혀져있기도 하다.)          
+> [빈스톡 환경 구성 PORT 8080 설정 (1)](https://stackoverflow.com/questions/54612962/502-bad-gateway-elastic-beanstalk-spring-boot)     
+> [빈스톡 환경 구성 PORT 8080 설정 (2)](https://stackguides.com/questions/54612962/502-bad-gateway-elastic-beanstalk-spring-boot)
 
 <br>
 
@@ -895,41 +916,10 @@ server:
 
 
 
-아니, 이거 server 지시어에서 그러면, url이 달라도 포트만 같으면 그냥 매칭해준다는거잖아. server의 default_server가
-그런의미라는데, 이거 그때 뭐가 틀리면 받지않게 하는 방법이 있다고 하는데 그거를 알아서 적용해야한다.
-a
-위에 있는거 로그 스토리지 s3까지 버켓생성하고 다시봐야 한다.
-
-그거랑 ssl할때 보안그룹에 443 포트도 이해해야
-
-그리고 보안그룹에 8080포트도 같이 정리해야한다.
-
-용량에서 인스턴스 유형에 플릿의 구성해서 t2.micro랑 t2.small있는거 같이 다시 정리할 필요가 있다.
-실제 이거 정확하게 봐야하는게 비용절감면에서도 좋을거같다.
-
-배포 바익은 추가 롤링이 아닌, 변경 불가능에 대해서도 정리하자.
-
-ㅁㅁㅁ 이거 그거도 해야해, 이거 배포하기 Version label 앞에서 시간확보한거 사용하는거
-이거는 파일 작성할 때 말고 실제 빈스톡 환경에서 콘솔창 다룰때 상세하게 다루자.
-
-그 443 ssl적용할때, nginx.conf파일은 물론이고 그 리스터 부분도 다시 정리해야해
-
-
-
-
-
-
-
-
-
 
 
 1.빈스톡 connect fail해서 한 경우도 인스턴스가 바뀌지않음
 2.이상하게 그 디그레이드 되서 기다리게 된거 있잖아 배포는 됬는데, 그거는 EC2가 바뀌었는데 ? 직접해봄 - 그니까, 실제 인스턴스도 바뀌고 배포도 완료되어 들어가보면 변경된 restcontroller의 String값이 브라우정 나왔다.
-3.혹시 여태 안됬던게, rest가 아닌 다른 정적 머스테치 연동은 안되니까, 받을게 없어서 에러가 난건가 ? 그래서 rest를 하니 된거
-    아.. 우선은 rest가 없어서 그랬던건지 아니면 그냥 mustache가 /를 못받아서 그랬던건지 알아야 한다.(이거 이유도 알자 404 등등)
-4.그리고 실제 port나(어플리케이션에서 server.prot하는거나, 아니면 빈스톡구성에서 PORT 5000하는거나) 이거도 영향을
-    주는지 해보고, 보안그룹에서 80포트를 없애도 되는지 확인해보자.
 
 6.거기다가, 그냥 아무것도 커밋없이도 푸쉬되는지도 보자.    - 안됨
 7.그 모냐 왜 t2.micro에서 잘되다가 잘 안되다가 하는지 알기 그리고 용량증가하면 더 잘되는거같다.

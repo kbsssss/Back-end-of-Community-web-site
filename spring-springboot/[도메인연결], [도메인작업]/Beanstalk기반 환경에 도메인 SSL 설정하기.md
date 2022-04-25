@@ -6,6 +6,8 @@
 
 * ACM
 * 
+* 알아두면 좋을 HTTPS 기본 개념
+* SSL인증서의 작용원리
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 * * *
