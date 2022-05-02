@@ -1037,4 +1037,4 @@ server:
 
 
 
-태그 : #
+태그 : #Nginx, #Reverse Proxy, #리버스 프록시, #5000port, #simple directive, #block directive, #nginx.conf, #mapping error
