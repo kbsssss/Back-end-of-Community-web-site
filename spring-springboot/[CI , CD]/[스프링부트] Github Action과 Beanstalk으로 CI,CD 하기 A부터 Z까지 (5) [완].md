@@ -5,8 +5,8 @@
 # 📖 [스프링부트] Github Action과 Beanstalk으로 CI/CD 하기 A부터 Z까지 (5) [완]
 
 * 리버스 프록시로써 작동하는 Nginx
-* 빈스톡 환경 배포의 마지막 설정파일 nginx.conf 설정
-* 
+* Nginx 설정파일인 nginx.conf 작성
+* 최종 배포시 발생하는 문제들
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
 
@@ -337,7 +337,7 @@ http {
 }
 ```
 
-http 블록은 웹 서버에 대한 동작을 설정하는 영역으로, server, location 블록을 포함한다.
+http 블록은 Nginx 서버에 대한 동작을 설정하는 영역으로, server, location 블록을 포함한다.
 또한, 여기서 선언된 값은 하위블록에 상속된다.
 
 <br>
@@ -703,32 +703,130 @@ access_log 지시어 값의 맨뒤 main은 이 전 log_format  main
       }
 ```
 
-마지막으로 location 블록 지시어와 
-location 블록 지시어안의 심플 지시어들을 보도록 하겠다.
+마지막으로 location 블록 지시어와 location 블록 지시어안의 심플 지시어들을 보도록 하겠다.
 
 location은 server 블록 지시어의 하위 블록 지시어로 특정 url을 처리하는 지시어다.
-예를들면,    
-www.dev_monster.com/nginx     
-www.dev_monster.com/apache     
-와 같이 요청이 들어오는 경우 location 블록 지시어를      
+조금 더 쉽게 말하자면, server 블록 지시어는 www.도메인A.com, 도메인A.com, 도메인A.net처럼 최상위 도메인이나 아니면
+하위도메인 혹은 도메인B.com과 같이 아예 도메인 이름이 다른 경우를 모두 식별하여 HTTP 요청(Request)에 맞게 연결하지만
+location은 server로 받아온 도메인에서 특정 세부 url을 처리하는데 사용한다. 예를들면 도메인A.com/one, 도메인A.com/two
+로 요청이 들어오면 각각 다른 origin서버나 혹은 정적파일을 제공해줄 수 있는것이다. 예를 보면 더 정확하게 알 수 있다.
 
+<br>
+
+```conf
 location / {
+    proxy_pass          http://springboot;
+    proxy_http_version  1.1;
+    proxy_set_header    Connection          $connection_upgrade;
+    proxy_set_header    Upgrade             $http_upgrade;
 
-For HTTP, the proxy_http_version directive should be set to “1.1” and the “Connection” header field should be cleared:
-이렇다는데 ?
+    proxy_set_header    Host                $host;
+    proxy_set_header    X-Real-IP           $remote_addr;
+    proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+  }    
 
-http 1.1버전부터는 디폴트가 되었다 이런것도 정리
+location /one {
+    root /home/deploy/main
+    index index.html
+  }
 
-location 그 길이중 매칭되는게 많으면 더 많이 매칭되는곳으로 연결한다.    
+location /two
+    return 200;
+}
+```
 
-또한, 정적 데이터를 내보내다가 proxy_pass를 사용하는경우 리버스 프록시로써 was를 가리킬 때 사용한다.     
+이처럼, server 블록지시어안에 location 블록 지시어를 여러개 지정할 수 있으며
+만약 server 블록이 도메인A.com 요청을 받아들이면 위의 location /로 매칭이 되고 도메인A.com/one 요청이 들어와
+받아들이면 location /one으로 매칭이 되는것이다.
 
-근데 궁금한게 proxy_pass 하고 http나 https를 골라서 해야하는데 왜 나는 그냥 celebmine.com을      
-들어가도 https://로 되는거지 심지어 listen이 443이 없어도 매칭이 잘되었었다.     
+만약 위와같이 설정하였는데 요청이 도메인A.com/one/main으로 온다면 Nginx는 그 중 가장 길게 매칭이 되는
+location 블록과 연결시킨다. 도메인A.com/one/main이면 location /one과 가장 길게 매칭이되니 location /one으로
+연결이 되는것이다.
 
-a
+<br>
 
-a
+> 위에서 location /은 우리가 작성한 upstream 블록지시어와 매칭시켜주어 origin 서버인 WAS로 보내주기
+> 때문에 Nginx를 리버스 프록시로써 사용할 수 있다. location /one의 경우에는 요청이 들어오면 정적자료를 반환하기에
+> 이 경우는 Nginx가 웹 서버로써 작동하는 거다. 마지막으로 location /two는 status code(상태코드)를 반환하는 것이다.   
+
+<br>
+
+> Nginx는 정적파일을 서빙하는 웹 서버로써 사용하거나 혹은 리버스 프록시로써 사용할 수 있는데, 이곳에서는 리버스 프록시로써만 Nginx를
+> 사용하려 한다.        
+> [웹 서버 혹은 리버스 프록시로써의 Nginx](https://juneyr.dev/nginx-basics)
+
+<br>
+
+> [location 지시어에 관하여 (1)](https://juneyr.dev/nginx-basics)     
+> [location 지시어에 관하여 (2)](https://narup.tistory.com/209)     
+> [location 지시어에 관하여 (3)](https://architectophile.tistory.com/11)     
+
+<br>
+
+```conf
+location / {
+    proxy_pass          http://springboot;
+    proxy_http_version  1.1;
+    proxy_set_header    Connection          $connection_upgrade;
+    proxy_set_header    Upgrade             $http_upgrade;
+
+    proxy_set_header    Host                $host;
+    proxy_set_header    X-Real-IP           $remote_addr;
+    proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+  }  
+```
+
+우리는 리버스 프록시로써 작동하는 이 코드들에 대해 마지막으로 보도록 하겠다.
+
+* proxy_pass : HTTP 요청(Request)이 location과 매칭되었을때 해당 요청을 어디로 보낼지 나타내는 지시어이다.
+  값으로는 IP주소:포트번호로 설정하거나, 도메인명 아니면 우리가 위에서 설정한 upstream의 명칭을 가져다가 사용할 수 있다. 위처럼
+  http://springboot로 적어주면 이는 127.0.0.1:8080을 의미하게 된다. 또한, http:// 혹은 https://를 같이 작성하여
+  어느 규약을 사용할것인지 알려준다.(작성해주지 않으면 EC2로 배포가 되지 않는다.)
+
+* proxy_http_version  : 디폴트 값은 1.0이다. keepalive 지시어를 사용하려면 버전 1.1을 사용하여야 한다.
+
+* proxy_set_header Host : Nginx에서 proxy_pass로 요청이 넘어갈때 헤더값들이 이전 클라이언트가 보낸 HTTP 요청(Request)의 헤더 값들이 그대로 상속되어서 넘어가게 된다.
+  하지만, proxy_set_header Host와 proxy_set_header Connection는 상속된 값이 아니라 디폴트값으로 재설정이 되어서 Nginx에서 origin 서버로 보내지는데
+  그때의 값은 proxy_set_header Host  $proxy_host; 와 proxy_set_header Connection close; 이다. 하지만, proxy_set_header Host  $proxy_host;
+  의 경우 클라이언트가 보낸 요청의 헤더에서 $proxy_host와 일치하는 항목이 없으면 빈값으로 보내지게 되고 그렇게 되면 오류가 발생하게 된다. 그렇기에 
+  proxy_set_header Host  $host; 와 같이 작성하여 제대로 된 Host값이 헤더에 담아져서 보내지게 해야한다.
+  
+* proxy_set_header Connection : 해당 지시어는 upstream 지시어를 사용하기 위한것이기 때문에 
+  proxy_set_header Connection  $connection_upgrade; 로 다시 명시해주어야 한다.
+  
+* proxy_set_header X-Real-IP : 실제 클라이언트의 IP를 헤더의 X-Real-IP에 값으로 넣어서 전송시킨다.
+  조작이 불가능하고, 여러 프록시 서버를 거치더라도 실제 처음 요청을 한 클라이언트의 ip주소만을 담고있다.
+
+* proxy_set_header X-Forwarded-For : 이 또한 X-Forwarded-For에 클라이언트 IP 주소를 넣어서 전송시킨다.
+  다만, 이전에 프록시 서버를 거쳐서 온 요청이라면 처음 요청을 한 클라이언트가 아닌 바로 전 프록시 서버의 ip주소가 담아지게 된다.
+  또한, 이 헤더값은 조작이 가능하기에 보통 proxy_set_header X-Real-IP와 proxy_set_header X-Forwarded-For를 같이
+  작성하여 사용한다.
+
+* proxy_set_header Upgrade : 이는 upgrade 기능을 사용함으로써 HTTP에서 웹소켓으로 커넥션을 업그레이드 시켜준다.
+  이는 나중에 웹소켓을 사용하게 되는 경우에 다시 보도록 하자.
+
+<br>
+
+> 한가지 의문점이 들수도 있다. 왜 여기서는 굳이 proxy_pass의 값으로 ip주소:포트번호를 쓰지 않고 upstream의
+> 명칭을 쓰냐는것인데, 이렇게 upstream 블록 지시어를 사용하게 되면, keepalive 심플 지시어같은 추가적인 설정을 할 수 있기
+> 때문에 사용을 한다.
+
+<br>
+
+> Nginx를 프록시로 앞단에 두고 Tomcat을 뒷단에 두면, 별도 설정 없이는 톰캣(WAS)에서는
+> 클라이언트 IP를 알 수가 없다. 그렇기에 proxy_set_header X-Real-IP와 proxy_set_header X-Forwarded-For
+> 를 사용해서 클라이언트의 ip주소를 확인한다.     
+> [X-Real-IP와 X-Forwarded-For를 사용하는 이유](https://sg-choi.tistory.com/540)
+
+<br>
+
+> [proxy 지시어에 관하여 (1)](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass)    
+> [proxy 지시어에 관하여 (2)](https://dev-jwblog.tistory.com/42)    
+> [proxy 지시어에 관하여 (3)](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_http_version)    
+> [proxy 지시어에 관하여 (4)](https://developer88.tistory.com/299)    
+> [proxy 지시어에 관하여 (5)](https://velog.io/@csk917work/Nginx-%EC%84%9C%EB%B2%84-%EC%84%A4%EC%A0%95)    
+> [proxy 지시어에 관하여 (6)](https://sg-choi.tistory.com/540)       
+> [proxy 지시어에 관하여 (7)](https://dev-gorany.tistory.com/330)     
 
 <br>
 
@@ -738,6 +836,9 @@ a
 이렇게, 실제로 호스트는 한대지만, server 블록을 여러개 만들어 설정하게되면, 하나의 호스트에
 여러 웹사이트(도메인)를 서빙할 수 있게 되어, 마치 가상으로 호스트가 여러개 존재하는 것처럼 동작하기에
 이를 가상 호스트라고 한다. server 블록 자체가 가상 호스팅을 가능하게 하는것이다.
+
+location의 경우에는 server 블록 지시어가 받아들인 도메인에 대해 더욱 세부적으로 나누어서
+매칭을 해주고 Nginx를 리버스 프록시로써 작동시킬지 아니면 웹 서버로써 활용할지를 결정해준다.
 
 <br>
 
@@ -818,30 +919,58 @@ http {
 
 마지막으로 정리된 nginx.conf 파일의 코드들이다.
 
+이제 깃헙으로 push를 진행하게 되면, 정상적으로 배포가 진행되게 된다.
+
 <br>
 
 
 
-### 3. 빈스톡, nginx 리버스프록시에서 템플릿 에러
+### 3. 스프링부트 최종 배포시 발생하는 문제들
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/152488115-f6e4b0d7-2953-4d84-ac7e-e122c588f229.png">
-</p>
+```java
+@Controller
+public class MainController {
 
-두가지 해야해, 이게 맵핑이되는거 전혀없으면 아예 배포가 안됬어
-두번째는
+    @GetMapping("/hi1")
+    public String main1() throws Exception{
+        return "/main";
+    }
 
-여기 그거해야해, 원래 일반 로컬에서는 템플릿 반환이 문자열 "main","/main"이건
-상관없었는데, 이게 빈스톡 엔진엑스 상황에서는 404에러가 뜬다. 음.. 왜그러는거지 ?
-그리고 아마존 책 그거 빈스톡한거도 그러면 어떻게 반환형이 써있는지보자.
-그리고 404에러면 아예 맵핑되는게 없다는건데 이게 말이되나 ?
+    @GetMapping("/hi2")
+    public String main2() throws Exception{
+        return "main";
+    }
+}
+```
 
+첫번째로, 위를 보면 @Controller 클래스의 코드를 보면 main1 메서드는
+반환값이 "/main"이고 main2 메서드는 반환값이 "main"이다. 스프링부트를 로컬로
+실행시키고 크롬에서 접속하면 두 메서드 모두 정상적으로 작동한다. 하지만, 실제 빈스톡과 Nginx를 사용하여
+EC2로 배포시키면 크롬에서 "도메인/hi1"로 접속시 정상적으로 맵핑이 이루어지고 결과값이 나오지만
+"도메인/hi2"로 접속하면 404 에러가 발생한다. 에러가 발생하는 이유는 해당 요청 도메인에 대해
+컨트롤러에서 맵핑은 되지만 return 값이 정상적으로 전달되지 않기 때문이다.
 
-그 모냐, 이게 REdirect에서는 / 이거쓰면 절대경로가 되고 /안쓰면 상대경로가 되는데
-그냥 로컬로하면 되는데 이게 엔진엑스를 거치면서 /를 하게되면 TEmplates부터 모두 써주어야 하는거고
-/를 안쓰면 그냥 index만 적어주면 되는건가 근데 모든 곳들이 전부 /를 안쓰고 return한다.
+<br>
 
-2.그리고 nginx가 리버스 프록시이면서 웹서버이다 ? 라는것도 정리하
+```java
+@RestController
+public class MainRestController {
+    
+    @GetMapping("/hi3")
+    public String main3() throws Exception{
+        return "test(테스트)";
+    }
+}
+```
+
+두번째로는 처음 빈스톡을 사용하여 스프링부트 프로젝트를 EC2에 배포할때
+한개라도 URL이든 맵핑되고 정상적으로 반환값이 존재하는 컨트롤러가 있어야 한다.
+즉, 조금 더 쉽게 설명하자면 위에서 설명한대로 "도메인/hi1"에 대해서는 정상적으로
+컨트롤러에서 맵핑이되고 값이 반환이 되는데 이러한것 없이 값이 정상적으로 반환되지않는
+"main2" 메서드만 존재한다거나 아니면 적어도 RestController를 이용하여 문자열 반환 컨트롤러 메서드가
+1개라도 존재하지 않는다면 배포를 진행할 때 Fail이 발생하게 된다. 그렇기에, 처음에 테스트를 할 때
+컨트롤러의 경우 정상적으로 return값을 설정했는지 그게 아니라면 RestController를 이용하여
+문자열이라도 출력하게 했는지를 체크해야 정상적으로 EC2에 배포되는것을 볼 수 있다.
 
 <br>
 
@@ -909,41 +1038,3 @@ server:
 
 
 태그 : #
-
-
-
-
-
-
-
-
-
-1.빈스톡 connect fail해서 한 경우도 인스턴스가 바뀌지않음
-2.이상하게 그 디그레이드 되서 기다리게 된거 있잖아 배포는 됬는데, 그거는 EC2가 바뀌었는데 ? 직접해봄 - 그니까, 실제 인스턴스도 바뀌고 배포도 완료되어 들어가보면 변경된 restcontroller의 String값이 브라우정 나왔다.
-
-6.거기다가, 그냥 아무것도 커밋없이도 푸쉬되는지도 보자.    - 안됨
-7.그 모냐 왜 t2.micro에서 잘되다가 잘 안되다가 하는지 알기 그리고 용량증가하면 더 잘되는거같다.
-8.아 빌드하는거에 이미 테스트를 진행하고 빌드하는구나, 깃헙액션 보니 그렇다. + 
-9.혹시나 /에 대한 맵핑이 되어야 (여태, /맵핑을 restcontroller만 함 되는건지 일반 컨트롤러로 /맵핑해봤다. 결과는 ? 와
-    RestController가 있어서 된게 아니라, /맵핑자체를 통신을 못받아서 안된거였네. 404에러가 계속 뜨니 /에 실제, /ho는
-    레스트 해놓고 /와 /hohoho를 일반 컨트롤러 했는데 그 계속 오류 됬던거로 뜸
-10.보면, 정상적으로 배포완료되도 degraded됬다고 나와 1 out of 2 instances에서 버전이 맞지 않다고 근데, 이건
-    조졸두 블로그에도 똑같이 나오는데 이거 해결하고 가자.
-    
-11.탄력적 ip관련해서도 정리해야한다. 로드벨런서에서 하는건데, 
-
-12.rds도 연결해보고 있는데, rds추가할때 무엇이 문제가 될때 빈스톡이 연결이 안되는건지 보도록 하겠다.
-    (1). 
-13. 온디맨드 인스턴스는 람다나 scheduler를 이용하여 비용을 절약할 수도 있다고 한다.
-    근데, 이게 로드벨런서랑 무슨 차이일까 흠 ?
-    https://ssue95.tistory.com/4
-
-14.그 db연결할 때 우선 build.gradle에 의존모듈     implementation('org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3')
-이 있으면 빈스톡에 배포가 안된다. 그러고 보니, 일반적으로 인텔리제이에서 실행할때도 안됬던게 있었는데 이거 의존모듈 때문이였나 ?
-그거 비교해서 다시 봐보고 정리하자.
-
-15.탄력적ip하려면 로드벨런서인가 거기에서 VPC해야 하는거 간단히 정리
-
-19.혹시 ssl적용하기 위해 리스너 추가하면 어떻게 달라지는지 보자.
-
-21.꼭 ssl할때 리스너에 따라서 이런거 어떻게 바뀌는지 꼭 정리하고 보자.
