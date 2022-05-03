@@ -59,11 +59,6 @@ www 하위도메인에대한 레코드 지정까지 끝내면 real-test.com 호�
 pc버전으로 보기를 따로 만들어야 한다. 모바일 버전에서
 그러면 pc nginx에서 모바일이나 태블릿 체크해주고 이를 m.naver.com 리다이렉트 시켜주어야 한다는건데 ?
 
-추가로, http://www.naver.com이나 http://naver.com으로 들어오면 https://www.naver.com, https://naver.com
-으로 리다이렉팅해주는거도 해야
-http://www.starry.info는 https://www.starry.info로,
-http://starry.info는 https://starry.info 로,
-https://www.starry.info는 https://starry.info로 돌려줘서 최종 도착지가 모두 https://starry.info 가 됩니다.
 
 잠깐, 이 redirect도 301 status code인가, 그럼 302는 뭐고 bitly 이거 원리는 뭐지
 
