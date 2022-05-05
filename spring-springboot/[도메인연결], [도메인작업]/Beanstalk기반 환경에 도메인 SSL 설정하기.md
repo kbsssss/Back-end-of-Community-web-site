@@ -87,13 +87,11 @@ HTTPS가 정상적으로 작동하도록 설정해 보겠다.
 </p>
 
 AWS의 ACM(AWS Certificate Manager)을 접속해보면 위와같은 화면이 나온다. 
-이곳에서 우리는 SSL/TLS 인증서를 요청하고 발급받
+이곳에서 우리는 SSL/TLS 인증서를 요청하고 발급받을 것이다. 요청을 클릭해보자.
 
-> Amazon ACM에서 발급해주는 SSL/TLS 인증서는 무료인 대신에, 해당 도메인의 DNS 서버로 Route53을 사용해야 한다. 그러니 route53을
-> 이용하여 미리 도메인을 연결해놓자. 아직 연결해놓지 않았다면 필자가 적어놓은 [Beanstalk기반 환경에 Route53을 이용하여 도메인 연결](https://sooolog.dev/Beanstalk%EA%B8%B0%EB%B0%98-%ED%99%98%EA%B2%BD%EC%97%90-Route53%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EB%8F%84%EB%A9%94%EC%9D%B8-%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0/)
-> 을 참고하도록 하자.
-
-> [](https://wwlee94.github.io/category/blog/aws-eb-https/)    
+> ACM(AWS Certificate Manager)에 SSL/TLS 인증서를 요청하면, Amazon의 인증기관(CA)인 
+> Amazon Trust Services (ATS)에서 발급이 된다.    
+> [SSL/TLS 인증서와 Amazon 인증기관(CA)](https://aws.amazon.com/ko/blogs/korea/new-aws-certificate-manager-deploy-ssltls-based-apps-on-aws/)
 
 <br>
 
@@ -101,10 +99,14 @@ AWS의 ACM(AWS Certificate Manager)을 접속해보면 위와같은 화면이 �
 <img src="https://user-images.githubusercontent.com/59492312/166397059-6fbb60b0-7218-46ba-98ca-1e875424a81e.png">
 </p>
 
-그것도 해야해 보니까 tls인가 인증서 버전을 1.3이상 올려야 한다. 등 이런얘기 하고 있어
-이거 정책아님 ?
-https://www.google.com/search?q=ssl+tls+%ED%95%A8%EA%BB%98+%EC%82%AC%EC%9A%A9&rlz=1C5CHFA_enKR982KR982&oq=ssl+tls+%ED%95%A8%EA%BB%98+%EC%82%AC%EC%9A%A9&aqs=chrome..69i57j33i160l2.8432j0j1&sourceid=chrome&ie=UTF-8
+퍼블릭 인증서 요청을 클릭해준다.
 
+> 프라이빗 인증서를 사용하려면 프라이빗 CA(Certificate Manager)를 생성해야 한다. 프라이빗 CA는
+> AWS 클라우드 내부에 PKI (퍼블릭 키 인프라) 를 구축하는 기업 고객을 대상으로 하며 조직 내에서 비공개로 
+> 사용할 수 있도록 고안된 서비스이다. 사설 CA를 생성하면 외부 CA에서 유효성 검사를 받지 않고 직접 인증서를 발급하고 
+> 조직의 내부 요구 사항에 맞게 사용자 지정하여 발급하고 사용할 수 있다. 간단하게 말하면, 기업 내부에서 사용하기 위한 목적이며
+> 나중에 실제 사용시 더 자세하게 봐도 무방하다.     
+> [ACM의 사설 CA와 프라이빗 인증서](https://docs.aws.amazon.com/ko_kr/acm-pca/latest/userguide/PcaWelcome.html)
 
 <br>
 
@@ -112,7 +114,22 @@ https://www.google.com/search?q=ssl+tls+%ED%95%A8%EA%BB%98+%EC%82%AC%EC%9A%A9&rl
 <img src="https://user-images.githubusercontent.com/59492312/166397062-a6b3fdc5-1e59-4989-a321-4d3a990be7f5.png">
 </p>
 
-ㅁ
+도메인 이름에는 인증서에 포함시키고 싶은 도메인명을 적어주면 된다.
+
+도메인.com으로 기본 도메인 형식으로 추가해줄 수 있고, *.도메인.com으로 해서 해당 도메인의 
+모든 서브 도메인을 인증서에 포함시킬수도 있다. 혹은 www.도메인.com으로 해서 www.도메인.com 
+서브 도메인만 인증서에 포함시킬수도 있다.
+
+그 외에도, 꼭 A도메인.com을 추가했다고 해서 A도메인의 서브도메인만 추가가 가능한것은 아니다.
+A도메인.net이나, B도메인.com도 인증서에 한번에 추가가 가능하다.
+
+> 완전히 정규화된 도메인 이름(FQDN)이란 간단하게 얘기하면 .com 또는 .org와 같은 최상위 도메인 확장명이 
+> 마지막에 위치한 도메인을 의미한다.(더 자세히 알고싶다면 FQDN에 관해 검색해보자.)    
+> [FQDN이란](https://ko.eyewated.com/fqdn%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%9D%98%EB%AF%B8%ED%95%A9%EB%8B%88%EA%B9%8C/)
+
+> [도메인 이름에 도메인명 추가 (1)](https://wwlee94.github.io/category/blog/aws-eb-https/)    
+> [도메인 이름에 도메인명 추가 (2)](https://comocode.tistory.com/28)    
+> [도메인 이름에 도메인명 추가 (3)](https://aws.amazon.com/ko/premiumsupport/knowledge-center/acm-add-domain-certificates-elb/)
 
 <br>
 
@@ -120,15 +137,46 @@ https://www.google.com/search?q=ssl+tls+%ED%95%A8%EA%BB%98+%EC%82%AC%EC%9A%A9&rl
 <img src="https://user-images.githubusercontent.com/59492312/166397063-4a7ee18e-682e-4312-8cc9-33fe2d67cbd6.png">
 </p>
 
-ㅁ
+검증 방법 선택은 DNS검증과 이메일 검증이 있다.
+
+DNS 검증방법은 Route53 호스팅영역에서 추가한 도메인에 대해 CNAME레코드를 생성하여 검증을 진행한다.
+검증을 한다는것은 해당 도메인의 소유 여부와 이 도메인과 연결된 DNS(Domain Name Server)를 제어할 수 있는지를 체크한다.
+DNS 검증을 시작하게 되면, 본인이 입력한 도메인과 매칭되는 Route53의 호스팅 영역에서 CNAME이 추가되어서 검증을 진행하게 된다.
+CNAME이 추가되면, 해당 CNAME 레코드 이름으로 요청이 들어오게 되고 값/트래픽 라우팅 대상으로 정상적으로 요청이 전달되면 해당 도메인의 소유권과
+연동된 DNS에 대한 제어권이 검증된다.
+
+이메일 검증방법은 해당 도메인을 구매할 당시에 입력한 이메일로 검증 메일이 보내지게 된다. 
+이 방법으로 도메인에 대한 소유권을 검증하게 된다.
+
+우리는 DNS검증 방법으로 진행하도록 하겠다. DNS 검증을 클릭하고 요청을 눌러주자.
+
+> 이메일 검증 인증서는 최초 검증일로부터 최대 825일까지만 갱신할 수 있다. 825일이 지나면 도메인 소유자가 새 인증서를 다시 요청해야 한다. 
+> 그러나, DNS 검증 인증서는 자동으로 갱신할 수 있다. 즉, 한번만 등록하면 문제가 없는한 AWS에서 자동으로 갱신을 해준다.    
+> [이메일 검증과 DNS 검증의 차이](https://skyksit.tistory.com/entry/AWS-%EC%9D%B8%EC%A6%9D%EC%84%9C-%EB%B0%9C%EA%B8%89%EB%B0%9B%EA%B8%B0-2-%EB%A9%80%ED%8B%B0-%EA%B3%84%EC%A0%95%EC%97%90%EC%84%9C-%EC%97%AC%EB%9F%AC%EA%B0%9C%EC%9D%98-%EC%84%9C%EB%B8%8C%EB%8F%84%EB%A9%94%EC%9D%B8-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0)
+
+> Amazon ACM에 요청하여 발급해주는 SSL/TLS 인증서는 무료이다. 다만, DNS검증을 통하여 인증서를 발급받으려면 AWS DNS(Domain Name Server)인 Route53을 사용해야 한다. 
+> 즉, 소유하고 있는 도메인의 DNS로 Route53을 이용하여 미리 연결된 상태여야 인증서에 등록하려는 도메인에 대한 검증이 가능하다. 만약, 아직 연결해놓지 않았다면 필자가 적어놓은 [Beanstalk기반 환경에 Route53을 이용하여 도메인 연결](https://sooolog.dev/Beanstalk%EA%B8%B0%EB%B0%98-%ED%99%98%EA%B2%BD%EC%97%90-Route53%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EB%8F%84%EB%A9%94%EC%9D%B8-%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0/)
+> 를 참고하도록 하자.     
+> [ACM에서 발급해주는 SSL/TLS 인증서](https://wwlee94.github.io/category/blog/aws-eb-https/)    
+
+> [이메일 검증과 DNS 검증 (1)](https://comocode.tistory.com/28)    
+> [이메일 검증과 DNS 검증 (2)](https://jojoldu.tistory.com/434)    
 
 <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/166397064-73c66903-59da-4f85-b845-b7987d46fb3a.png">
+<img src="https://user-images.githubusercontent.com/59492312/166873864-09228e09-7b21-4eb6-920e-4e0228003dc7.png">
 </p>
 
-ㅁ
+요청을 클릭하고 나면 인증서 목록에서 내가 방금 요청한 인증서를 클릭해준다.
+그러면 위 이미지처럼 검증 대기중 상태로 표시가 되고, 아래에 도메인(6)과 "Route 53에서 레코드 생성"
+클릭 아이콘도 보인다.
+
+이 화면의 의미는 아직 도메인 혹은 DNS에 대한 검증(우리는 DNS 검증을 선택했다.)이 완료되지 않은 상태이며 
+도메인(6)의 의미는 우리가 방금전 SSL/TLS 인증서에 등록하려한 도메인의 개수를 의미한다.(필자는 위에서 6개 도메인에 대한
+인증서 등록을 하려했으니 6개로 표시되는 것이다.)
+
+여기서 "Route 53에서 레코드 생성" 버튼을 눌러주자. 
 
 <br>
 
@@ -136,7 +184,26 @@ https://www.google.com/search?q=ssl+tls+%ED%95%A8%EA%BB%98+%EC%82%AC%EC%9A%A9&rl
 <img src="https://user-images.githubusercontent.com/59492312/166397067-80d1c598-ae7a-40a0-9c3b-3777afdf07bb.png">
 </p>
 
-ㅁ
+그러면, 도메인별로 유형이 CNAME인 목록들이 나열된다.
+
+이 목록들에 대한 레코드 생성의 의미는 앞서말했던, DNS 검증의 방법으로 SSL/TLS 인증서에 등록하려는
+도메인과 연동된 Route53 호스팅영역에 CNAME 유형의 레코드를 생성하는 방식이다. 이렇게 레코드를 생성한 후,
+해당 CNAME 이름으로 요청이 보내지고, CNAME 값으로 요청이 정상적으로 전달이 되면 검증이 완료된다.
+
+이렇게 함으로써 도메인 소유권에 대한 검증과 DNS 제어권에 대한 인증이 검증된다.
+해당 도메인들에 대한 각각의 검증이 완료되야 SSL/TLS 인증서가 발급이 된다. 
+
+우측 하단의 "레코드 생성" 버튼을 눌러준다.
+
+> 도메인마다 검증하기 위한 CNAME 레코드 목록들은 직접 Route53의 호스팅 영역에 추가해주어도 된다. 하지만, 위에 처럼
+> "Route53에서 레코드 생성" 버튼을 누르고 레코드를 생성해주면 직접 해당 CNAME 레코드들을 추가해줄 필요없이 자동으로
+> 추가해준다.    
+> [Route53에 검증용 CNAME 자동추가](https://wwlee94.github.io/category/blog/aws-eb-https/)
+
+> 추가로, 보면 알겠지만 www.도메인A.com, 도메인A.com에 대한 검증은 서로 다른 CNAME명과 CNAME값이 적용되어서 호스팅영역에 레코드가
+> 생성되게 된다. 하지만, 도메인B.com과 *.도메인B.com은 서로 같은 CNAME명과 CNAME값을 갖은걸 알 수 있다. 또한 알면 재밌는점이 필자는 
+> m.도메인C.com, *.도메인C.com, 도메인C.com 도메인들에 대해 SSL/TLS 인증서 발급을 신청했고, 호스팅 영역은 도메인C.com과 m.도메인C.com
+> 두개를 만들었는데 정작 CNAME 레코드는 도메인C.com에만 생성되었다는것이다.(m.도메인C.com 호스팅영역에는 아무 레코드도 생성되지 않았다.)
 
 <br>
 
@@ -144,9 +211,26 @@ https://www.google.com/search?q=ssl+tls+%ED%95%A8%EA%BB%98+%EC%82%AC%EC%9A%A9&rl
 <img src="https://user-images.githubusercontent.com/59492312/166397069-7d05d580-cd76-421a-89e2-d43bd7acceb2.png">
 </p>
 
-ㅁ
+조금만 시간이 지난 후, 다시 해당 인증서를 들어가보면 이렇게 신청한 도메인들에 대해
+성공이라고 뜬것을 볼 수 있다. 그럼 우리는 신청한 도메인에 대한 SSL/TLS 인증서 발급을
+완료한것이다.
+
+> 헷갈리면 안되는것이 ACM에서는 AWS의 CA에서 인증서를 발급받기 위한 요청만 할 뿐이다. 또한, 도메인을 입력하였던것도
+> 발급받으려는 SSL/TLS 인증서에 해당 도메인을 추가하기 위함이다. 즉, 인증서만을 발급받기 위한 과정이지 해당 도메인들에 대해
+> 직접적으로 어떠한 설정이 이루어진것은 아니다.
+
+> [ACM인증서 발급 (1)](https://wwlee94.github.io/category/blog/aws-eb-https/)    
+> [ACM인증서 발급 (2)](https://comocode.tistory.com/28)      
 
 <br>
+
+
+
+
+그것도 해야해 보니까 tls인가 인증서 버전을 1.3이상 올려야 한다. 등 이런얘기 하고 있어
+이거 정책아님 ?
+https://www.google.com/search?q=ssl+tls+%ED%95%A8%EA%BB%98+%EC%82%AC%EC%9A%A9&rlz=1C5CHFA_enKR982KR982&oq=ssl+tls+%ED%95%A8%EA%BB%98+%EC%82%AC%EC%9A%A9&aqs=chrome..69i57j33i160l2.8432j0j1&sourceid=chrome&ie=UTF-8
+
 
 지금 이거 보니 listen 443을 안하고 그냥 지금있는 그대로 쓰면
 불안정한 https연결이 될수도 있다는데 ?
@@ -220,7 +304,15 @@ AWS에서 제공해주는 SSL 인증서는 무료인 대신에, 해당 도메인
 <img src="">
 </p>
 
-a
+이메일 검증이아닌 DNS검증이 조 ㅎ은 이유
+
+3. TLS검증이 되지 않았을 경우 입니다.
+
+1번의 경우 도메인 구매시 등록한 admin 계정으로 매년 수동으로 갱신을 해주어야 합니다.
+2번의 경우 답이 없습니다. 무조건 DNS인증으로 변경해야합니다.
+3번의 경우 내가 a.com 이라는 도메인으로 서비스하고 있다고 가정했을때, AWS는 https://a.com 또는 https://www.a.com 에 요청을 보내서 HTTP응답 코드가 200일경우 자동갱신을 해주게 됩니다. 즉, 자동갱신이 되지 않았다는 것은 응답코드가 200코드가 아닌 상황이기때문에 응답코드가 왜 200이 아닌지 파악을 해봐야합니다.
+https://kim-dragon.tistory.com/6
+DNS인증을 사용하면 TLS검증을 시도하지 않으며, 따라서 관리자가 별도로 갱신을 해줄 필요가 없습니다. 단, ACM이 DNS검증올 검증한 인증서를 갱신하지 못한다면 DNS구성에 해당 CNAME 레코드가 없어졌거나 정확하지 않기 때문이므로 DNS서버 설정을 살펴봐야 합니다.
 
 <br>
 
