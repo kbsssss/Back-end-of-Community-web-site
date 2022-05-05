@@ -2,7 +2,7 @@
 <img src="">
 </p>
 
-# 📖 Beanstalk환경과 nginx기반에서 다중도메인, SSL 리다이렉팅
+# 📖 Beanstalk환경과 nginx기반에서 멀티도메인, 서브도메인, HTTPS 리다이렉팅
 
 * 
 * 
