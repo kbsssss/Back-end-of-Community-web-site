@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/166934711-797918c8-e3e8-4bc9-a44d-e717cd2a073c.png">
+<img src="v">
 </p>
 
 # 📖 Beanstalk환경과 nginx기반에서 멀티도메인, 서브도메인, HTTPS 리다이렉팅
@@ -17,6 +17,14 @@
 <p align="center">
 <img src="">
 </p>
+
+그럼 https://celebmine.com은 어떻게 매치하는걸까
+이거는 맞는 listen도 없고 맞는 server_name도 없으면 그냥
+default_server로..? 이건 말이 안되는데..?
+
+그리고 listen으로 포트먼저 듣고 그 다음 server_name으로 매칭한다는데
+https://jgj1018.github.io/server/2017/02/11/server1.html
+일치하는 listen 포트가없으면 server_name에 맞게 매치하는것같다.
 
 그 nginx에서 server별로 access_log가 중복되는게 한개 있었는데 그거때문에
 배포 오류나는거였나 ? 14분씩 걸린다

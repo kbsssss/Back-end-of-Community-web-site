@@ -101,6 +101,11 @@ https://jsikim1.tistory.com/153
 여기 그것도 해야돼, DEFAULT_SERVER을 이용해서 맞는 URI가 아니면 반려하는거
 https://xetown.com/tips/1172256
 
+지금 이거 보니 listen 443을 안하고 그냥 지금있는 그대로 쓰면
+불안정한 https연결이 될수도 있다는데 ?
+http://linforum.kr/bbs/board.php?bo_table=security&wr_id=104
+
+
 <br>
 
 <p align="center">

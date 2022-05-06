@@ -14,7 +14,7 @@
 
 <br>
 
-
+하... 인증서 하나 모자이크처리해야
 
 ### 1.HTTPS 작동원리와 SSL/TLS 인증서의 개념
 
@@ -259,7 +259,7 @@ CNAME이 추가되면, 해당 CNAME 레코드 이름으로 요청이 들어오�
 <br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/166937079-9167aa32-6f66-47d0-b34f-ae8f4db6d090.png">
+<img src="https://user-images.githubusercontent.com/59492312/167127086-b4aaf3af-0e32-472b-b4f9-91f6d1aef560.png">
 </p>
 
 Application Load Balancer 리스너를 설정하여 추가할 수 있는 화면이 나온다.
@@ -299,49 +299,19 @@ SSL 정책은 간단히 말하면, 클라이언트와 로드 밸런서간의 HTT
 
 
 
-### 🚀 추가로, 알아두면 좋을 HTTPS 기본 개념
+### 🚀 추가로,
 
 <p align="center">
-<img src="">
+<img src="https://user-images.githubusercontent.com/59492312/166397062-a6b3fdc5-1e59-4989-a321-4d3a990be7f5.png">
 </p>
 
-이메일 검증이아닌 DNS검증이 조 ㅎ은 이유
-
-3. TLS검증이 되지 않았을 경우 입니다.
-
-1번의 경우 도메인 구매시 등록한 admin 계정으로 매년 수동으로 갱신을 해주어야 합니다.
-2번의 경우 답이 없습니다. 무조건 DNS인증으로 변경해야합니다.
-3번의 경우 내가 a.com 이라는 도메인으로 서비스하고 있다고 가정했을때, AWS는 https://a.com 또는 https://www.a.com 에 요청을 보내서 HTTP응답 코드가 200일경우 자동갱신을 해주게 됩니다. 즉, 자동갱신이 되지 않았다는 것은 응답코드가 200코드가 아닌 상황이기때문에 응답코드가 왜 200이 아닌지 파악을 해봐야합니다.
-https://kim-dragon.tistory.com/6
-DNS인증을 사용하면 TLS검증을 시도하지 않으며, 따라서 관리자가 별도로 갱신을 해줄 필요가 없습니다. 단, ACM이 DNS검증올 검증한 인증서를 갱신하지 못한다면 DNS구성에 해당 CNAME 레코드가 없어졌거나 정확하지 않기 때문이므로 DNS서버 설정을 살펴봐야 합니다.
-
-지금 이거 보니 listen 443을 안하고 그냥 지금있는 그대로 쓰면
-불안정한 https연결이 될수도 있다는데 ?
-http://linforum.kr/bbs/board.php?bo_table=security&wr_id=104
-
-tls 정책과 관련해서 default_server에 대해서 얘기하는거 같은데 ?
-https://varins.com/library/server/web-server-nginx/
-
-a ssl기한도 있다고 한다.
-
-인증서 수정이 안돼
-
-보니까 https연결이 된다는것은 그냥 엔진엑스까지만 도달해도 된다는거네
-왜냐면, https://celebmine.com해도 정상적으로 https가 적용되니까,
-
-그리고 listen으로 포트먼저 듣고 그 다음 server_name으로 매칭한다는데
-https://jgj1018.github.io/server/2017/02/11/server1.html
-일치하는 listen 포트가없으면 server_name에 맞게 매치하는것같다.
-
-그럼 https://celebmine.com은 어떻게 매치하는걸까
-이거는 맞는 listen도 없고 맞는 server_name도 없으면 그냥
-default_server로..? 이건 말이 안되는데..?
-
-https://danidani-de.tistory.com/39
-아니 https리디렉션은 로드벨런서에서 해주는데 ?
+ACM에서 SSL/TLS 인증서에 등록하기 위한 도메인을 입력하는 화면이다.
+이곳에서 입력을 안하고 그냥 지나가면 나중에 SSL/TLS 인증서가 발급되었을 때
+도메인 추가하거나 혹은 삭제할 수 없다. 만약에 추가하거나 삭제하려면 다시 ACM에서
+SSL/TLS 인증서 발급을 요청해야하니 이 점에 주의하도록 하자.
 
 <br>
 
 
 
-태그 : #
+태그 : #HTTPS, #SSL/TLS 인증서, #인증기관(CA), #ACM, #FQDN, #Listener, #리스너, #보안정책
