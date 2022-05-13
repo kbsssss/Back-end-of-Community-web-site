@@ -4,19 +4,81 @@
 
 # 📖 Beanstalk환경과 nginx기반에서 멀티도메인, 서브도메인, HTTPS 리다이렉팅
 
-* 하위도메인(www.도메인)연결과 리다이렉팅
+* 멀티도메인과 서브도메인 Route53 설정
+* Nginx 설정파일 nginx.conf에서 멀티도메인, 서브도메인 리다이렉팅 설정
+
+하위도메인(www.도메인)연결과 리다이렉팅
 * 도메인.net, 도메인.co.kr을 도메인.com으로 리다이렉팅
 * 하위도메인(m.도메인)설계와 리다이렉팅
 * http:// -> https:// 리다이렉팅
 
 > 모든 코드는 [깃헙](https://github.com/sooolog/dev-spring-springboot)에 작성되어 있습니다.
+
 * * *
+
+
+<br>
+
+아 뭔데 뭔 NS(네임서버)야, 그러니까 왜 m.celebmine.com에 대해 CNAME이
+아닌 NS로 설정하라고 AWS에서 얘기하는거지 ?
+
+### 1.멀티도메인과 서브도메인 Route53 세팅
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/167347840-1d28e2b8-dc54-4221-b425-fda0a80bc873.png">
+</p>
+
+멀티도메인과 서브도메인의 리다이렉팅에 대해 알아보도록 하겠다.
+
+흔히 우리는 도메인A.com을 주 도메인으로 사용하고싶은데 나머지 도메인A.co.kr이나 도메인A.net을 구매하여
+이를 통한 클라이언트의 요청이 들어올시 다시 도메인A.com으로 접속되어 보여지게 하고싶어한다. 이를 리다이렉팅이라고
+하는데, www.도메인A.com이나 m.도
+
+> 흔히 우리는 도메인A.com으로 서비스를 내면, 도메인A.net이나 도메인A.co.kr도 한번에
+> 구매를 하여 도메인A.com으로 리다이렉팅을 한다. 이때 여러 도메인을 하나의 서버로 연결해서
+> 사용하는데, 이 때 사용된 모든 도메인을 멀티도메인이라고 한다. 또한 최상위도메인(com, co.kr, net)이 
+> 다른것 외에 도메인B.com 같이 도메인명 자체가 다른 경우에도 다른 도메인들과 같은 서버를 가리키게 되면
+> 도메인B.com도 멀티도메인이라 한다.     
+> [멀티도메인이란](https://post.naver.com/viewer/postView.nhn?volumeNo=24092785&memberNo=11287836)
+
+> m.도메인도 서브도메인 리다이렉팅에 속하긴하나, 이는 모바일 혹은 태블릿을 인지하고
+> 디바이스별 리다이렉팅이 필요하기 때문에 
+> 
+
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/59492312/167347848-5c9459c3-3ca6-4586-906d-0b6184a2700d.png">
+</p>
+
+ㅁ
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/59492312/167347850-7053e250-826b-49d7-985a-14f7f3e9e910.png">
+</p>
+
+ㅁ
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/59492312/167347852-a80b09db-e48f-45ee-b491-bfa8c39ecdf4.png">
+</p>
+
+ㅁ
+
+<br>
+
+<img src="https://user-images.githubusercontent.com/59492312/167347854-0b027007-1e80-492c-be84-47b409fed769.png">
+</p>
+
+ㅁ
 
 <br>
 
 
 
-### 1.하위도메인(www.도메인)연결과 리다이렉팅
+
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/153786539-3a375a17-591d-419b-836f-3ef32edcdcd6.png">
