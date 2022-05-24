@@ -5,7 +5,9 @@
 # 📖 Beanstalk환경과 nginx기반에서 멀티도메인, 서브도메인, HTTPS 리다이렉팅
 
 * 멀티도메인과 서브도메인 Route53 설정
-* Nginx 설정파일 nginx.conf에서 멀티도메인, 서브도메인 리다이렉팅 설정
+* HTTPS 리다이렉팅을 위한 기본 세팅
+* nginx.conf 설정을 이용하여 멀티도메인, 서브도메인, HTTPS 리다이렉팅
+
 
 하위도메인(www.도메인)연결과 리다이렉팅
 * 도메인.net, 도메인.co.kr을 도메인.com으로 리다이렉팅
@@ -19,60 +21,255 @@
 
 <br>
 
-아 뭔데 뭔 NS(네임서버)야, 그러니까 왜 m.celebmine.com에 대해 CNAME이
-아닌 NS로 설정하라고 AWS에서 얘기하는거지 ?
+
 
 ### 1.멀티도메인과 서브도메인 Route53 세팅
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/59492312/167347840-1d28e2b8-dc54-4221-b425-fda0a80bc873.png">
+<img src="https://user-images.githubusercontent.com/59492312/168206626-c716f392-2c89-46c2-9716-692b7b2f3174.png">
 </p>
 
 멀티도메인과 서브도메인의 리다이렉팅에 대해 알아보도록 하겠다.
 
 흔히 우리는 도메인A.com을 주 도메인으로 사용하고싶은데 나머지 도메인A.co.kr이나 도메인A.net을 구매하여
-이를 통한 클라이언트의 요청이 들어올시 다시 도메인A.com으로 접속되어 보여지게 하고싶어한다. 이를 리다이렉팅이라고
-하는데, www.도메인A.com이나 m.도
+이를 통한 클라이언트의 요청이 들어올시 다시 도메인A.com으로 접속되어 보여지게 하고싶어한다. 이를 멀티도메인 리다이렉팅이라고
+하고, www.도메인A.com 처럼 서브도메인을 다시 도메인A.com으로 리다이렉팅하는것은 서브도메인 리다이렉팅이라고 한다.
+
+이제부터, 멀티도메인과 서브도메인 리다이렉팅을 위한 기본 Route53 세팅부터 보도록 하겠다.
+기본적으로 Route53과 도메인 설정을 안다는 가정하에 필요한 부분만 보고 넘어가도록 하겠다.
+위 화면을 보면, 기본 도메인A.com(도메인A라고 통힐하겠다.)을 A레코드로 설정하였고(로드 밸런서로 설정하였다.), www.도메인A.com
+또한 도메인A.com과 같은 라우팅 값을 설정해준것이다.(m.도메인A.com을 제외한 SOA, NS 유형은
+기본적으로 route53 호스팅영역을 만들면 생성되는 유형이고 위의 CNAME 유형은 SSL/TLS 인증서를 받기위한
+DNS 검증 레코드이다.)
 
 > 흔히 우리는 도메인A.com으로 서비스를 내면, 도메인A.net이나 도메인A.co.kr도 한번에
 > 구매를 하여 도메인A.com으로 리다이렉팅을 한다. 이때 여러 도메인을 하나의 서버로 연결해서
-> 사용하는데, 이 때 사용된 모든 도메인을 멀티도메인이라고 한다. 또한 최상위도메인(com, co.kr, net)이 
-> 다른것 외에 도메인B.com 같이 도메인명 자체가 다른 경우에도 다른 도메인들과 같은 서버를 가리키게 되면
+> 사용하는데, 이 때 사용된 모든 도메인을 멀티도메인이라고 한다. 또한 최상위도메인(com, co.kr, net)이
+> 다른 도메인 외에 도메인B.com 같이 도메인명 자체가 다른 경우에도 다른 도메인들과 같은 서버를 가리키게 되면
 > 도메인B.com도 멀티도메인이라 한다.     
 > [멀티도메인이란](https://post.naver.com/viewer/postView.nhn?volumeNo=24092785&memberNo=11287836)
 
 > m.도메인도 서브도메인 리다이렉팅에 속하긴하나, 이는 모바일 혹은 태블릿을 인지하고
-> 디바이스별 리다이렉팅이 필요하기 때문에 
-> 
-
+> 디바이스별 리다이렉팅이 필요하기 때문에 별도의 설정이 필요하다. 또한, DNS인 Route53에서
+> 불필요한 리소스 낭비를 막기위한 추가설정에 관해서도 설명해야하니 필요시 필자가 작성한 글을 보도록 하자.    
+> [Beanstalk환경과 nginx기반에서 디바이스별 리다이렉션](https://sooolog.dev/Beanstalk%ED%99%98%EA%B2%BD%EA%B3%BC-nginx%EA%B8%B0%EB%B0%98%EC%97%90%EC%84%9C-%EB%94%94%EB%B0%94%EC%9D%B4%EC%8A%A4%EB%B3%84-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98/)
 
 <br>
 
-<img src="https://user-images.githubusercontent.com/59492312/167347848-5c9459c3-3ca6-4586-906d-0b6184a2700d.png">
+<p align="center">
+<img src="https://user-images.githubusercontent.com/59492312/168217003-90ef1421-cc26-4e9f-9658-fca00db63abc.png">
 </p>
 
-ㅁ
+위의 것과 동일한 도메인A이나 최상위도메인이 com이 아닌 net이다. 
+Route53 호스팅영역을 생성할 때 기본적으로 최상위도메인이 다르면 하나의 최상위도메인당
+하나의 호스팅영역을 생성해주어야 한다.
+
+동일하게 레코드 유형이 NS,SOA인것은 호스팅영역을 생성할 때 기본적으로 생성되는 레코드 유형이고
+CNAME 두개는 SSL/TLS 인증서를 발급받기 위한 DNS검증을 위해 사용된 레코드 이다. 나머지는 도메인A.net
+과 www.도메인A.net이 빈스톡의 로드 밸런서를 가리키는 A유형의 레코드이다.
+
+> 최상위 도메인당 하나의 호스팅영역을 생성해주어야 하는것과는 반대로, 서브도메인은
+> 주로 도메인.com의 호스팅영역 내에서 추가적으로 설정하여 사용한다. aws 에서도 서브도메인에
+> 대해서 따로 독립적인 호스팅영역을 만드는걸 권장하지 않는다. 하지만, 예외가 있는데 바로 
+> m.도메인.com의 경우이다.(이는 디바이스별 리다이렉션에 자세하게 정리해 놓았다.)       
+> [Beanstalk환경과 nginx기반에서 디바이스별 리다이렉션](https://sooolog.dev/Beanstalk%ED%99%98%EA%B2%BD%EA%B3%BC-nginx%EA%B8%B0%EB%B0%98%EC%97%90%EC%84%9C-%EB%94%94%EB%B0%94%EC%9D%B4%EC%8A%A4%EB%B3%84-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98/)
 
 <br>
 
+<p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/167347850-7053e250-826b-49d7-985a-14f7f3e9e910.png">
 </p>
 
-ㅁ
+위의 자료는 최상위 도메인 co.kr에 대한 설정이다.
+방금 전 설명한것과 동일한 레코드들이다.
+
+여기까지하면, 서브도메인과 멀티도메인에 대한 Route53 설정은 끝이 난다.
 
 <br>
 
-<img src="https://user-images.githubusercontent.com/59492312/167347852-a80b09db-e48f-45ee-b491-bfa8c39ecdf4.png">
-</p>
 
-ㅁ
 
-<br>
+### 2.HTTPS 리다이렉팅을 위한 기본 세팅
 
+<p align="center">
 <img src="https://user-images.githubusercontent.com/59492312/167347854-0b027007-1e80-492c-be84-47b409fed769.png">
 </p>
 
-ㅁ
+여기서는 따로 빈스톡기반 환경에 도메인 HTTPS 연결을 다루지 않고 이미 연결이 되있다는 가정하에 진행하도록 하겠다.
+빈스톡환경에서 SSL/TLS 인증서를 발급받아 HTTPS를 적용하는 방법은 필자가 작성한 글을 보면 쉽게 따라할 수 있다.
+(아래 참조링크가 필자가 작성한 글이다.)
+
+이곳에서는 HTTP로 접속했을 시 HTTPS로 리다이렉트하여 접속할 수 있도록 설정하려 한다.
+
+위와같이 도메인에 접속하였을 때 자물쇠가 채워져 있으면 HTTPS가 정상적으로 작동하고
+있다는 것이다.
+
+> [Beanstalk기반 환경에 도메인 SSL 설정하기](https://sooolog.dev/Beanstalk%EA%B8%B0%EB%B0%98-%ED%99%98%EA%B2%BD%EC%97%90-%EB%8F%84%EB%A9%94%EC%9D%B8-SSL-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0/)
+
+<br>
+
+
+
+### 3.nginx.conf 설정을 이용하여 멀티도메인, 서브도메인, HTTPS 리다이렉팅
+
+```conf
+  server {
+      listen 80;
+      server_name celebmine.net www.celebmine.net;
+
+      set $mobile_rewrite do_not_perform;
+
+      if ($http_user_agent ~* "(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge\ |maemo|midp|mmp|mobile.+firefox|netfront|opera\ m(ob|in)i|palm(\ os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows\ ce|xda|xiino [NC,OR]") {
+          set $mobile_rewrite perform;
+      }
+
+      if ($http_user_agent ~* "^(1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a\ wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r\ |s\ )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1\ u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp(\ i|ip)|hs\-c|ht(c(\-|\ |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac(\ |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt(\ |\/)|klon|kpt\ |kwc\-|kyo(c|k)|le(no|xi)|lg(\ g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-|\ |o|v)|zz)|mt(50|p1|v\ )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v\ )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-|\ )|webc|whit|wi(g\ |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-) [NC]") {
+          set $mobile_rewrite perform;
+      }
+
+      if ($mobile_rewrite = perform) {
+          rewrite ^ http://m.celebmine.com$request_uri? redirect;
+          return 301;
+          break;
+      }
+
+      return 301 https://celebmine.com$request_uri;
+
+      access_log    /var/log/nginx/access2.log main;
+  }
+
+
+  server {
+      listen 80;
+      server_name celebmine.co.kr www.celebmine.co.kr;
+      return 301 https://celebmine.com$request_uri;
+
+      access_log    /var/log/nginx/access13.log main;
+  }
+
+  server {
+      listen        80 default_server;
+      listen        [::]:80 default_server;
+
+      if ($host = www.celebmine.com) {
+          return 301 http://celebmine.com$request_uri;
+      }
+
+        set $mobile_rewrite do_not_perform;
+        if ($http_user_agent ~* "(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge\ |maemo|midp|mmp|mobile.+firefox|netfront|opera\ m(ob|in)i|palm(\ os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows\ ce|xda|xiino [NC,OR]") {
+            set $mobile_rewrite perform;
+        }
+        if ($http_user_agent ~* "^(1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a\ wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r\ |s\ )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1\ u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp(\ i|ip)|hs\-c|ht(c(\-|\ |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac(\ |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt(\ |\/)|klon|kpt\ |kwc\-|kyo(c|k)|le(no|xi)|lg(\ g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-|\ |o|v)|zz)|mt(50|p1|v\ )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v\ )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-|\ )|webc|whit|wi(g\ |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-) [NC]") {
+            set $mobile_rewrite perform;
+        }
+
+        if ($mobile_rewrite = perform) {
+            rewrite ^ http://m.celebmine.com$request_uri? redirect;
+            return 302;
+            break;
+        }
+
+
+      location / {
+          proxy_pass          http://springboot;
+          proxy_http_version  1.1;
+          proxy_set_header    Connection          $connection_upgrade;
+          proxy_set_header    Upgrade             $http_upgrade;
+
+          proxy_set_header    Host                $host;
+          proxy_set_header    X-Real-IP           $remote_addr;
+          proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+      }
+
+      access_log    /var/log/nginx/access.log main;
+
+      client_max_body_size  10m;
+      client_header_timeout 60;
+      client_body_timeout   60;
+      keepalive_timeout     60;
+      server_tokens         off;
+      gzip                  on;
+      gzip_comp_level       4;
+
+      # Include the Elastic Beanstalk generated locations
+      include conf.d/elasticbeanstalk/healthd.conf;
+  }
+```
+
+전체 설정코드는 위와같다.
+위의 코드의 의미는 
+
+그럼 이제 멀티도메인, 서브도메인, HTTPS 리다이렉트를 위한 각각의 코드들에 대해
+자세히 알아보도록 하겠다.
+
+음,, 아예 STatus코드 반환하는게 낫나 아니면 그냥 리다이렉트가 낫나
+
+
+<br>
+
+```conf
+a
+```
+
+a
+
+<br>
+
+```conf
+a
+```
+
+a
+
+<br>
+
+
+
+### 4.마지막으로 default_server 설정으로 보안 강화하기
+
+```conf
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        # Everything is a 444
+        location / {
+                return 444;
+        }
+}
+
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        # Everything is a 444
+        location / {
+                return 444;
+        }
+}
+```
+
+a
+
+<br>
+
+
+eturn 301 아래에 expires epoch; 을 붙여주는 것은 301 리다이렉트가 캐싱되지 않도록 하기 위해서
+https://xetown.com/tips/1172256
+실제로 WWw.celebmine.net이 내 브라우저에 캐싱되어서 계속 네이버 뜬다.
+근데 스마트폰은 정상적으로 잘 뜸
+
+https://xetown.com/tips/1172256
+여기서는 rewrite를 쓰지 말라한다.
+
+www seo측면이랑 싹 정리하자.
+https://xetown.com/questions/1131734
+
+그거도 해야해, 원래 route53할때 서브도메인하지말라해
+근데 m.도메인은 해야해
+
+아 뭔데 뭔 NS(네임서버)야, 그러니까 왜 m.celebmine.com에 대해 CNAME이
+아닌 NS로 설정하라고 AWS에서 얘기하는거지 ?
 
 <br>
 

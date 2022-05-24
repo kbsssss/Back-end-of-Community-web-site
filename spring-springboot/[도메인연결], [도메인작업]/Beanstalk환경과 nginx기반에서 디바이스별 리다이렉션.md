@@ -18,7 +18,7 @@ return rewrite redirect 셋다 알아야해
 ### 1.
 
 <p align="center">
-<img src="">
+<img src="https://user-images.githubusercontent.com/59492312/167347852-a80b09db-e48f-45ee-b491-bfa8c39ecdf4.png">
 </p>
 
 이거는 네이버 해보니까 302코드였다. 이거는 302는 영구적인게 아닌 임시 아닌가 ?
